@@ -16,12 +16,19 @@
 
   #define PUSH_BUTTON         8
   #define PUSH_BUTTON_DELAY   400
+
+  #define TEST_BUTTON1        9
+  #define TEST_BUTTON2        10
   
   
   // ----------- GLOBAL VARS ------------- //
 
-  unsigned long pushButtonTimestamp   = 0;
-  bool          auxiliaryBeamsEnabled = false;
+  unsigned long pushButtonTimestamp     = 0;
+  unsigned long testButton1Timestamp    = 0;
+  unsigned long testButton2Timestamp    = 0;
+  int           auxiliaryBeamsEnabled   = HIGH;
+  int           auxiliaryBeamsLastState = auxiliaryBeamsEnabled;
+  int           lowBeams                = HIGH;
   
   
   // ----------- FUNCTIONS ------------- //
