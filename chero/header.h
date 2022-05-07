@@ -3,8 +3,11 @@
   
   // ----------- MISC ------------- //
   
-  #define VERSION             F("0.9.1")
-  #define BAUD_RATE           9600
+  #define VERSION         F("0.93.1")
+  #define BAUD_RATE       9600
+
+  #define MAX_LINE_LEN      64
+  #define MAX_COMMAND_ARGS  10
   
   
   // ----------- GLOBAL VARS ------------- //
@@ -36,5 +39,15 @@
   // ----------- FUNCTIONS ------------- //
   
   float measureVoltage  (const int pin);
+  char *readSerial      ();
+  bool  charAllowed     (char c);
+  void  clearArgs       (char **args);
+  void  parseCommand    (char *command);
+  
+  
+  // ----------- MISC ------------- //
+
+  // Array of special chars allowed in inputs
+  const byte    specialChars[]  = { 0x20, 0x2d, 0x2e, 0x2f, 0x3a };
   
 #endif // _HEADER_H

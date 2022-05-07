@@ -1,5 +1,8 @@
 #include "header.h"
+#include "utilities.h"
 #include "measureVoltage.h"
+#include "readSerial.h"
+#include "parseCommand.h"
 
 void setup() {
   Serial.begin(BAUD_RATE);
@@ -58,4 +61,7 @@ void loop() {
     digitalWrite(highBeamsRelayPin, HIGH);
     digitalWrite(buttonLedRelayPin, HIGH);
   }
+
+  char *buf = readSerial();
+  if (buf != NULL) parseCommand(buf);
 }
