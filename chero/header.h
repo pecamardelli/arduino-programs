@@ -3,17 +3,8 @@
   
   // ----------- MISC ------------- //
   
-  #define VERSION             F("0.1.0")
+  #define VERSION             F("0.9.1")
   #define BAUD_RATE           9600
-  
-  
-  // ----------- PIN DEFINITION ------------- //
-
-  #define PUSH_BUTTON         8
-  #define PUSH_BUTTON_DELAY   400
-
-  #define TEST_BUTTON1        9
-  #define TEST_BUTTON2        10
   
   
   // ----------- GLOBAL VARS ------------- //
@@ -34,6 +25,7 @@
   const int     highBeamsSensorPin      = A1;
 
   const int     pushButtonPin           = 8;
+  const int     pushButtonDelay         = 400;
 
   float         lowBeamsSensorValue     = 0;
   float         highBeamsSensorValue    = 0;

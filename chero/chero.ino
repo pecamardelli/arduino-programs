@@ -2,7 +2,6 @@
 #include "measureVoltage.h"
 
 void setup() {
-  // put your setup code here, to run once:
   Serial.begin(BAUD_RATE);
   Serial.println(F("Relay Management for Jeep Grand Cherokee WJ 2005"));
   Serial.print(F("Version: "));
@@ -15,9 +14,7 @@ void setup() {
   pinMode(buttonLedRelayPin, OUTPUT);
   digitalWrite(buttonLedRelayPin, HIGH);
 
-  pinMode(PUSH_BUTTON, INPUT_PULLUP);
-  pinMode(TEST_BUTTON1, INPUT_PULLUP);
-  pinMode(TEST_BUTTON2, INPUT_PULLUP);
+  pinMode(pushButtonPin, INPUT_PULLUP);
 
   Serial.print(F("Low beams pin number: "));
   Serial.println(lowBeamsRelayPin);
@@ -30,7 +27,7 @@ void setup() {
 }
 
 void loop() {
-  if(digitalRead(PUSH_BUTTON) == LOW && millis() - pushButtonTimestamp > PUSH_BUTTON_DELAY) {
+  if(digitalRead(pushButtonPin) == LOW && millis() - pushButtonTimestamp > pushButtonDelay) {
     pushButtonTimestamp = millis();
     auxiliaryBeamsLastState = auxiliaryBeamsEnabled;
     auxiliaryBeamsEnabled = !auxiliaryBeamsEnabled;
