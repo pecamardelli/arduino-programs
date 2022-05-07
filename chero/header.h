@@ -1,5 +1,7 @@
 #ifndef _HEADER_H
 #define _HEADER_H
+
+  #include "boardTypes.h"
   
   // ----------- MISC ------------- //
   
@@ -16,38 +18,26 @@
   unsigned long testButton1Timestamp    = 0;
   unsigned long testButton2Timestamp    = 0;
   
-  bool          auxiliaryBeamsEnabled   = false;
-  int           auxiliaryBeamsLastState = auxiliaryBeamsEnabled;
-  int           lowBeams                = HIGH;
+  bool  auxiliaryBeamsEnabled   = false;
 
-  const int     lowBeamsRelayPin        = 2;
-  const int     highBeamsRelayPin       = 3;
-  const int     buttonLedRelayPin       = 4;
+  int   lowBeamsRelayPin        = 2;
+  int   highBeamsRelayPin       = 3;
+  int   buttonLedRelayPin       = 4;
   
-  const int     lowBeamsSensorPin       = A0;
-  const int     highBeamsSensorPin      = A1;
+  int   lowBeamsSensorPin       = A0;
+  int   highBeamsSensorPin      = A1;
 
-  const int     pushButtonPin           = 8;
-  const int     pushButtonDelay         = 400;
+  int   pushButtonPin           = 8;
+  int   pushButtonDelay         = 400;
 
-  float         lowBeamsSensorValue     = 0;
-  float         highBeamsSensorValue    = 0;
+  float lowBeamsSensorValue     = 0;
+  float highBeamsSensorValue    = 0;
 
-  const float   auxiliaryBeamsVoltageThreshold  = 11.0;
-  
-  
-  // ----------- FUNCTIONS ------------- //
-  
-  float measureVoltage  (const int pin);
-  char *readSerial      ();
-  bool  charAllowed     (char c);
-  void  clearArgs       (char **args);
-  void  parseCommand    (char *command);
-  
+  float auxiliaryBeamsVoltageThreshold  = 11.0;
   
   // ----------- MISC ------------- //
 
-  // Array of special chars allowed in inputs
+  // Array of special chars allowed on inputs
   const byte    specialChars[]  = { 0x20, 0x2d, 0x2e, 0x2f, 0x3a };
   
 #endif // _HEADER_H

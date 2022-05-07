@@ -1,14 +1,12 @@
 #include "header.h"
 #include "utilities.h"
+#include "printFunctions.h"
 #include "measureVoltage.h"
 #include "readSerial.h"
 #include "parseCommand.h"
 
 void setup() {
   Serial.begin(BAUD_RATE);
-  Serial.println(F("Relay Management for Jeep Grand Cherokee WJ 2005"));
-  Serial.print(F("Version: "));
-  Serial.println(VERSION);
 
   pinMode(lowBeamsRelayPin, OUTPUT);
   digitalWrite(lowBeamsRelayPin, HIGH);
@@ -19,20 +17,12 @@ void setup() {
 
   pinMode(pushButtonPin, INPUT_PULLUP);
 
-  Serial.print(F("Low beams pin number: "));
-  Serial.println(lowBeamsRelayPin);
-  Serial.print(F("High beams pin number: "));
-  Serial.println(highBeamsRelayPin);
-  Serial.print(F("Button led pin number: "));
-  Serial.println(buttonLedRelayPin);
-  Serial.print(F("Push button pin number: "));
-  Serial.println(pushButtonPin);
+  systemInfo();
 }
 
 void loop() {
   if(digitalRead(pushButtonPin) == LOW && millis() - pushButtonTimestamp > pushButtonDelay) {
     pushButtonTimestamp = millis();
-    auxiliaryBeamsLastState = auxiliaryBeamsEnabled;
     auxiliaryBeamsEnabled = !auxiliaryBeamsEnabled;
     Serial.println("Auxiliary Beams Enabled: " + String(auxiliaryBeamsEnabled));
   }
