@@ -8,11 +8,6 @@
   
   
   // ----------- PIN DEFINITION ------------- //
-  
-  #define RELAY1  2
-  #define RELAY2  3
-  #define RELAY3  4
-  #define RELAY4  5
 
   #define PUSH_BUTTON         8
   #define PUSH_BUTTON_DELAY   400
@@ -26,13 +21,28 @@
   unsigned long pushButtonTimestamp     = 0;
   unsigned long testButton1Timestamp    = 0;
   unsigned long testButton2Timestamp    = 0;
-  int           auxiliaryBeamsEnabled   = HIGH;
+  
+  bool          auxiliaryBeamsEnabled   = false;
   int           auxiliaryBeamsLastState = auxiliaryBeamsEnabled;
   int           lowBeams                = HIGH;
+
+  const int     lowBeamsRelayPin        = 2;
+  const int     highBeamsRelayPin       = 3;
+  const int     buttonLedRelayPin       = 4;
+  
+  const int     lowBeamsSensorPin       = A0;
+  const int     highBeamsSensorPin      = A1;
+
+  const int     pushButtonPin           = 8;
+
+  float         lowBeamsSensorValue     = 0;
+  float         highBeamsSensorValue    = 0;
+
+  const float   auxiliaryBeamsVoltageThreshold  = 11.0;
   
   
   // ----------- FUNCTIONS ------------- //
   
-  void          checkButton           ();
+  float measureVoltage  (const int pin);
   
 #endif // _HEADER_H
