@@ -69,7 +69,7 @@ void createRelay(byte pin) {
 }
 
 void checkRelays() {
-  DateTime now = RTC.now();
+  DateTime now = clock.getTime();
   int startMins, endMins, currentMins;
 
   node_t *aux = first;

@@ -20,19 +20,10 @@ void printData(String data, bool carriageReturn) {
       else Serial.print(data);
       break;
     case COMM_TELNET:
-      if(carriageReturn) client.println(data);
-      else client.print(data);
+      //if(carriageReturn) client.println(data);
+      //else client.print(data);
       break;
   }
-}
-
-// Print the prompt
-void printPrompt() {
-  timeOfLastActivity = millis();
-  while (client.read() != -1) {};
-  client.println();
-  client.print(sys.hostname);
-  client.print(F("#>"));
 }
 
 void printIpAddress() {

@@ -18,13 +18,13 @@ void parser(char *command) {
   if(strncmp(args[0], "help", 4) == 0) printHelp();
   else if(strncmp(args[0], "set", 3) == 0) {
     if(strncmp(args[1], "help", 4) == 0 or !strlen(args[1])) setCommandHelp();
-    else if(strncmp(args[1], "hostname", 8) == 0) setHostname(args[2]);  // By default, args[2] is an empty string. setHostname will deal with it.
-    else if(strncmp(args[1], "ip", 2) == 0) setAddress(args[2], IP_ADDRESS);
-    else if(strncmp(args[1], "mask", 2) == 0) setAddress(args[2], SUBNET_MASK);
-    else if(strncmp(args[1], "gateway", 7) == 0) setAddress(args[2], DEFAULT_GATEWAY);
-    else if(strncmp(args[1], "dns", 3) == 0) setAddress(args[2], DNS_SERVER);
+    else if(strncmp(args[1], "hostname", 8) == 0) sys.setHostname(args[2]);  // By default, args[2] is an empty string. setHostname will deal with it.
+    else if(strncmp(args[1], "ip", 2) == 0) sys.setIpAddress(args[2], IP_ADDRESS);
+    else if(strncmp(args[1], "mask", 2) == 0) sys.setIpAddress(args[2], SUBNET_MASK);
+    else if(strncmp(args[1], "gateway", 7) == 0) sys.setIpAddress(args[2], DEFAULT_GATEWAY);
+    else if(strncmp(args[1], "dns", 3) == 0) sys.setIpAddress(args[2], DNS_SERVER);
     else if(strncmp(args[1], "mac", 3) == 0) printData(F("Not implemented..."), true);
-    else if(strncmp(args[1], "datetime", 3) == 0) setDateTime(args[2], args[3]);
+    else if(strncmp(args[1], "datetime", 3) == 0) clock.setDateTime(args[2], args[3]);
     else {
       printData(F("Unknown subcommand \""), false);
       printData(args[1], false);
@@ -72,14 +72,14 @@ void parser(char *command) {
       printData(F("\""), true);
     }
   }
-  else if(strncmp(args[0], "hostname", 8) == 0) printData(sys.hostname, true);
-  else if(strncmp(args[0], "time", 4) == 0) printData(getDate(), true);
-  else if(strncmp(args[0], "save", 4) == 0) saveData();
-  else if(strncmp(args[0], "reboot", 6) == 0) digitalWrite(sys.resetPin, LOW);
+  else if(strncmp(args[0], "hostname", 8) == 0) printData(sys.config.hostname, true);
+  else if(strncmp(args[0], "time", 4) == 0) printData(clock.getDate(), true);
+  else if(strncmp(args[0], "save", 4) == 0) sys.saveData();
+  else if(strncmp(args[0], "reboot", 6) == 0) digitalWrite(sys.config.resetPin, LOW);
   else if(strncmp(args[0], "exit", 4) == 0 ||
           strncmp(args[0], "quit", 4) == 0 &&
           output == COMM_TELNET) {
-    closeConnection();
+    network.closeConnection();
   }
   else if(strncmp(args[0], "defragEeprom", 12) == 0) printData(F("Feature not implemented"), true);
   else {

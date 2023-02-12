@@ -5,10 +5,8 @@
 #include <Ethernet.h>
 #include <EEPROM.h>
 
-// ----------- MISC ------------- //
 
-#define VERSION             F("1.7.1")
-#define BAUD_RATE           9600
+// ----------- MISC ------------- //
 #define MAX_COMMAND_LEN     64
 #define MAX_COMMAND_ARGS    10
 #define MAX_HOSTNAME_LEN    32
@@ -27,15 +25,7 @@
 #define COMM_SERIAL      100
 #define COMM_TELNET      200
 
-// Type of address passed to setAddress function
-#define IP_ADDRESS       0
-#define SUBNET_MASK      1
-#define DEFAULT_GATEWAY  2
-#define DNS_SERVER       3
-
 // ----------- VARIABLE DECLARATION ----------- //
-
-RTC_DS1307 RTC;
 
 // ----------- RELAYS ----------- //
 
@@ -66,22 +56,6 @@ node_t *first = NULL;
 node_t *last  = NULL;
 
 // ----------- SYSTEM ----------- //
-
-typedef struct systemData {
-  char   hostname[32];
-  byte   mac[6];
-  byte   ip[4];
-  byte   subnet[4];
-  byte   gateway[4];
-  byte   dns[4];
-  byte   resetPin;
-};
-
-struct  systemData sys;
-
-int           eeAddress       = 0;
-bool          sysChangeFlag   = false;
-String        days[]          = { "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" };
 byte          output          = COMM_SERIAL;
 char          *statuses[]     = { "ON", "OFF" };
 unsigned long tstamp          = 0;
@@ -101,18 +75,12 @@ unsigned long timeOfLastActivity;
 
 //five minutes
 unsigned long allowedConnectTime = 300000;
-
-EthernetServer server(23); // Telnet listens on port 23
-EthernetClient client = 0; // Client needs to have global scope so it can be called
-                           // from functions outside of loop, but we don't know
-                           // what client is yet, so creating an empty object
 /* -------------------------------------------------------------- */
 
 // ----------- FUNCTION DECLARATIONS ----------- //
 
 void parser(char *command);
 void setParam(String param);
-void saveData();
 
 // Relay functions - Defined in relayFunctions.h
 void setRelayStatus(byte pin, bool _status);
@@ -130,12 +98,8 @@ void changeRelayPin(byte currentPin, char *newPin);
 // Getter functions - Defined in getters.h //
 void getRelayInfo();
 void getReceivedText();
-String getDate();
 
 // Setter functions - Defined in setters.h //
-void setHostname(char *_name);
-void setAddress(char *_address, char *_type);
-void setDateTime(char *_date, char *_time);
 
 // Utilities - Defined in utils.h
 String arrayToString(byte array[], unsigned int len);

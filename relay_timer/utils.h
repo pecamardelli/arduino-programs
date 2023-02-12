@@ -46,70 +46,7 @@ void clearArgs(char **args) {
   }
 }
 
-void loadSystemData() {
-  // LOAD SYSTEM CONFIGURATIONS
-  // They're stored at the end of the EEPROM.
-  // Relay data is stored at the beginning.
- 
-  eeAddress = EEPROM.length() - sizeof(systemData) - 1;
-  EEPROM.get(eeAddress, sys);
 
-  // Set a default mac address if it's not defined.
-  if(sys.mac[0] == 0xff) sys.mac[0] = 0xDE;
-  if(sys.mac[1] == 0xff) sys.mac[1] = 0xAD;
-  if(sys.mac[2] == 0xff) sys.mac[2] = 0xBE;
-  if(sys.mac[3] == 0xff) sys.mac[3] = 0xEF;
-  if(sys.mac[4] == 0xff) sys.mac[4] = 0xF0;
-  if(sys.mac[5] == 0xff) sys.mac[5] = 0x18;
-  
-  Ethernet.begin(sys.mac, sys.ip, sys.dns, sys.gateway, sys.subnet);
-
-  byte pos      = 0;
-  relayQuantity = 0;
-  eeAddress     = 0;
-
-  // All relays are loaded into a dynamic list. This way, more relays can be added later.
-
-  // From byte 0 to 100 is stored the "file system". Every two bytes is an integer
-  // that represents a memory address where the relay data is stored on the EEPROM.
-  for(byte i=0;i<MAX_RELAY_NUMBER;i++) {
-    EEPROM.get(eeAddress, pos);
-  }
-  
-  do {
-    node_t *aux = (node_t *)malloc(sizeof(node_t));
-    
-    if (!aux) break;
-    else {
-      EEPROM.get(eeAddress, aux->relay);
-  
-      if(aux->relay.type == 200) {
-        if (!aux->relay.deleted) {
-          if(first == NULL) {
-            first       = aux;
-            first->next = NULL;
-            last        = first;
-          } else {
-            last->next  = aux;
-            last        = aux;
-            last->next  = NULL;
-          }
-    
-          pinMode(aux->relay.pin, OUTPUT);
-          digitalWrite(aux->relay.pin, HIGH);
-          aux->changeFlag = false;
-          aux->overrided  = false;
-    
-          relayQuantity++;
-        }
-        else free(aux);
-
-        eeAddress += sizeof(relayData);
-      } else break;
-    }
-  }
-  while(1);
-}
 
 String arrayToString(byte array[], unsigned int len) {
   char buffer[20] = "";
@@ -127,20 +64,4 @@ String arrayToString(byte array[], unsigned int len) {
   
   buffer[len*3] = '\0';
   return String(buffer);
-}
-
-void checkConnectionTimeout() {
-  if(millis() - timeOfLastActivity > allowedConnectTime) {
-    client.println();
-    client.println(F("Timeout disconnect."));
-    client.stop();
-    connectFlag = 0;
-  }
-}
-
-void closeConnection() {
-  client.println(F("\nBye.\n"));
-  client.stop();
-  connectFlag = 0;
-  output = COMM_SERIAL;
 }
