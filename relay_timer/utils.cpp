@@ -1,3 +1,5 @@
+#include "header.h"
+
 String parseUpTime(unsigned long startTime) {
   unsigned long diff = millis() - startTime;
   int _days = 0;

@@ -1,17 +1,4 @@
-byte checkPin(char *_pin) {
-  int pin;
-  sscanf(_pin, "%d", &pin);
-  
-  // Check if pin number is out of range
-  if(pin < 0 || pin > 53) return NULL;
-
-  // Check if given pin number is blacklisted
-  for(int i=0;i<sizeof(unusablePins)/sizeof(byte);i++) {
-    if(pin == unusablePins[i]) return NULL;
-  }
-
-  return (byte)pin;
-}
+#include "header.h"
 
 void setRelayStatus(byte pin, bool _status) {
   node_t *target = searchRelay(pin);
@@ -126,7 +113,7 @@ void deleteRelay(byte pin) {
 
   if (target) {
       target->relay.deleted = true;
-      printData(F("Relay successfully marked as deleted"), true);
+      sys.printData(F("Relay successfully marked as deleted"), true);
   }
 }
 
@@ -138,8 +125,8 @@ void setRelayDesc(byte pin, char *_desc) {
     else strncpy(target->relay.desc, _desc, RELAY_DESC_LEN);
     
     target->changeFlag = true;
-    printData(F("Description set to: "), false);
-    printData(target->relay.desc, true);
+    sys.printData(F("Description set to: "), false);
+    sys.printData(target->relay.desc, true);
   }
 }
 
@@ -154,12 +141,12 @@ void setRelayParams(byte pin, char *_param, byte type) {
           if(param >= 0 && param <= 23) {
             target->relay.startHour = param;
             target->changeFlag = true;
-            printData(F("Starting hour set to: "), false);
-            printData(String(param), true);
+            sys.printData(F("Starting hour set to: "), false);
+            sys.printData(String(param), true);
           }
           else {
-            printData(F("ERROR! Invalid starting hour \""), false);
-            printData(String(param) + "\"", true);
+            sys.printData(F("ERROR! Invalid starting hour \""), false);
+            sys.printData(String(param) + "\"", true);
             return;
           }
         break;
@@ -167,13 +154,13 @@ void setRelayParams(byte pin, char *_param, byte type) {
           if(param >= 0 && param <= 23) {
             target->relay.endHour = param;
             target->changeFlag = true;
-            printData("Pin " + String(pin), false);
-            printData(F(": ending hour set to: "), false);
-            printData(String(param), true);
+            sys.printData("Pin " + String(pin), false);
+            sys.printData(F(": ending hour set to: "), false);
+            sys.printData(String(param), true);
           }
           else {
-            printData(F("ERROR! Invalid ending hour \""), false);
-            printData(String(param) + "\"", true);
+            sys.printData(F("ERROR! Invalid ending hour \""), false);
+            sys.printData(String(param) + "\"", true);
             return;
           }
         break;
@@ -181,13 +168,13 @@ void setRelayParams(byte pin, char *_param, byte type) {
           if(param >= 0 && param <= 59) {
             target->relay.startMin = param;
             target->changeFlag = true;
-            printData("Pin " + String(pin), false);
-            printData(F(": starting minute set to: "), false);
-            printData(String(param), true);
+            sys.printData("Pin " + String(pin), false);
+            sys.printData(F(": starting minute set to: "), false);
+            sys.printData(String(param), true);
           }
           else {
-            printData(F("ERROR! Invalid starting minute \""), false);
-            printData(String(param) + "\"", true);
+            sys.printData(F("ERROR! Invalid starting minute \""), false);
+            sys.printData(String(param) + "\"", true);
             return;
           }
         break;
@@ -195,18 +182,18 @@ void setRelayParams(byte pin, char *_param, byte type) {
           if(param >= 0 && param <= 59) {
             target->relay.endMin = param;
             target->changeFlag = true;
-            printData("Pin " + String(pin), false);
-            printData(F(": ending minute set to: "), false);
-            printData(String(param), true);
+            sys.printData("Pin " + String(pin), false);
+            sys.printData(F(": ending minute set to: "), false);
+            sys.printData(String(param), true);
           }
           else {
-            printData(F("ERROR! Invalid ending minute \""), false);
-            printData(String(param) + "\"", true);
+            sys.printData(F("ERROR! Invalid ending minute \""), false);
+            sys.printData(String(param) + "\"", true);
             return;
           }
         break;
       default:
-        printData(F("ERROR! Invalid param type \""), true);
+        sys.printData(F("ERROR! Invalid param type \""), true);
     }
   }
 }
@@ -216,18 +203,18 @@ void resumeRelay(byte pin) {
 
   if (target) {
     target->overrided  = false;
-    printData("Relay " + String(pin), false);
-    printData(F(" resumed."), true);
+    sys.printData("Relay " + String(pin), false);
+    sys.printData(F(" resumed."), true);
   }
 }
 
 void changeRelayPin(byte currentPin, char *_newPin) {
   // Check if the new pin is valid
-  const byte newPin = checkPin(_newPin);
+  const byte newPin = (byte)_newPin;
   // Now check if someone else has it.
   node_t *isUsed = searchRelay(newPin);
 
-  if (isUsed) return printData(F("Error: new pin already in use."), true);
+  if (isUsed) return sys.printData(F("Error: new pin already in use."), true);
   
   // Looks like we're good.
   node_t *target = searchRelay(currentPin);
@@ -235,8 +222,8 @@ void changeRelayPin(byte currentPin, char *_newPin) {
   if (target) {
     target->relay.pin  = newPin;
     target->changeFlag = true;
-    printData(F("New pin successfully changed to: "), false);
-    printData(String(newPin), true);
+    sys.printData(F("New pin successfully changed to: "), false);
+    sys.printData(String(newPin), true);
   }
 }
 
@@ -253,43 +240,43 @@ void switchRelay(byte pin, uint8_t state, bool overrided) {
 }
 
 void getRelayInfo() {
-  printData(F("PIN\tENABLED\tDESCRIPTION\t\SWITCH ON\tSWITCH OFF\tSTATUS\tUPTIME"), true);  
+  sys.printData(F("PIN\tENABLED\tDESCRIPTION\t\SWITCH ON\tSWITCH OFF\tSTATUS\tUPTIME"), true);  
   node_t *aux = first;
 
   while(aux != NULL) {
     if(!aux->relay.deleted) {
-      printData(String(aux->relay.pin) + "\t", false);
+      sys.printData(String(aux->relay.pin) + "\t", false);
 
       const char *_enabled = (aux->relay.enabled) ? "true" : "false";
-      printData(_enabled, false);
-      printData("\t", false);
-      printData(aux->relay.desc, false);
+      sys.printData(_enabled, false);
+      sys.printData("\t", false);
+      sys.printData(aux->relay.desc, false);
 
       const byte *descLen = strlen(aux->relay.desc);
       
-      if (descLen < 8) printData("\t\t\t", false);
-      else if (descLen < 16) printData("\t\t", false);
-      else printData("\t", false);
+      if (descLen < 8) sys.printData("\t\t\t", false);
+      else if (descLen < 16) sys.printData("\t\t", false);
+      else sys.printData("\t", false);
 
       String starth = (aux->relay.startHour < 10) ? "0" + String(aux->relay.startHour) : String(aux->relay.startHour);
       String startm = (aux->relay.startMin < 10) ? "0" + String(aux->relay.startMin) : String(aux->relay.startMin);
-      printData( starth + ":" + startm + "\t", false);
+      sys.printData( starth + ":" + startm + "\t", false);
 
       String endh = (aux->relay.endHour < 10) ? "0" + String(aux->relay.endHour) : String(aux->relay.endHour);
       String endm = (aux->relay.endMin < 10) ? "0" + String(aux->relay.endMin) : String(aux->relay.endMin);
-      printData(endh + ":" + endm + "\t", false);
+      sys.printData(endh + ":" + endm + "\t", false);
 
       const char *_mode = digitalRead(aux->relay.pin) ? "off" : "on";
-      printData(_mode, false);
-      printData("\t", false);
+      sys.printData(_mode, false);
+      sys.printData("\t", false);
 
-      if (aux->relay.startTime) printData(parseUpTime(aux->relay.startTime), false);
-      else printData(F("--d --:--:--"), false);
+      if (aux->relay.startTime) sys.printData(parseUpTime(aux->relay.startTime), false);
+      else sys.printData(F("--d --:--:--"), false);
       
-      printData("\t", false);
+      sys.printData("\t", false);
       
-      if (aux->changeFlag) printData("*", true);
-      else printData("", true);
+      if (aux->changeFlag) sys.printData("*", true);
+      else sys.printData("", true);
     }
     aux = aux->next;
   }

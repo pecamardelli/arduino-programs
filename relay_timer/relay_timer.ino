@@ -1,18 +1,17 @@
 // * ARDUINO RELAY TIMER - February 2023
 
 #include "header.h"
-#include "clock.h"
-#include "system.h"
-#include "network.h"
-#include "utils.h"
-#include "printFunctions.h"
-#include "relayFunctions.h"
-#include "parser.h"
+#include "system.cpp"
+#include "network.cpp"
+#include "clock.cpp"
+#include "relay.cpp"
+#include "utils.cpp"
+#include "parser.cpp"
 
 void setup() {
   Serial.begin(9600);
   Wire.begin();
-  Serial.print("Hola");
+  Serial.write("Hola");
 }
 
 void loop() {
@@ -23,7 +22,7 @@ void loop() {
       while(Serial.read() != -1) {}
     }
     else {
-      output = COMM_SERIAL;
+      sys.output = COMM_SERIAL;
       sys.getSerialInput();
     }
   }
