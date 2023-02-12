@@ -62,9 +62,7 @@ void loadSystemData() {
   if(sys.mac[4] == 0xff) sys.mac[4] = 0xF0;
   if(sys.mac[5] == 0xff) sys.mac[5] = 0x18;
   
-  Serial.print(F("Starting ethernet shield: "));
   Ethernet.begin(sys.mac, sys.ip, sys.dns, sys.gateway, sys.subnet);
-  Serial.println(F("done."));
 
   byte pos      = 0;
   relayQuantity = 0;
@@ -81,12 +79,8 @@ void loadSystemData() {
   do {
     node_t *aux = (node_t *)malloc(sizeof(node_t));
     
-    if (!aux) {
-        Serial.print(F("ERROR: Could not allocate memory. "));
-        Serial.print(String(relayQuantity));
-        Serial.println(F(" relay(s) loaded."));
-        break;
-    } else {
+    if (!aux) break;
+    else {
       EEPROM.get(eeAddress, aux->relay);
   
       if(aux->relay.type == 200) {
@@ -111,11 +105,7 @@ void loadSystemData() {
         else free(aux);
 
         eeAddress += sizeof(relayData);
-      } else {
-        Serial.print(F("All relays loaded. Total: "));
-        Serial.println(String(relayQuantity));
-        break;
-      }
+      } else break;
     }
   }
   while(1);

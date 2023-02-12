@@ -1,6 +1,4 @@
 void saveData() {
-  printData(F("Saving changes to EEPROM..."), true);
-  
   int q = 0;
   node_t *aux = first;
   eeAddress = 0;
@@ -29,7 +27,6 @@ void saveData() {
     sys.mac[5] = 0xED;
     */
     EEPROM.put(eeAddress, sys);
-    printData(F("System data saved."), true);
     sysChangeFlag = false;
   }
 }

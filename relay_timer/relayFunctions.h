@@ -3,18 +3,11 @@ byte checkPin(char *_pin) {
   sscanf(_pin, "%d", &pin);
   
   // Check if pin number is out of range
-  if(pin < 0 || pin > 53) {
-    printData(F("Pin number is out of range (0-53): "), false);
-    printData(String(pin), true);
-    return NULL;
-  }
+  if(pin < 0 || pin > 53) return NULL;
 
   // Check if given pin number is blacklisted
   for(int i=0;i<sizeof(unusablePins)/sizeof(byte);i++) {
-    if(pin == unusablePins[i]) {
-      printData(F("Pin is blacklisted."), true);
-      return NULL;
-    }
+    if(pin == unusablePins[i]) return NULL;
   }
 
   return (byte)pin;
@@ -24,9 +17,6 @@ void setRelayStatus(byte pin, bool _status) {
   node_t *target = searchRelay(pin);
   if(target) {
     target->relay.enabled = _status;
-    printData(F("Relay "), false);
-    printData(String(pin), false);
-    printData(F(" enabled."), true);
   }
 }
 
@@ -41,18 +31,11 @@ node_t *searchRelay(byte pin) {
     aux = aux->next;
   }
   
-  printData(F("No relay found at pin "), false);
-  printData(String(pin), true);
-  
   return NULL;
 }
 
 void createRelay(byte pin) {
-  if(searchRelay(pin)) {
-    printData(F("Pin already in use: "), false);
-    printData(String(pin), true);
-    return;
-  }
+  if(searchRelay(pin)) return;
   
   node_t *aux = (node_t *)malloc(sizeof(node_t));
   aux->next = NULL; // Set to NULL to inform that it's a new list entry.
@@ -83,8 +66,6 @@ void createRelay(byte pin) {
       //last->next  = NULL;  In this case, next has been set to NULL when memory was allocated.
     }
   }
-  printData(F("Added a new relay at pin "), false);
-  printData(String(pin), true);
 }
 
 void checkRelays() {

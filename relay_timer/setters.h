@@ -1,9 +1,7 @@
 void setHostname(char *_name) {
-  if(strlen(_name) == 0)
-    return printData(F("Hostname cannot be an empty string."), true);
+  if(strlen(_name) == 0) return;
     
-  if(strlen(_name) > MAX_HOSTNAME_LEN)
-    return printData(F("Hostname exceeds maximum length."), true);
+  if(strlen(_name) > MAX_HOSTNAME_LEN) return;
 
   // Looks like we're good...
   printData(_name, true);
@@ -11,19 +9,12 @@ void setHostname(char *_name) {
 
   // Inform that changes were made.
   sysChangeFlag = true;
-  
-  printData(F("Hostname set to: "), false);
-  printData(String(sys.hostname), true);
 }
 
 void setAddress(char *_address, int _type) {
   IPAddress addr;
   // Check validity
-  if (!addr.fromString(_address)) {
-    printData(F("Invalid address: "), false);
-    printData(_address, true);
-    return;
-  }
+  if (!addr.fromString(_address)) return;
 
   switch(_type) {
     case IP_ADDRESS:
@@ -51,13 +42,7 @@ void setAddress(char *_address, int _type) {
       sys.dns[3]    = addr[3];
       break;
   }
-
-  printData(F("Parameter successfully updated: "), false);
-  printData(String(addr[0], DEC) + "." +
-                    String(addr[1], DEC) + "." +
-                    String(addr[2], DEC) + "." +
-                    String(addr[3], DEC), true);
-  printData(F("Save & reboot to apply changes."), true);
+  
   sysChangeFlag = true;
 }
 
@@ -74,24 +59,6 @@ void setDateTime(char *_date, char *_time) {
 
   if(sscanf(_time, "%d:%d:%d", &_hour, &_min, &_sec) != 3)
     return printData(F("Bad time format (HH:MM:SS)"), true);
-  
-  if(_hour < 0 || _hour > 23) {
-    printData(F("ERROR! Hour out of range: "), false);
-    printData(String(_hour), true); 
-    return;
-  }
-
-  if(_min < 0 || _min > 59) {
-    printData(F("ERROR! Minute out of range: "), false);
-    printData(String(_min), true); 
-    return;
-  }
-
-  if(_sec < 0 || _sec > 59) {
-    printData(F("ERROR! Second out of range: "), false);
-    printData(String(_sec), true); 
-    return;
-  }
 
   if(_day >= 0 || _day <= 31) {
     if(_day == 31 &&
@@ -116,28 +83,7 @@ void setDateTime(char *_date, char *_time) {
       }
     }        
   }
-  else {
-    printData(F("ERROR! The day is out of range: "), false);
-    printData(String(_day), true); 
-    return;
-  }
-
-  if(_month < 0 || _month > 12) {
-    printData(F("ERROR! The month is out of range: "), false);
-    printData(String(_month), true); 
-    return;
-  }
-
-  if(_year < 2018) {
-    printData(F("ERROR! Unless you've travelled back in time, you cannot be in the year "), false);
-    printData(String(_year) + ".", true); 
-    return;
-  }
-
-  if(_year > 2099) {
-    printData(F("ERROR! I don't think this device will be still alive beyond the year 2099."), true); 
-    return;
-  }
+  else return;
   
   RTC.adjust(DateTime(_year,_month,_day,_hour,_min,_sec));
   printData(F("Date successfully updated: "), false);
