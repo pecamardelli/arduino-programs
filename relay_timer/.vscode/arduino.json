@@ -1,0 +1,5 @@
+{
+    "board": "arduino:avr:uno",
+    "sketch": "relay_timer.ino",
+    "port": "/dev/ttyACM0"
+}
