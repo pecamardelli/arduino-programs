@@ -4,23 +4,30 @@
 #include "header.h"
 
 System sys;
+Parser parser;
+EthernetServer server(23); // Telnet listens on port 23
 
-#line 6 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 8 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void setup();
-#line 12 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 15 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void loop();
-#line 6 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 8 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void setup()
 {
     Serial.begin(9600);
-    Serial.println("Hello World");
+    Ethernet.begin(sys.macAddress, sys.ipAddress, sys.dnsServer, sys.gateway, sys.subnetMask);
+    server.begin();
 }
 
 void loop()
 {
     if (Serial.available())
     {
-        // sys.getSerialInput();
+        Serial.println("Free memory before: " + String(sys.getFreeMemory()));
+        char *input = sys.getSerialInput();
+        parser.parse(input);
+        free(input);
+        Serial.println("Free memory after: " + String(sys.getFreeMemory()));
     }
 }
 

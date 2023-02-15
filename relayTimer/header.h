@@ -6,6 +6,7 @@
 #define MACROS_H
 
 #define MAX_COMMAND_LEN 64
+#define MAX_COMMAND_ARGS 16
 
 #endif
 
@@ -17,7 +18,6 @@
 
 class System
 {
-    bool charAllowed(char c);
     byte specialChars[6];
 
 public:
@@ -29,7 +29,61 @@ public:
     IPAddress gateway;
     IPAddress dnsServer;
 
-    void System::getSerialInput();
+    char *System::getSerialInput();
+    int System::getFreeMemory();
+    bool System::charAllowed(char c)
+};
+
+#endif
+
+#ifndef PARSER_H
+#define PARSER_H
+
+class Command
+{
+private:
+public:
+    Command(/* args */);
+    ~Command();
+    char **args;
+    uint8_t count;
+    void freeMem();
+};
+
+class Parser
+{
+private:
+    const char *delimiter;
+    Command *Parser::tokenize(char *input);
+
+public:
+    Parser(/* args */);
+    ~Parser();
+    void Parser::parse(char *input);
+};
+
+#endif
+
+#ifndef TELNET_H
+#define TELNET_H
+
+class Telnet
+{
+private:
+    EthernetClient client;
+    boolean connected;
+    unsigned long timeOfLastActivity;
+    unsigned long allowedConnectTime;
+
+    void Telnet::closeConnection();
+    void Telnet::checkConnectionTimeout();
+    char *Telnet::getInput();
+
+public:
+    Telnet(/* args */);
+    ~Telnet();
+    void Telnet::commandPrompt();
+    void Telnet::checkConnection();
 };
 
 #endif

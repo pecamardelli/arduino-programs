@@ -1,5 +1,5 @@
 {
-  "additionalFiles": "..,..",
+  "additionalFiles": "..,..,..,..,..",
   "builtInLibrariesFolders": "/home/pablin/arduino-1.8.19/libraries",
   "builtInToolsFolders": "/home/pablin/arduino-1.8.19/tools-builder,/home/pablin/arduino-1.8.19/hardware/tools/avr,/home/pablin/.arduino15/packages",
   "compiler.optimization_flags": "",
