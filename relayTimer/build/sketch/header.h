@@ -19,7 +19,6 @@
 
 class System
 {
-    bool charAllowed(char c);
     byte specialChars[6];
 
 public:
@@ -33,6 +32,7 @@ public:
 
     char *System::getSerialInput();
     int System::getFreeMemory();
+    bool System::charAllowed(char c);
 };
 
 #endif
@@ -73,11 +73,18 @@ class Telnet
 private:
     EthernetClient client;
     boolean connected;
+    unsigned long timeOfLastActivity;
+    unsigned long allowedConnectTime;
+
+    void Telnet::closeConnection();
+    void Telnet::checkConnectionTimeout();
+    char *Telnet::getInput();
 
 public:
     Telnet(/* args */);
     ~Telnet();
     void Telnet::commandPrompt();
+    void Telnet::checkConnection();
 };
 
 #endif

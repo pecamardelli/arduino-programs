@@ -31,7 +31,7 @@ public:
 
     char *System::getSerialInput();
     int System::getFreeMemory();
-    bool System::charAllowed(char c)
+    bool System::charAllowed(char c);
 };
 
 #endif

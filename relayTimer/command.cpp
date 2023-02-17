@@ -2,7 +2,7 @@
 
 Command::Command(/* args */)
 {
-  args = new char *[MAX_COMMAND_ARGS];
+  args = new char *[MAX_COMMAND_ARGS](NULL);
   count = 0;
 }
 
@@ -18,7 +18,6 @@ void Command::freeMem()
     {
       free(args[i]);
     }
-    args[i] = NULL;
   }
   free(args);
 }

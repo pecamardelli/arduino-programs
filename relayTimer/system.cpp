@@ -2,8 +2,8 @@
 
 System::System()
 {
-  hostname = "Arduino Relay Timer";
-  ipAddress.fromString("192.168.40.3");
+  hostname = "arduino";
+  ipAddress.fromString("192.168.40.8");
   subnetMask.fromString("255.255.255.0");
   gateway.fromString("192.168.40.1");
   dnsServer.fromString("179.42.171.21");
@@ -26,27 +26,33 @@ System::System()
 char *System::getSerialInput()
 {
   char c;
-  uint8_t charsReceived = 0;
-  char *buffer = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
+  uint8_t charIndex = 0;
+  const uint8_t charsWaiting = Serial.available();
+
+  if (charsWaiting <= 0)
+    return;
+
+  char *input = (char *)malloc(charsWaiting * sizeof(char));
 
   while (Serial.available() > 0)
   {
-    c = (char)Serial.read();
+    c = Serial.read();
 
     // Include letters, digits, and other allowed chars. Add more allowed characters
     // at the definition of the specialChars array.
     if (isalpha(c) or isdigit(c) or charAllowed(c))
     {
-      buffer[charsReceived] = (char)c;
-      charsReceived++;
-      if (charsReceived >= MAX_COMMAND_LEN - 1)
-        break;
+      input[charIndex++] = (char)c;
     }
+    else
+    {
+      input[charIndex++] = (char)0x20;
+    }
+      
     delay(5);
   }
-
-  buffer[charsReceived] = (char)0x20;
-  return buffer;
+  
+  return input;
 };
 
 bool System::charAllowed(char c)

@@ -3,8 +3,8 @@
 
 System::System()
 {
-  hostname = "Arduino Relay Timer";
-  ipAddress.fromString("192.168.40.3");
+  hostname = "arduino";
+  ipAddress.fromString("192.168.40.8");
   subnetMask.fromString("255.255.255.0");
   gateway.fromString("192.168.40.1");
   dnsServer.fromString("179.42.171.21");
