@@ -27,12 +27,11 @@ char *System::getSerialInput()
 {
   char c;
   uint8_t charIndex = 0;
-  const uint8_t charsWaiting = Serial.available();
 
-  if (charsWaiting <= 0)
+  if (Serial.available() <= 0)
     return;
 
-  char *input = (char *)malloc(charsWaiting * sizeof(char));
+  char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
 
   while (Serial.available() > 0)
   {

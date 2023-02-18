@@ -53,14 +53,13 @@ void Telnet::checkConnection()
 char *Telnet::getInput()
 {
   uint8_t charIndex = 0;
-  const uint8_t charsWaiting = client.available();
   char c;
   
-  if (!charsWaiting)
+  if (client.available() <= 0)
     return;
     
   // Looks like we have a command to parse. Let's do it.
-  char *input = (char *)malloc(charsWaiting * sizeof(char));
+  char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
 
   while (client.available() > 0)
   {

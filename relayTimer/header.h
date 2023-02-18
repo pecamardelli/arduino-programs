@@ -54,12 +54,11 @@ class Parser
 {
 private:
     const char *delimiter;
-    Command *Parser::tokenize(char *input);
 
 public:
     Parser(/* args */);
     ~Parser();
-    void Parser::parse(char *input);
+    Command *Parser::parse(char *input);
 };
 
 #endif
@@ -75,7 +74,6 @@ private:
     unsigned long timeOfLastActivity;
     unsigned long allowedConnectTime;
 
-    void Telnet::closeConnection();
     void Telnet::checkConnectionTimeout();
     char *Telnet::getInput();
 
@@ -84,6 +82,7 @@ public:
     ~Telnet();
     void Telnet::commandPrompt();
     void Telnet::checkConnection();
+    void Telnet::closeConnection();
 };
 
 #endif
