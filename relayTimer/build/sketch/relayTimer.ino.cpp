@@ -6,12 +6,13 @@ System sys;
 Parser parser;
 EthernetServer server(23); // Telnet listens on port 23
 Telnet telnet;
+SerialChannel serial;
 
-#line 8 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 9 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void setup();
-#line 25 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 26 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void loop();
-#line 8 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
+#line 9 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino"
 void setup()
 {
   Serial.begin(9600);
@@ -32,28 +33,29 @@ void setup()
 void loop()
 {
   telnet.checkConnection();
+  serial.checkServer();
 
-  if (Serial.available())
-  {
-    Serial.println("Free memory before: " + String(sys.getFreeMemory()));
-    char *input = sys.getSerialInput();
-    Command *com = parser.parse(input);
+  // if (Serial.available())
+  // {
+  //   Serial.println("Free memory before: " + String(sys.getFreeMemory()));
+  //   char *input = sys.getSerialInput();
+  //   Command *com = parser.parse(input);
 
-    if (strncmp(com->args[0], "help", 4) == 0)
-    {
-      Serial.println("Help wanted...");
-    }
-    else if (strncmp(com->args[0], "exit", 4) == 0)
-    {
-      // telnet.closeConnection();
-    }
-    else
-    {
-      Serial.println("Bad command: " + String(com->args[0]));
-    }
+  //   if (strncmp(com->args[0], "help", 4) == 0)
+  //   {
+  //     Serial.println("Help wanted...");
+  //   }
+  //   else if (strncmp(com->args[0], "exit", 4) == 0)
+  //   {
+  //     // telnet.closeConnection();
+  //   }
+  //   else
+  //   {
+  //     Serial.println("Bad command: " + String(com->args[0]));
+  //   }
 
-    delete com;
-    Serial.println("Free memory after: " + String(sys.getFreeMemory()));
-  }
+  //   delete com;
+  //   Serial.println("Free memory after: " + String(sys.getFreeMemory()));
+  // }
 }
 

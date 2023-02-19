@@ -96,7 +96,7 @@ protected:
 #ifndef TELNET_H
 #define TELNET_H
 
-class Telnet : public Channel<EthernetClient>
+class Telnet : public Channel<EthernetClient *>
 {
 private:
     boolean connected;
@@ -114,5 +114,20 @@ public:
 };
 
 extern Telnet telnet;
+
+#endif
+
+#ifndef SERIAL_CHANNEL_H
+#define SERIAL_CHANNEL_H
+
+class SerialChannel : public Channel<Stream *>
+{
+private:
+    /* data */
+public:
+    SerialChannel(/* args */);
+    ~SerialChannel();
+    void checkServer();
+};
 
 #endif

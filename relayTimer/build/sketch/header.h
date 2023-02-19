@@ -8,6 +8,7 @@
 
 #define MAX_COMMAND_LEN 64
 #define MAX_COMMAND_ARGS 16
+#define MAX_HOSTNAME_LEN 64
 
 #endif
 
@@ -19,20 +20,23 @@
 
 class System
 {
+private:
     byte specialChars[6];
+    bool configChanged;
 
 public:
     System();
-    String hostname;
+    char hostname[MAX_HOSTNAME_LEN];
     byte macAddress[6];
     IPAddress ipAddress;
     IPAddress subnetMask;
     IPAddress gateway;
     IPAddress dnsServer;
 
-    char *System::getSerialInput();
-    int System::getFreeMemory();
-    bool System::charAllowed(char c);
+    char *getSerialInput();
+    int getFreeMemory();
+    bool charAllowed(char c);
+    char *setHostname(char *newHostname);
 };
 
 extern System sys;
@@ -93,7 +97,7 @@ protected:
 #ifndef TELNET_H
 #define TELNET_H
 
-class Telnet : public Channel<EthernetClient>
+class Telnet : public Channel<EthernetClient *>
 {
 private:
     boolean connected;
@@ -111,5 +115,20 @@ public:
 };
 
 extern Telnet telnet;
+
+#endif
+
+#ifndef SERIAL_CHANNEL_H
+#define SERIAL_CHANNEL_H
+
+class SerialChannel : public Channel<Stream *>
+{
+private:
+    /* data */
+public:
+    SerialChannel(/* args */);
+    ~SerialChannel();
+    void checkServer();
+};
 
 #endif

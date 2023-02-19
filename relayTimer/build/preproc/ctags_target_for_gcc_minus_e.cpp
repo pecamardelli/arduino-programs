@@ -5,6 +5,7 @@ System sys;
 Parser parser;
 EthernetServer server(23); // Telnet listens on port 23
 Telnet telnet;
+SerialChannel serial;
 
 void setup()
 {
@@ -26,27 +27,28 @@ void setup()
 void loop()
 {
   telnet.checkConnection();
+  serial.checkServer();
 
-  if (Serial.available())
-  {
-    Serial.println("Free memory before: " + String(sys.getFreeMemory()));
-    char *input = sys.getSerialInput();
-    Command *com = parser.parse(input);
+  // if (Serial.available())
+  // {
+  //   Serial.println("Free memory before: " + String(sys.getFreeMemory()));
+  //   char *input = sys.getSerialInput();
+  //   Command *com = parser.parse(input);
 
-    if (strncmp(com->args[0], "help", 4) == 0)
-    {
-      Serial.println("Help wanted...");
-    }
-    else if (strncmp(com->args[0], "exit", 4) == 0)
-    {
-      // telnet.closeConnection();
-    }
-    else
-    {
-      Serial.println("Bad command: " + String(com->args[0]));
-    }
+  //   if (strncmp(com->args[0], "help", 4) == 0)
+  //   {
+  //     Serial.println("Help wanted...");
+  //   }
+  //   else if (strncmp(com->args[0], "exit", 4) == 0)
+  //   {
+  //     // telnet.closeConnection();
+  //   }
+  //   else
+  //   {
+  //     Serial.println("Bad command: " + String(com->args[0]));
+  //   }
 
-    delete com;
-    Serial.println("Free memory after: " + String(sys.getFreeMemory()));
-  }
+  //   delete com;
+  //   Serial.println("Free memory after: " + String(sys.getFreeMemory()));
+  // }
 }
