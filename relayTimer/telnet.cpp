@@ -1,8 +1,6 @@
 #include "header.h"
 
-extern System sys;
 extern EthernetServer server;
-extern Parser parser;
 
 Telnet::Telnet()
 {
@@ -18,9 +16,9 @@ Telnet::~Telnet()
 void Telnet::commandPrompt()
 {
   timeOfLastActivity = millis();
-  client.println();
+  // client.println();
   client.print(sys.hostname);
-  client.print(F("#>"));
+  client.print(F("#> "));
 };
 
 void Telnet::checkConnection()
@@ -41,6 +39,7 @@ void Telnet::checkConnection()
   {
     char *input = getInput();
     Command *com = parser.parse(input);
+    exec(com);
     delete com;
     commandPrompt();
   }

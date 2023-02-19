@@ -7,6 +7,7 @@
 
 #define MAX_COMMAND_LEN 64
 #define MAX_COMMAND_ARGS 16
+#define MAX_HOSTNAME_LEN 64
 
 #endif
 
@@ -18,21 +19,26 @@
 
 class System
 {
+private:
     byte specialChars[6];
+    bool configChanged;
 
 public:
     System();
-    String hostname;
+    char hostname[MAX_HOSTNAME_LEN];
     byte macAddress[6];
     IPAddress ipAddress;
     IPAddress subnetMask;
     IPAddress gateway;
     IPAddress dnsServer;
 
-    char *System::getSerialInput();
-    int System::getFreeMemory();
-    bool System::charAllowed(char c);
+    char *getSerialInput();
+    int getFreeMemory();
+    bool charAllowed(char c);
+    char *setHostname(char *newHostname);
 };
+
+extern System sys;
 
 #endif
 
@@ -61,6 +67,8 @@ public:
     Command *Parser::parse(char *input);
 };
 
+extern Parser parser;
+
 #endif
 
 #ifndef CHANNEL_H
@@ -80,6 +88,7 @@ public:
 protected:
     T client;
     char *getInput();
+    char *exec(Command *com);
 };
 
 #endif
@@ -103,5 +112,7 @@ public:
     void checkConnection();
     void closeConnection();
 };
+
+extern Telnet telnet;
 
 #endif

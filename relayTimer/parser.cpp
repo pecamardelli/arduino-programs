@@ -26,17 +26,17 @@ Command *Parser::parse(char *input)
   }
 
   // ----- Do some debugging ----- //
-  
-  for (uint8_t i = 0; i < com->count; i++)
-  {
-    Serial.print("Argument " + String(i) + ": ");
-    Serial.println(com->args[i]);
-  }
-  Serial.println("Total args: " + String(com->count));
-  
+
+  // for (uint8_t i = 0; i < com->count; i++)
+  // {
+  //   Serial.print("Argument " + String(i) + ": ");
+  //   Serial.println(com->args[i]);
+  // }
+  // Serial.println("Total args: " + String(com->count));
+
   // ---------------------------- //
 
   free(input);
-  
+
   return com;
 }

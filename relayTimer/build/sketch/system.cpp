@@ -48,10 +48,10 @@ char *System::getSerialInput()
     {
       input[charIndex++] = (char)0x20;
     }
-      
+
     delay(5);
   }
-  
+
   return input;
 };
 

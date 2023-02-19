@@ -46,7 +46,6 @@ void loop()
       Serial.println("Bad command: " + String(com->args[0]));
     }
 
-    com->freeMem();
     delete com;
     Serial.println("Free memory after: " + String(sys.getFreeMemory()));
   }

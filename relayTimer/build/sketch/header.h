@@ -35,6 +35,8 @@ public:
     bool System::charAllowed(char c);
 };
 
+extern System sys;
+
 #endif
 
 #ifndef PARSER_H
@@ -62,6 +64,8 @@ public:
     Command *Parser::parse(char *input);
 };
 
+extern Parser parser;
+
 #endif
 
 #ifndef CHANNEL_H
@@ -81,6 +85,7 @@ public:
 protected:
     T client;
     char *getInput();
+    char *exec(Command *com);
 };
 
 #endif
@@ -104,5 +109,7 @@ public:
     void checkConnection();
     void closeConnection();
 };
+
+extern Telnet telnet;
 
 #endif

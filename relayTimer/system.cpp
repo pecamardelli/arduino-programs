@@ -2,11 +2,12 @@
 
 System::System()
 {
-  hostname = "arduino";
+  strcpy(hostname, "arduino");
   ipAddress.fromString("192.168.40.8");
   subnetMask.fromString("255.255.255.0");
   gateway.fromString("192.168.40.1");
   dnsServer.fromString("179.42.171.21");
+  configChanged = false;
 
   macAddress[0] = 0xDE;
   macAddress[1] = 0xAD;
@@ -47,10 +48,10 @@ char *System::getSerialInput()
     {
       input[charIndex++] = (char)0x20;
     }
-      
+
     delay(5);
   }
-  
+
   return input;
 };
 
@@ -82,3 +83,18 @@ int System::getFreeMemory()
   return __brkval ? &top - __brkval : &top - __malloc_heap_start;
 #endif // __arm__
 }
+
+char *System::setHostname(char *newHostname)
+{
+  if (strlen(newHostname) == 0)
+    return "Error: hostname cannot be empty.";
+
+  if (strlen(newHostname) > MAX_HOSTNAME_LEN)
+    return "Error: hostname exceedes maximum.";
+
+  // Looks like we're good...
+  strncpy(hostname, newHostname, MAX_HOSTNAME_LEN);
+
+  // Inform that changes were made.
+  configChanged = true;
+};
