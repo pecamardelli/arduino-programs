@@ -27,27 +27,32 @@ System::System()
 char *System::getSerialInput()
 {
   char c;
-  uint8_t charsReceived = 0;
-  char *buffer = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
+  uint8_t charIndex = 0;
+
+  if (Serial.available() <= 0)
+    return;
+
+  char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
 
   while (Serial.available() > 0)
   {
-    c = (char)Serial.read();
+    c = Serial.read();
 
     // Include letters, digits, and other allowed chars. Add more allowed characters
     // at the definition of the specialChars array.
     if (isalpha(c) or isdigit(c) or charAllowed(c))
     {
-      buffer[charsReceived] = (char)c;
-      charsReceived++;
-      if (charsReceived >= MAX_COMMAND_LEN - 1)
-        break;
+      input[charIndex++] = (char)c;
     }
+    else
+    {
+      input[charIndex++] = (char)0x20;
+    }
+      
     delay(5);
   }
-
-  buffer[charsReceived] = (char)0x20;
-  return buffer;
+  
+  return input;
 };
 
 bool System::charAllowed(char c)

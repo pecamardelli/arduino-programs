@@ -63,26 +63,45 @@ public:
 
 #endif
 
+#ifndef CHANNEL_H
+#define CHANNEL_H
+
+template <class T>
+class Channel
+{
+private:
+    bool charAllowed(char c);
+    byte specialChars[6];
+
+public:
+    Channel(/* args */);
+    ~Channel();
+
+protected:
+    T client;
+    char *getInput();
+};
+
+#endif
+
 #ifndef TELNET_H
 #define TELNET_H
 
-class Telnet
+class Telnet : public Channel<EthernetClient>
 {
 private:
-    EthernetClient client;
     boolean connected;
     unsigned long timeOfLastActivity;
     unsigned long allowedConnectTime;
 
-    void Telnet::checkConnectionTimeout();
-    char *Telnet::getInput();
+    void checkConnectionTimeout();
 
 public:
     Telnet(/* args */);
     ~Telnet();
-    void Telnet::commandPrompt();
-    void Telnet::checkConnection();
-    void Telnet::closeConnection();
+    void commandPrompt();
+    void checkConnection();
+    void closeConnection();
 };
 
 #endif

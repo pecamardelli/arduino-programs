@@ -8,6 +8,7 @@ Command::Command(/* args */)
 
 Command::~Command()
 {
+    freeMem();
 }
 
 void Command::freeMem()

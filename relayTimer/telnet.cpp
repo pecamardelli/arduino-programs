@@ -40,44 +40,14 @@ void Telnet::checkConnection()
   if (client.connected() && client.available())
   {
     char *input = getInput();
-    parser.parse(input);
-    free(input);
+    Command *com = parser.parse(input);
+    delete com;
     commandPrompt();
   }
-  
+
   // Check to see if connection has timed out
   if (connected)
     checkConnectionTimeout();
-};
-
-char *Telnet::getInput()
-{
-  uint8_t charIndex = 0;
-  char c;
-  
-  if (client.available() <= 0)
-    return;
-    
-  // Looks like we have a command to parse. Let's do it.
-  char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
-
-  while (client.available() > 0)
-  {
-    c = client.read();
-    //Serial.print(String(int(c)) + " ");
-    // Include letters, digits, and other allowed chars. Add more allowed characters
-    // at the definition of the specialChars array.
-    if (isalpha(c) or isdigit(c) or sys.charAllowed(c))
-    {
-      input[charIndex++] = (char)c;
-    }
-    else
-    { 
-      input[charIndex++] = (char)0x20;
-    }
-  }
-  
-  return input;
 };
 
 void Telnet::closeConnection()

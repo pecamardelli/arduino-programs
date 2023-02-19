@@ -1,7 +1,5 @@
 #include "header.h"
 
-extern Telnet telnet;
-
 Parser::Parser(/* args */)
 {
   // Using space character as delimiter
@@ -14,7 +12,7 @@ Parser::~Parser()
 
 Command *Parser::parse(char *input)
 {
-  //Serial.println("Parsing: " + String(input));
+  Serial.println("Parsing: " + String(input));
   Command *com = new Command();
 
   char *token = strtok(input, delimiter);

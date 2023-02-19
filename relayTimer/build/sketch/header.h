@@ -55,12 +55,32 @@ class Parser
 {
 private:
     const char *delimiter;
-    Command *Parser::tokenize(char *input);
 
 public:
     Parser(/* args */);
     ~Parser();
-    void Parser::parse(char *input);
+    Command *Parser::parse(char *input);
+};
+
+#endif
+
+#ifndef CHANNEL_H
+#define CHANNEL_H
+
+template <class T>
+class Channel
+{
+private:
+    bool charAllowed(char c);
+    byte specialChars[6];
+
+public:
+    Channel(/* args */);
+    ~Channel();
+
+protected:
+    T client;
+    char *getInput();
 };
 
 #endif
@@ -68,23 +88,21 @@ public:
 #ifndef TELNET_H
 #define TELNET_H
 
-class Telnet
+class Telnet : public Channel<EthernetClient>
 {
 private:
-    EthernetClient client;
     boolean connected;
     unsigned long timeOfLastActivity;
     unsigned long allowedConnectTime;
 
-    void Telnet::closeConnection();
-    void Telnet::checkConnectionTimeout();
-    char *Telnet::getInput();
+    void checkConnectionTimeout();
 
 public:
     Telnet(/* args */);
     ~Telnet();
-    void Telnet::commandPrompt();
-    void Telnet::checkConnection();
+    void commandPrompt();
+    void checkConnection();
+    void closeConnection();
 };
 
 #endif
