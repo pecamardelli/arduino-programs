@@ -2,14 +2,14 @@
 
 SerialChannel::SerialChannel(/* args */)
 {
-    client = &Serial;
+  client = &Serial;
 }
 
 SerialChannel::~SerialChannel()
 {
 }
 
-void SerialChannel::checkServer()
+void SerialChannel::checkAvailable()
 {
   if (client->available())
   {

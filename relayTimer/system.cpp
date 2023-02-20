@@ -24,37 +24,6 @@ System::System()
   specialChars[4] = 0x3a;
 };
 
-char *System::getSerialInput()
-{
-  char c;
-  uint8_t charIndex = 0;
-
-  if (Serial.available() <= 0)
-    return;
-
-  char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
-
-  while (Serial.available() > 0)
-  {
-    c = Serial.read();
-
-    // Include letters, digits, and other allowed chars. Add more allowed characters
-    // at the definition of the specialChars array.
-    if (isalpha(c) or isdigit(c) or charAllowed(c))
-    {
-      input[charIndex++] = (char)c;
-    }
-    else
-    {
-      input[charIndex++] = (char)0x20;
-    }
-
-    delay(5);
-  }
-
-  return input;
-};
-
 bool System::charAllowed(char c)
 {
   for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
@@ -95,6 +64,45 @@ char *System::setHostname(char *newHostname)
   // Looks like we're good...
   strncpy(hostname, newHostname, MAX_HOSTNAME_LEN);
 
-  // Inform that changes were made.
-  configChanged = true;
+  return newHostname;
+};
+
+char *System::setIpAddress(char *newIpAddress)
+{
+  if (!ipAddress.fromString(newIpAddress))
+    return "Error: invalid ip address.";
+
+  Ethernet.setLocalIP(ipAddress);
+
+  return newIpAddress;
+};
+
+char *System::setSubnetMask(char *newSubnetMask)
+{
+  if (!subnetMask.fromString(newSubnetMask))
+    return "Error: invalid subnet mask.";
+
+  Ethernet.setSubnetMask(subnetMask);
+
+  return newSubnetMask;
+};
+
+char *System::setDefaultGateway(char *newDefaultGateway)
+{
+  if (!gateway.fromString(newDefaultGateway))
+    return "Error: invalid default gateway.";
+
+  Ethernet.setGatewayIP(gateway);
+
+  return newDefaultGateway;
+};
+
+char *System::setDnsServer(char *newDnsServer)
+{
+  if (!dnsServer.fromString(newDnsServer))
+    return "Error: invalid DNS server.";
+
+  Ethernet.setDnsServerIP(dnsServer);
+
+  return newDnsServer;
 };

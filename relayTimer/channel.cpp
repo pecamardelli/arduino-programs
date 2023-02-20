@@ -49,6 +49,17 @@ char *Channel<T>::getInput()
 };
 
 template <class T>
+bool Channel<T>::charAllowed(char c)
+{
+    for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
+    {
+        if (c == specialChars[i])
+            return true;
+    }
+    return false;
+};
+
+template <class T>
 char *Channel<T>::exec(Command *com)
 {
 
@@ -72,19 +83,32 @@ char *Channel<T>::exec(Command *com)
         client->println(F("set (parameter)\t\t--> Sets a given parameter. Use 'set help' for further options."));
         client->println(F("show (parameter)\t--> Shows specified information. Use 'show help' for further options."));
         client->println(F("save\t\t\t--> Save changes."));
-        client->println(F("reboot\t\t\t--> Restarts the system (TODO)."));
         client->println(F("exit\t\t\t--> Close connection (telnet only)."));
         client->println(F("quit\t\t\t--> Close connection (telnet only)."));
     }
     else if (strncmp(com->args[0], "set", 3) == 0)
     {
         if (strncmp(com->args[1], "help", 4) == 0 or !strlen(com->args[1]))
-        { /*setCommandHelp();*/
+        {
+            client->println(F("hostname\t\t--> Sets the system name."));
+            client->println(F("ip\t\t--> Sets system's ip address."));
+            client->println(F("mask\t\t--> Sets system's subnet mask."));
+            client->println(F("gateway\t\t--> Sets system's default gateway."));
+            client->println(F("dns\t\t--> Sets system's dns server."));
+            client->println(F("mac\t\t--> Sets system's mac address."));
         }
         else if (strncmp(com->args[1], "hostname", 8) == 0)
-            sys.setHostname(com->args[2]); // By default, args[2] is an empty string. setHostname will deal with it.
-        // else if (strncmp(com->args[1], "ip", 2) == 0)
-        //     sys.setIpAddress(com->args[2], IP_ADDRESS);
+            client->println(sys.setHostname(com->args[2])); // By default, args[2] is an empty string. setHostname will deal with it.
+        else if (strncmp(com->args[1], "ip", 2) == 0)
+            client->println(sys.setIpAddress(com->args[2]));
+        else if (strncmp(com->args[1], "mask", 2) == 0)
+            client->println(sys.setSubnetMask(com->args[2]));
+        else if (strncmp(com->args[1], "gateway", 2) == 0)
+            client->println(sys.setDefaultGateway(com->args[2]));
+        else if (strncmp(com->args[1], "dns", 2) == 0)
+            client->println(sys.setDnsServer(com->args[2]));
+        else if (strncmp(com->args[1], "mac", 2) == 0)
+            client->println("Not implemented");
         // else if (strncmp(com->args[1], "mask", 2) == 0)
         //     sys.setIpAddress(com->args[2], SUBNET_MASK);
         // else if (strncmp(com->args[1], "gateway", 7) == 0)
@@ -118,17 +142,6 @@ char *Channel<T>::exec(Command *com)
     }
 
     // client->println("Free memory after: " + String(sys.getFreeMemory()));
-};
-
-template <class T>
-bool Channel<T>::charAllowed(char c)
-{
-    for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
-    {
-        if (c == specialChars[i])
-            return true;
-    }
-    return false;
 };
 
 template class Channel<EthernetClient *>;

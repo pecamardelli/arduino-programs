@@ -16,12 +16,11 @@ Telnet::~Telnet()
 void Telnet::commandPrompt()
 {
   timeOfLastActivity = millis();
-  // client->println();
   client->print(sys.hostname);
   client->print(F("#> "));
 };
 
-void Telnet::checkConnection()
+void Telnet::checkAvailable()
 {
   client = &server.available();
   if (client && !connected)
@@ -43,10 +42,6 @@ void Telnet::checkConnection()
     delete com;
     commandPrompt();
   }
-
-  // Check to see if connection has timed out
-  if (connected)
-    checkConnectionTimeout();
 };
 
 void Telnet::closeConnection()
@@ -54,14 +49,4 @@ void Telnet::closeConnection()
   client->println(F("\nBye.\n"));
   client->stop();
   connected = false;
-};
-
-void Telnet::checkConnectionTimeout()
-{
-  if (millis() - timeOfLastActivity > allowedConnectTime)
-  {
-    client->println();
-    client->println(F("Timeout disconnect."));
-    closeConnection();
-  }
 };

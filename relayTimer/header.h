@@ -11,12 +11,17 @@
 
 #endif
 
+// ----------- GLOBAL VARS ------------- //
+#ifndef GLOBAL_H
+#define GLOBAL_H
+
+#endif
+
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
 #define VERSION F("2.0")
 #define BAUD_RATE 9600
-
 class System
 {
 private:
@@ -32,10 +37,13 @@ public:
     IPAddress gateway;
     IPAddress dnsServer;
 
-    char *getSerialInput();
     int getFreeMemory();
     bool charAllowed(char c);
     char *setHostname(char *newHostname);
+    char *setIpAddress(char *newIpAddress);
+    char *setSubnetMask(char *newSubnetMask);
+    char *setDefaultGateway(char *newDefaultGateway);
+    char *setDnsServer(char *newDnsServer);
 };
 
 extern System sys;
@@ -84,11 +92,12 @@ private:
 public:
     Channel(/* args */);
     ~Channel();
+    char *exec(Command *com);
 
 protected:
     T client;
     char *getInput();
-    char *exec(Command *com);
+    // char *exec(Command *com);
 };
 
 #endif
@@ -103,13 +112,11 @@ private:
     unsigned long timeOfLastActivity;
     unsigned long allowedConnectTime;
 
-    void checkConnectionTimeout();
-
 public:
     Telnet(/* args */);
     ~Telnet();
     void commandPrompt();
-    void checkConnection();
+    void checkAvailable();
     void closeConnection();
 };
 
@@ -127,7 +134,7 @@ private:
 public:
     SerialChannel(/* args */);
     ~SerialChannel();
-    void checkServer();
+    void checkAvailable();
 };
 
 #endif
