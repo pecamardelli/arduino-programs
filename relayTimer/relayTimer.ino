@@ -12,7 +12,6 @@ node_t *last = NULL;
 void setup()
 {
   Serial.begin(9600);
-
   // Check for Ethernet hardware present
   // if (Ethernet.hardwareStatus() == EthernetNoHardware)
   // {

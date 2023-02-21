@@ -24,25 +24,47 @@
 #ifndef RELAY_H
 #define RELAY_H
 
-class Relay
+typedef struct _relayData
 {
-private:
-public:
-    Relay(uint8_t);
-    ~Relay();
-    uint8_t setPin(uint8_t);
-    uint8_t getPin();
-    char *setMode(uint8_t);
-
     uint8_t pin;
-    bool enabled;
-    char desc[RELAY_DESC_LEN];
     uint8_t startHour;
     uint8_t startMin;
     uint8_t endHour;
     uint8_t endMin;
-    unsigned long startTime;
+    char desc[RELAY_DESC_LEN];
+    bool enabled;
     bool deleted;
+} relayData_t;
+class Relay
+{
+private:
+    relayData_t data;
+
+public:
+    Relay(uint8_t);
+    ~Relay();
+
+    unsigned long startTime;
+
+    uint8_t getPin();
+    uint8_t getMode();
+    char *getDesc();
+    uint8_t getStartHour();
+    uint8_t getStartMinute();
+    uint8_t getEndHour();
+    uint8_t getEndMinute();
+    bool getStatus();
+    String getStartTime();
+    String getEndTime();
+    String getUptime();
+
+    char *setPin(uint8_t);
+    char *setDesc(char *);
+    char *setMode(uint8_t);
+    char *setStartHour(uint8_t);
+    char *setStartMinute(uint8_t);
+    char *setEndHour(uint8_t);
+    char *setEndMinute(uint8_t);
 };
 
 typedef struct node

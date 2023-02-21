@@ -207,14 +207,14 @@ void Channel<T>::getRelayInfo()
 
     while (aux != NULL)
     {
-        client->print(String(aux->relay->pin) + "\t");
+        client->print(String(aux->relay->getPin()) + "\t");
 
-        const char *_enabled = (aux->relay->enabled) ? "true" : "false";
+        const char *_enabled = (aux->relay->getStatus()) ? "true" : "false";
         client->print(_enabled);
         client->print("\t");
-        client->print(aux->relay->desc);
+        client->print(aux->relay->getDesc());
 
-        const uint8_t *descLen = strlen(aux->relay->desc);
+        const uint8_t *descLen = strlen(aux->relay->getDesc());
 
         if (descLen < 8)
             client->print("\t\t\t");
@@ -223,26 +223,14 @@ void Channel<T>::getRelayInfo()
         else
             client->print("\t");
 
-        String starth = (aux->relay->startHour < 10) ? "0" + String(aux->relay->startHour) : String(aux->relay->startHour);
-        String startm = (aux->relay->startMin < 10) ? "0" + String(aux->relay->startMin) : String(aux->relay->startMin);
-        client->print(starth + ":" + startm + "\t");
+        client->print(aux->relay->getStartTime() + "\t");
+        client->print(aux->relay->getEndTime() + "\t");
 
-        String endh = (aux->relay->endHour < 10) ? "0" + String(aux->relay->endHour) : String(aux->relay->endHour);
-        String endm = (aux->relay->endMin < 10) ? "0" + String(aux->relay->endMin) : String(aux->relay->endMin);
-        client->print(endh + ":" + endm + "\t");
-
-        const char *_mode = digitalRead(aux->relay->pin) ? "off" : "on";
+        const char *_mode = digitalRead(aux->relay->getPin()) ? "off" : "on";
         client->print(_mode);
         client->print("\t");
 
-        if (aux->relay->startTime)
-        {
-        }
-        // client->print(parseUpTime(aux->relay->startTime));
-        else
-            client->print(F("--d --:--:--"));
-
-        client->print("\t");
+        client->print(aux->relay->getUptime() + "\t");
 
         if (aux->changeFlag)
             client->println("*");
