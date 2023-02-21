@@ -6,6 +6,9 @@ EthernetServer server(23); // Telnet listens on port 23
 Telnet telnet;
 SerialChannel serial;
 
+node_t *first = NULL;
+node_t *last = NULL;
+
 void setup()
 {
   Serial.begin(9600);

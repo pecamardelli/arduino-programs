@@ -8,12 +8,49 @@
 #define MAX_COMMAND_LEN 64
 #define MAX_COMMAND_ARGS 16
 #define MAX_HOSTNAME_LEN 64
+#define RELAY_DESC_LEN 32
 
 #endif
 
-// ----------- GLOBAL VARS ------------- //
-#ifndef GLOBAL_H
-#define GLOBAL_H
+// ----------- BOARD RELATED ------------- //
+#if defined(ARDUINO_AVR_MEGA2560)
+#define BOARD "Mega 2560"
+#define DIGITAL_PINS 53
+#elif defined(ARDUINO_AVR_UNO)
+#define BOARD "Uno"
+#define DIGITAL_PINS 13
+#endif
+
+#ifndef RELAY_H
+#define RELAY_H
+
+class Relay
+{
+private:
+public:
+    Relay(uint8_t);
+    ~Relay();
+    uint8_t setPin(uint8_t);
+    uint8_t getPin();
+    char *setMode(uint8_t);
+
+    uint8_t pin;
+    bool enabled;
+    char desc[RELAY_DESC_LEN];
+    uint8_t startHour;
+    uint8_t startMin;
+    uint8_t endHour;
+    uint8_t endMin;
+    unsigned long startTime;
+    bool deleted;
+};
+
+typedef struct node
+{
+    Relay *relay;
+    bool changeFlag;
+    struct node *next;
+} node_t;
 
 #endif
 
@@ -38,12 +75,16 @@ public:
     IPAddress dnsServer;
 
     int getFreeMemory();
-    bool charAllowed(char c);
-    char *setHostname(char *newHostname);
-    char *setIpAddress(char *newIpAddress);
-    char *setSubnetMask(char *newSubnetMask);
-    char *setDefaultGateway(char *newDefaultGateway);
-    char *setDnsServer(char *newDnsServer);
+    bool charAllowed(char);
+    char *setHostname(char *);
+    char *setIpAddress(char *);
+    char *setSubnetMask(char *);
+    char *setDefaultGateway(char *);
+    char *setDnsServer(char *);
+    uint8_t getAvailablePin();
+    bool isPinAvailable(uint8_t);
+    Relay *searchByPin(uint8_t);
+    char *createRelay(uint8_t);
 };
 
 extern System sys;
@@ -72,7 +113,7 @@ private:
 public:
     Parser(/* args */);
     ~Parser();
-    Command *Parser::parse(char *input);
+    Command *Parser::parse(char *);
 };
 
 extern Parser parser;
@@ -86,13 +127,14 @@ template <class T>
 class Channel
 {
 private:
-    bool charAllowed(char c);
+    bool charAllowed(char);
+    void getRelayInfo();
     byte specialChars[6];
 
 public:
     Channel(/* args */);
     ~Channel();
-    char *exec(Command *com);
+    char *exec(Command *);
 
 protected:
     T client;

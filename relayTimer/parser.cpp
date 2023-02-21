@@ -12,7 +12,6 @@ Parser::~Parser()
 
 Command *Parser::parse(char *input)
 {
-  Serial.println("Parsing: " + String(input));
   Command *com = new Command();
 
   char *token = strtok(input, delimiter);

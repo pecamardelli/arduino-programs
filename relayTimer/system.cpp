@@ -1,5 +1,8 @@
 #include "header.h"
 
+extern node_t *first;
+extern node_t *last;
+
 System::System()
 {
   strcpy(hostname, "arduino");
@@ -106,3 +109,73 @@ char *System::setDnsServer(char *newDnsServer)
 
   return newDnsServer;
 };
+
+uint8_t System::getAvailablePin()
+{
+  // Leaving pins 1, 2 and 13 unused
+  for (uint8_t k = 3; k < DIGITAL_PINS - 1; k++)
+  {
+    if (searchByPin(k) == NULL)
+      return k;
+  }
+
+  return 0;
+}
+
+bool System::isPinAvailable(uint8_t pin)
+{
+  if (pin <= 2 || pin >= DIGITAL_PINS)
+    return false;
+
+  if (searchByPin(pin) != NULL)
+    return false;
+
+  return true;
+}
+
+Relay *System::searchByPin(uint8_t pin)
+{
+
+  node_t *aux = first;
+  while (aux != NULL)
+  {
+    if (aux->relay->getPin() == pin)
+    {
+      return aux->relay;
+    }
+    aux = aux->next;
+  }
+
+  return NULL;
+}
+
+char *System::createRelay(uint8_t pin)
+{
+  if (!isPinAvailable(pin))
+    return "Error: pin not available";
+
+  node_t *aux = (node_t *)malloc(sizeof(node_t));
+  aux->next = NULL; // Set to NULL to inform that it's a new list entry.
+
+  pinMode(pin, OUTPUT);
+  digitalWrite(pin, HIGH);
+
+  aux->relay = new Relay(pin);
+
+  if (aux->next == NULL)
+  {
+    if (first == NULL)
+    {
+      first = aux;
+      last = aux;
+    }
+    else
+    {
+      last->next = aux;
+      last = aux;
+      // last->next  = NULL;  In this case, next has been set to NULL when memory was allocated.
+    }
+  }
+
+  return "Relay created.";
+}
