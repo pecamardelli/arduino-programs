@@ -1,5 +1,6 @@
 
 #include <Ethernet.h>
+// #include <RTClib.h>
 
 // ----------- MACROS ------------- //
 #ifndef MACROS_H
@@ -9,6 +10,10 @@
 #define MAX_COMMAND_ARGS 16
 #define MAX_HOSTNAME_LEN 64
 #define RELAY_DESC_LEN 32
+
+#define STATUS_DISABLED 0x00
+#define STATUS_ENABLED 0x01
+#define STATUS_DELETED 0x02
 
 #endif
 
@@ -24,6 +29,13 @@
 #ifndef RELAY_H
 #define RELAY_H
 
+enum RelayStatus
+{
+    disabled,
+    enabled,
+    deleted
+};
+
 typedef struct _relayData
 {
     uint8_t pin;
@@ -31,10 +43,10 @@ typedef struct _relayData
     uint8_t startMin;
     uint8_t endHour;
     uint8_t endMin;
+    RelayStatus status;
     char desc[RELAY_DESC_LEN];
-    bool enabled;
-    bool deleted;
 } relayData_t;
+
 class Relay
 {
 private:
@@ -53,7 +65,7 @@ public:
     uint8_t getStartMinute();
     uint8_t getEndHour();
     uint8_t getEndMinute();
-    bool getStatus();
+    RelayStatus getStatus();
     String getStartTime();
     String getEndTime();
     String getUptime();
@@ -71,6 +83,7 @@ typedef struct node
 {
     Relay *relay;
     bool changeFlag;
+    bool overrided;
     struct node *next;
 } node_t;
 
@@ -103,10 +116,11 @@ public:
     char *setSubnetMask(char *);
     char *setDefaultGateway(char *);
     char *setDnsServer(char *);
+    char *createRelay(uint8_t);
     uint8_t getAvailablePin();
     bool isPinAvailable(uint8_t);
     Relay *searchByPin(uint8_t);
-    char *createRelay(uint8_t);
+    // void checkRelays();
 };
 
 extern System sys;
@@ -151,7 +165,7 @@ class Channel
 private:
     bool charAllowed(char);
     void getRelayInfo();
-    byte specialChars[6];
+    const byte **specialChars;
 
 public:
     Channel(/* args */);
@@ -161,7 +175,6 @@ public:
 protected:
     T client;
     char *getInput();
-    // char *exec(Command *com);
 };
 
 #endif
@@ -200,5 +213,25 @@ public:
     ~SerialChannel();
     void checkAvailable();
 };
+
+#endif
+
+#ifndef CLOCK_H
+#define CLOCK_H
+// class Clock
+// {
+// private:
+//     const char **days;
+
+// public:
+//     Clock(/* args */);
+//     ~Clock();
+//     RTC_DS1307 RTC;
+
+//     String setDateTime(char *, char *);
+//     String getDate();
+// };
+
+// extern Clock clock;
 
 #endif

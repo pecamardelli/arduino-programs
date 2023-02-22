@@ -4,8 +4,7 @@ Relay::Relay(uint8_t newPin)
 {
     data.pin = newPin;
     strcpy(data.desc, "No description");
-    data.deleted = false;
-    data.enabled = false;
+    data.status = disabled;
 
     data.startHour = 0;
     data.startMin = 0;
@@ -52,9 +51,9 @@ uint8_t Relay::getEndMinute()
     return data.endMin;
 }
 
-bool Relay::getStatus()
+RelayStatus Relay::getStatus()
 {
-    return data.enabled;
+    return data.status;
 }
 
 String Relay::getStartTime()

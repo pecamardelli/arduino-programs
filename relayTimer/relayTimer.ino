@@ -5,6 +5,7 @@ Parser parser;
 EthernetServer server(23); // Telnet listens on port 23
 Telnet telnet;
 SerialChannel serial;
+// Clock clock;
 
 node_t *first = NULL;
 node_t *last = NULL;

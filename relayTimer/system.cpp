@@ -179,3 +179,70 @@ char *System::createRelay(uint8_t pin)
 
   return "Relay created.";
 }
+
+// void System::checkRelays()
+// {
+//   DateTime now = clock.RTC.now();
+//   int startMins, endMins, currentMins;
+
+//   node_t *aux = first;
+//   while (aux != NULL)
+//   {
+//     if (aux->relay->getStatus() == enabled && !aux->overrided)
+//     {
+//       startMins = aux->relay->getStartHour() * 60 + aux->relay->getStartMinute();
+//       endMins = aux->relay->getEndHour() * 60 + aux->relay->getEndMinute();
+//       currentMins = now.hour() * 60 + now.minute();
+
+//       if (startMins <= currentMins)
+//       {
+//         if (endMins > startMins)
+//         {
+//           if (endMins < currentMins)
+//           {
+//             // switchRelay(aux->relay.pin, HIGH, false);
+//             aux->relay->setMode(HIGH);
+//           }
+//           else
+//           {
+//             // switchRelay(aux->relay.pin, LOW, false);
+//             aux->relay->setMode(LOW);
+//           }
+//         }
+//         else
+//         {
+//           // switchRelay(aux->relay.pin, LOW, false);
+//           aux->relay->setMode(LOW);
+//         }
+//       }
+//       else
+//       {
+//         if (startMins < endMins)
+//         {
+//           // switchRelay(aux->relay.pin, HIGH, false);
+//           aux->relay->setMode(HIGH);
+//         }
+//         else
+//         {
+//           if (endMins > currentMins)
+//           {
+//             // switchRelay(aux->relay.pin, LOW, false);
+//             aux->relay->setMode(LOW);
+//           }
+//           else
+//           {
+//             // switchRelay(aux->relay.pin, HIGH, false);
+//             aux->relay->setMode(HIGH);
+//           }
+//         }
+//       }
+//     }
+//     else if (!aux->overrided)
+//     {
+//       // switchRelay(aux->relay.pin, HIGH, false);
+//       aux->relay->setMode(HIGH);
+//     }
+
+//     aux = aux->next;
+//   }
+// }

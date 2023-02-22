@@ -187,6 +187,8 @@ char *Channel<T>::exec(Command *com)
     }
     else if (strncmp(com->args[0], "hostname", 8) == 0)
         client->println(sys.hostname);
+    // else if (strncmp(com->args[0], "date", 4) == 0)
+    //     client->println(clock.getDate());
     else if (strncmp(com->args[0], "exit", 4) == 0 || strncmp(com->args[0], "quit", 4) == 0)
     {
         telnet.closeConnection();
