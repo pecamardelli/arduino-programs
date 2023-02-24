@@ -19,10 +19,7 @@
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
                 "/home/pablin/Arduino/libraries/Ethernet/src",
-                "/home/pablin/Arduino/libraries/RTClib/src",
-                // "/home/pablin/Arduino/libraries/Adafruit_BusIO",
-                // "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
-                // "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+                "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"
@@ -536,7 +533,8 @@
                 "__ATOMIC_RELEASE=3",
                 "__BUILTIN_AVR_FMUL=1",
                 "USBCON"
-            ]
+            ],
+            "compileCommands": "${workspaceFolder}/build/compile_commands.json"
         }
     ]
 }

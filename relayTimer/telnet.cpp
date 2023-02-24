@@ -38,7 +38,7 @@ void Telnet::checkAvailable()
   {
     char *input = getInput();
     Command *com = parser.parse(input);
-    exec(com);
+    client->println(sys.exec(com));
     delete com;
     commandPrompt();
   }

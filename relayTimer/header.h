@@ -1,6 +1,5 @@
 
 #include <Ethernet.h>
-// #include <RTClib.h>
 
 // ----------- MACROS ------------- //
 #ifndef MACROS_H
@@ -79,13 +78,21 @@ public:
     char *setEndMinute(uint8_t);
 };
 
-typedef struct node
+#endif
+
+#ifndef COMMAND_H
+#define COMMAND_H
+
+class Command
 {
-    Relay *relay;
-    bool changeFlag;
-    bool overrided;
-    struct node *next;
-} node_t;
+private:
+public:
+    Command(/* args */);
+    ~Command();
+    char **args;
+    uint8_t count;
+    void freeMem();
+};
 
 #endif
 
@@ -111,16 +118,12 @@ public:
 
     int getFreeMemory();
     bool charAllowed(char);
-    char *setHostname(char *);
-    char *setIpAddress(char *);
-    char *setSubnetMask(char *);
-    char *setDefaultGateway(char *);
-    char *setDnsServer(char *);
-    char *createRelay(uint8_t);
-    uint8_t getAvailablePin();
-    bool isPinAvailable(uint8_t);
-    Relay *searchByPin(uint8_t);
-    // void checkRelays();
+    String setHostname(char *);
+    String setIpAddress(char *);
+    String setSubnetMask(char *);
+    String setDefaultGateway(char *);
+    String setDnsServer(char *);
+    String exec(Command *);
 };
 
 extern System sys;
@@ -129,17 +132,6 @@ extern System sys;
 
 #ifndef PARSER_H
 #define PARSER_H
-
-class Command
-{
-private:
-public:
-    Command(/* args */);
-    ~Command();
-    char **args;
-    uint8_t count;
-    void freeMem();
-};
 
 class Parser
 {
@@ -164,13 +156,11 @@ class Channel
 {
 private:
     bool charAllowed(char);
-    void getRelayInfo();
     const byte **specialChars;
 
 public:
     Channel(/* args */);
     ~Channel();
-    char *exec(Command *);
 
 protected:
     T client;
@@ -233,5 +223,34 @@ public:
 // };
 
 // extern Clock clock;
+
+#endif
+
+#ifndef NODELIST_H
+#define NODELIST_H
+
+typedef struct node
+{
+    Relay *relay;
+    bool changeFlag;
+    bool overrided;
+    struct node *next;
+} node_t;
+
+class NodeList
+{
+private:
+    uint8_t getAvailablePin();
+    node_t *first, *last;
+
+public:
+    NodeList(/* args */);
+    ~NodeList();
+    void checkRelays();
+    Relay *searchByPin(uint8_t);
+    bool isPinAvailable(uint8_t);
+    char *createRelay(uint8_t);
+    String getRelayInfo();
+};
 
 #endif

@@ -1,5 +1,7 @@
 #include "header.h"
 
+extern NodeList nodes;
+
 Relay::Relay(uint8_t newPin)
 {
     data.pin = newPin;
@@ -116,7 +118,7 @@ String Relay::getUptime()
 
 char *Relay::setPin(uint8_t newPin)
 {
-    if (sys.isPinAvailable(newPin))
+    if (nodes.isPinAvailable(newPin))
     {
         data.pin = newPin;
     }

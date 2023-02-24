@@ -1,15 +1,14 @@
 #include "header.h"
 
-extern node_t *first;
-extern node_t *last;
+extern NodeList nodes;
 
 System::System()
 {
   strcpy(hostname, "arduino");
-  ipAddress.fromString("192.168.40.8");
-  subnetMask.fromString("255.255.255.0");
-  gateway.fromString("192.168.40.1");
-  dnsServer.fromString("179.42.171.21");
+  ipAddress.fromString(F("192.168.40.8"));
+  subnetMask.fromString(F("255.255.255.0"));
+  gateway.fromString(F("192.168.40.1"));
+  dnsServer.fromString(F("179.42.171.21"));
   configChanged = false;
 
   macAddress[0] = 0xDE;
@@ -56,13 +55,13 @@ int System::getFreeMemory()
 #endif // __arm__
 }
 
-char *System::setHostname(char *newHostname)
+String System::setHostname(char *newHostname)
 {
   if (strlen(newHostname) == 0)
-    return "Error: hostname cannot be empty.";
+    return F("Error: hostname cannot be empty.");
 
   if (strlen(newHostname) > MAX_HOSTNAME_LEN)
-    return "Error: hostname exceedes maximum.";
+    return F("Error: hostname exceedes maximum.");
 
   // Looks like we're good...
   strncpy(hostname, newHostname, MAX_HOSTNAME_LEN);
@@ -70,179 +69,187 @@ char *System::setHostname(char *newHostname)
   return newHostname;
 };
 
-char *System::setIpAddress(char *newIpAddress)
+String System::setIpAddress(char *newIpAddress)
 {
   if (!ipAddress.fromString(newIpAddress))
-    return "Error: invalid ip address.";
+    return F("Error: invalid ip address.");
 
   Ethernet.setLocalIP(ipAddress);
 
   return newIpAddress;
 };
 
-char *System::setSubnetMask(char *newSubnetMask)
+String System::setSubnetMask(char *newSubnetMask)
 {
   if (!subnetMask.fromString(newSubnetMask))
-    return "Error: invalid subnet mask.";
+    return F("Error: invalid subnet mask.");
 
   Ethernet.setSubnetMask(subnetMask);
 
   return newSubnetMask;
 };
 
-char *System::setDefaultGateway(char *newDefaultGateway)
+String System::setDefaultGateway(char *newDefaultGateway)
 {
   if (!gateway.fromString(newDefaultGateway))
-    return "Error: invalid default gateway.";
+    return F("Error: invalid default gateway.");
 
   Ethernet.setGatewayIP(gateway);
 
   return newDefaultGateway;
 };
 
-char *System::setDnsServer(char *newDnsServer)
+String System::setDnsServer(char *newDnsServer)
 {
   if (!dnsServer.fromString(newDnsServer))
-    return "Error: invalid DNS server.";
+    return F("Error: invalid DNS server.");
 
   Ethernet.setDnsServerIP(dnsServer);
 
   return newDnsServer;
 };
 
-uint8_t System::getAvailablePin()
+String System::exec(Command *com)
 {
-  // Leaving pins 1, 2 and 13 unused
-  for (uint8_t k = 3; k < DIGITAL_PINS - 1; k++)
+  String output = "";
+  // ----- Do some debugging ----- //
+
+  // for (uint8_t i = 0; i < com->count; i++)
+  // {
+  //     output += "Argument " + String(i) + ": ");
+  //     output += com->args[i]);
+  // }
+  // output += "Total args: " + String(com->count));
+
+  // ---------------------------- //
+
+  // output += "Free memory before: " + String(sys.getFreeMemory()));
+
+  if (strncmp(com->args[0], "help", 4) == 0)
   {
-    if (searchByPin(k) == NULL)
-      return k;
+    output += F("time\t\t\t--> Returns the current time.\n");
+    output += F("relay (pinNumber)\t--> Runs command on specified relay. Use 'relay help' for further options.\n");
+    output += F("set (parameter)\t\t--> Sets a given parameter. Use 'set help' for further options.\n");
+    output += F("show (parameter)\t--> Shows specified information. Use 'show help' for further options.\n");
+    output += F("save\t\t\t--> Save changes.\n");
+    output += F("exit\t\t\t--> Close connection (telnet only).\n");
+    output += F("quit\t\t\t--> Close connection (telnet only).\n");
   }
-
-  return 0;
-}
-
-bool System::isPinAvailable(uint8_t pin)
-{
-  if (pin <= 2 || pin >= DIGITAL_PINS)
-    return false;
-
-  if (searchByPin(pin) != NULL)
-    return false;
-
-  return true;
-}
-
-Relay *System::searchByPin(uint8_t pin)
-{
-
-  node_t *aux = first;
-  while (aux != NULL)
+  else if (strncmp(com->args[0], "set", 3) == 0)
   {
-    if (aux->relay->getPin() == pin)
+    if (strncmp(com->args[1], "help", 4) == 0 or !strlen(com->args[1]))
     {
-      return aux->relay;
+      output += F("hostname\t\t--> Sets the system name.\n");
+      output += F("ip\t\t--> Sets system's ip address.\n");
+      output += F("mask\t\t--> Sets system's subnet mask.\n");
+      output += F("gateway\t\t--> Sets system's default gateway.\n");
+      output += F("dns\t\t--> Sets system's dns server.\n");
+      output += F("mac\t\t--> Sets system's mac address.\n");
     }
-    aux = aux->next;
-  }
+    else if (strncmp(com->args[1], "hostname", 8) == 0)
+      output = sys.setHostname(com->args[2]); // By default, args[2] is an empty string. setHostname will deal with it.
+    else if (strncmp(com->args[1], "ip", 2) == 0)
+      output = sys.setIpAddress(com->args[2]);
+    else if (strncmp(com->args[1], "mask", 2) == 0)
+      output = sys.setSubnetMask(com->args[2]);
+    else if (strncmp(com->args[1], "gateway", 2) == 0)
+      output = sys.setDefaultGateway(com->args[2]);
+    else if (strncmp(com->args[1], "dns", 2) == 0)
+      output = sys.setDnsServer(com->args[2]);
+    else if (strncmp(com->args[1], "mac", 2) == 0)
+      output = F("Not implemented");
 
-  return NULL;
-}
-
-char *System::createRelay(uint8_t pin)
-{
-  if (!isPinAvailable(pin))
-    return "Error: pin not available";
-
-  node_t *aux = (node_t *)malloc(sizeof(node_t));
-  aux->next = NULL; // Set to NULL to inform that it's a new list entry.
-
-  pinMode(pin, OUTPUT);
-  digitalWrite(pin, HIGH);
-
-  aux->relay = new Relay(pin);
-
-  if (aux->next == NULL)
-  {
-    if (first == NULL)
+    else if (strncmp(com->args[0], "relay", 5) == 0)
     {
-      first = aux;
-      last = aux;
+      output += F("Unknown subcommand \"");
+      output += com->args[1];
+      output += F("\"");
+    }
+  }
+  else if (strncmp(com->args[0], "relay", 5) == 0)
+  {
+    if (strncmp(com->args[1], "help", 4) == 0 or !strlen(com->args[1]))
+    {
+      output += F("relay info\t\t\t\t-> Shows this information.\n");
+      output += F("relay (pinNumber) create\t\t-> Creates a relay at the specified pin.\n");
+      output += F("relay (pinNumber) delete \t\t-> Deletes the specified relay.\n");
+      output += F("relay (pinNumber) enable\t\t-> Enables the specified relay.\n");
+      output += F("relay (pinNumber) disable\t\t-> Disables the specified relay.\n");
+      output += F("relay (pinNumber) resume\t\t-> Resumes operation of the specified relay.\n");
+      output += F("relay (pinNumber) desc (string)\t\t-> Adds a description to the specified relay.\n");
+      output += F("relay (pinNumber) starth (hour)\t\t-> Sets starting hour.\n");
+      output += F("relay (pinNumber) endh (hour)\t\t-> Sets the ending hour.\n");
+      output += F("relay (pinNumber) startm (minute)\t-> Sets the starting minute.\n");
+      output += F("relay (pinNumber) endm (minute)\t\t-> Sets the ending minute.\n");
+      output += F("relay (pinNumber) pin (pinNumber)\t-> Sets a new pin for the specified relay.\n");
+      output += F("relay (pinNumber) on (pinNumber)\t-> Turns on the specified relay.\n");
+      output += F("relay (pinNumber) off (pinNumber)\t-> Turns off the specified relay.\n");
+      return output;
+    }
+    else if (strncmp(com->args[1], "info", 4) == 0)
+    {
+      output = nodes.getRelayInfo();
+      return output;
+    }
+
+    const uint8_t pin = atoi(com->args[1]);
+    // output += "Pin: " + String(pin));
+
+    if (strncmp(com->args[2], "create", 6) == 0)
+    {
+      output = nodes.createRelay(pin);
+    }
+    else if (strncmp(com->args[2], "on", 2) == 0)
+    {
+      Relay *relay = nodes.searchByPin(pin);
+      if (relay == NULL)
+      {
+        output = F("No relay defined on pin ");
+        output += String(pin);
+        return output;
+      }
+
+      relay->setMode(LOW);
+    }
+    else if (strncmp(com->args[2], "off", 3) == 0)
+    {
+      Relay *relay = nodes.searchByPin(pin);
+      if (relay == NULL)
+      {
+        output = F("No relay defined on pin ");
+        output += String(pin);
+        return output;
+      }
+
+      relay->setMode(HIGH);
     }
     else
     {
-      last->next = aux;
-      last = aux;
-      // last->next  = NULL;  In this case, next has been set to NULL when memory was allocated.
+      output += F("Unknown subcommand: ");
+      output += com->args[1];
+      output += "\n";
     }
   }
+  else if (strncmp(com->args[0], "freemem", 7) == 0)
+  {
+    output = F("Free memory: ");
+    output += String(sys.getFreeMemory());
+    output += F(" bytes.");
+  }
+  else if (strncmp(com->args[0], "hostname", 8) == 0)
+    output = sys.hostname;
+  // else if (strncmp(com->args[0], "date", 4) == 0)
+  //     output += clock.getDate());
+  else if (strncmp(com->args[0], "exit", 4) == 0 || strncmp(com->args[0], "quit", 4) == 0)
+  {
+    telnet.closeConnection();
+  }
+  else
+  {
+    output = F("Bad command: ");
+    output += String(com->args[0]) + "\n";
+  }
 
-  return "Relay created.";
-}
-
-// void System::checkRelays()
-// {
-//   DateTime now = clock.RTC.now();
-//   int startMins, endMins, currentMins;
-
-//   node_t *aux = first;
-//   while (aux != NULL)
-//   {
-//     if (aux->relay->getStatus() == enabled && !aux->overrided)
-//     {
-//       startMins = aux->relay->getStartHour() * 60 + aux->relay->getStartMinute();
-//       endMins = aux->relay->getEndHour() * 60 + aux->relay->getEndMinute();
-//       currentMins = now.hour() * 60 + now.minute();
-
-//       if (startMins <= currentMins)
-//       {
-//         if (endMins > startMins)
-//         {
-//           if (endMins < currentMins)
-//           {
-//             // switchRelay(aux->relay.pin, HIGH, false);
-//             aux->relay->setMode(HIGH);
-//           }
-//           else
-//           {
-//             // switchRelay(aux->relay.pin, LOW, false);
-//             aux->relay->setMode(LOW);
-//           }
-//         }
-//         else
-//         {
-//           // switchRelay(aux->relay.pin, LOW, false);
-//           aux->relay->setMode(LOW);
-//         }
-//       }
-//       else
-//       {
-//         if (startMins < endMins)
-//         {
-//           // switchRelay(aux->relay.pin, HIGH, false);
-//           aux->relay->setMode(HIGH);
-//         }
-//         else
-//         {
-//           if (endMins > currentMins)
-//           {
-//             // switchRelay(aux->relay.pin, LOW, false);
-//             aux->relay->setMode(LOW);
-//           }
-//           else
-//           {
-//             // switchRelay(aux->relay.pin, HIGH, false);
-//             aux->relay->setMode(HIGH);
-//           }
-//         }
-//       }
-//     }
-//     else if (!aux->overrided)
-//     {
-//       // switchRelay(aux->relay.pin, HIGH, false);
-//       aux->relay->setMode(HIGH);
-//     }
-
-//     aux = aux->next;
-//   }
-// }
+  return output;
+  // output += "Free memory after: " + String(sys.getFreeMemory()));
+};
