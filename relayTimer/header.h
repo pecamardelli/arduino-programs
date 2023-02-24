@@ -59,7 +59,7 @@ public:
 
     uint8_t getPin();
     uint8_t getMode();
-    char *getDesc();
+    String getDesc();
     uint8_t getStartHour();
     uint8_t getStartMinute();
     uint8_t getEndHour();
@@ -69,13 +69,13 @@ public:
     String getEndTime();
     String getUptime();
 
-    char *setPin(uint8_t);
-    char *setDesc(char *);
-    char *setMode(uint8_t);
-    char *setStartHour(uint8_t);
-    char *setStartMinute(uint8_t);
-    char *setEndHour(uint8_t);
-    char *setEndMinute(uint8_t);
+    String setPin(uint8_t);
+    String setDesc(char *);
+    String setMode(uint8_t);
+    String setStartHour(uint8_t);
+    String setStartMinute(uint8_t);
+    String setEndHour(uint8_t);
+    String setEndMinute(uint8_t);
 };
 
 #endif

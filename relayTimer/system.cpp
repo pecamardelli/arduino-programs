@@ -205,11 +205,15 @@ String System::exec(Command *com)
       if (relay == NULL)
       {
         output = F("No relay defined on pin ");
-        output += String(pin);
+        output += pin;
         return output;
       }
 
       relay->setMode(LOW);
+
+      output = F("Relay ");
+      output += pin;
+      output += F(" on");
     }
     else if (strncmp(com->args[2], "off", 3) == 0)
     {
@@ -217,11 +221,15 @@ String System::exec(Command *com)
       if (relay == NULL)
       {
         output = F("No relay defined on pin ");
-        output += String(pin);
+        output += pin;
         return output;
       }
 
       relay->setMode(HIGH);
+
+      output = F("Relay ");
+      output += pin;
+      output += F(" off");
     }
     else
     {

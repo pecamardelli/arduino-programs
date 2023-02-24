@@ -28,7 +28,7 @@ uint8_t Relay::getMode()
     return digitalRead(data.pin);
 }
 
-char *Relay::getDesc()
+String Relay::getDesc()
 {
     return data.desc;
 }
@@ -116,7 +116,7 @@ String Relay::getUptime()
 
 // -------------------------------------------- //
 
-char *Relay::setPin(uint8_t newPin)
+String Relay::setPin(uint8_t newPin)
 {
     if (nodes.isPinAvailable(newPin))
     {
@@ -128,7 +128,7 @@ char *Relay::setPin(uint8_t newPin)
     }
 }
 
-char *Relay::setMode(uint8_t mode)
+String Relay::setMode(uint8_t mode)
 {
     if (mode == HIGH || mode == LOW)
     {
@@ -139,10 +139,10 @@ char *Relay::setMode(uint8_t mode)
             startTime = 0;
     }
     else
-        return "Error: invalid mode";
+        return F("Error: invalid mode");
 }
 
-char *Relay::setDesc(char *newDesc)
+String Relay::setDesc(char *newDesc)
 {
     if (strlen(newDesc) > RELAY_DESC_LEN)
         return "Error: description too long";
@@ -151,7 +151,7 @@ char *Relay::setDesc(char *newDesc)
     return newDesc;
 }
 
-char *Relay::setStartHour(uint8_t hour)
+String Relay::setStartHour(uint8_t hour)
 {
     if (hour < 0 || hour > 23)
         return "Error: invalid hour";
@@ -159,7 +159,7 @@ char *Relay::setStartHour(uint8_t hour)
     data.startHour = hour;
 }
 
-char *Relay::setStartMinute(uint8_t minute)
+String Relay::setStartMinute(uint8_t minute)
 {
     if (minute < 0 || minute > 59)
         return "Error: invalid minute";
@@ -167,7 +167,7 @@ char *Relay::setStartMinute(uint8_t minute)
     data.startMin = minute;
 }
 
-char *Relay::setEndHour(uint8_t hour)
+String Relay::setEndHour(uint8_t hour)
 {
     if (hour < 0 || hour > 23)
         return "Error: invalid hour";
@@ -175,7 +175,7 @@ char *Relay::setEndHour(uint8_t hour)
     data.endHour = hour;
 }
 
-char *Relay::setEndMinute(uint8_t minute)
+String Relay::setEndMinute(uint8_t minute)
 {
     if (minute < 0 || minute > 59)
         return "Error: invalid minute";

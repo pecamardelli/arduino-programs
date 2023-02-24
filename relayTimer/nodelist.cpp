@@ -159,7 +159,7 @@ String NodeList::getRelayInfo()
         const char *_enabled = (aux->relay->getStatus()) ? "true" : "false";
         output += String(_enabled) + "\t" + String(aux->relay->getDesc());
 
-        const size_t descLen = strlen(aux->relay->getDesc());
+        const size_t descLen = aux->relay->getDesc().length();
 
         if (descLen < 8)
             output += "\t\t\t";
