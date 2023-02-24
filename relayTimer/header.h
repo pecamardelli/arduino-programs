@@ -1,9 +1,13 @@
 
 #include <Ethernet.h>
+#include <EEPROM.h>
 
 // ----------- MACROS ------------- //
 #ifndef MACROS_H
 #define MACROS_H
+
+#define VERSION F("2.0")
+#define BAUD_RATE 9600
 
 #define MAX_COMMAND_LEN 64
 #define MAX_COMMAND_ARGS 16
@@ -99,22 +103,35 @@ public:
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-#define VERSION F("2.0")
-#define BAUD_RATE 9600
-class System
+typedef struct _ethernet
 {
-private:
-    byte specialChars[6];
-    bool configChanged;
-
-public:
-    System();
-    char hostname[MAX_HOSTNAME_LEN];
     byte macAddress[6];
     IPAddress ipAddress;
     IPAddress subnetMask;
     IPAddress gateway;
     IPAddress dnsServer;
+
+} ethernet_t;
+
+typedef struct _system
+{
+    char hostname[MAX_HOSTNAME_LEN];
+    ethernet_t ethernetConfig;
+} system_t;
+
+class System
+{
+private:
+    byte specialChars[6];
+    bool configChanged;
+    uint16_t eeAddress;
+
+    void loadSystemData();
+    String ipToString(IPAddress);
+
+public:
+    System();
+    system_t config;
 
     int getFreeMemory();
     bool charAllowed(char);

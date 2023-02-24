@@ -111,6 +111,7 @@ String Relay::getUptime()
     String h = (_hours < 10) ? "0" + String(_hours) : String(_hours);
     String m = (_mins < 10) ? "0" + String(_mins) : String(_mins);
     String s = (_secs < 10) ? "0" + String(_secs) : String(_secs);
+
     return d + "d " + h + ":" + m + ":" + s;
 }
 
@@ -124,7 +125,7 @@ String Relay::setPin(uint8_t newPin)
     }
     else
     {
-        return "Error: pin inválido";
+        return F("Error: invalid pin number.");
     }
 }
 
@@ -139,13 +140,13 @@ String Relay::setMode(uint8_t mode)
             startTime = 0;
     }
     else
-        return F("Error: invalid mode");
+        return F("Error: invalid mode.");
 }
 
 String Relay::setDesc(char *newDesc)
 {
     if (strlen(newDesc) > RELAY_DESC_LEN)
-        return "Error: description too long";
+        return F("Error: description too long.");
 
     strcpy(data.desc, newDesc);
     return newDesc;
@@ -154,7 +155,7 @@ String Relay::setDesc(char *newDesc)
 String Relay::setStartHour(uint8_t hour)
 {
     if (hour < 0 || hour > 23)
-        return "Error: invalid hour";
+        return F("Error: invalid hour.");
 
     data.startHour = hour;
 }
@@ -162,7 +163,7 @@ String Relay::setStartHour(uint8_t hour)
 String Relay::setStartMinute(uint8_t minute)
 {
     if (minute < 0 || minute > 59)
-        return "Error: invalid minute";
+        return F("Error: invalid minute.");
 
     data.startMin = minute;
 }
@@ -170,7 +171,7 @@ String Relay::setStartMinute(uint8_t minute)
 String Relay::setEndHour(uint8_t hour)
 {
     if (hour < 0 || hour > 23)
-        return "Error: invalid hour";
+        return F("Error: invalid hour.");
 
     data.endHour = hour;
 }
@@ -178,7 +179,7 @@ String Relay::setEndHour(uint8_t hour)
 String Relay::setEndMinute(uint8_t minute)
 {
     if (minute < 0 || minute > 59)
-        return "Error: invalid minute";
+        return F("Error: invalid minute.");
 
     data.endMin = minute;
 }

@@ -20,7 +20,14 @@ void setup()
   // {
   //     Serial.println("Ethernet cable is not connected.");
   // }
-  Ethernet.begin(sys.macAddress, sys.ipAddress, sys.dnsServer, sys.gateway, sys.subnetMask);
+
+  Ethernet.begin(
+      sys.config.ethernetConfig.macAddress,
+      sys.config.ethernetConfig.ipAddress,
+      sys.config.ethernetConfig.dnsServer,
+      sys.config.ethernetConfig.gateway,
+      sys.config.ethernetConfig.subnetMask);
+
   server.begin();
 }
 

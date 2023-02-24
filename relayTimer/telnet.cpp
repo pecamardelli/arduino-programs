@@ -16,7 +16,7 @@ Telnet::~Telnet()
 void Telnet::commandPrompt()
 {
   timeOfLastActivity = millis();
-  client->print(sys.hostname);
+  client->print(sys.config.hostname);
   client->print(F("#> "));
 };
 
@@ -27,7 +27,7 @@ void Telnet::checkAvailable()
   {
     connected = true;
     client->println(F("ARDUINO RELAY TIMER"));
-    client->println(" - " + String(sys.hostname));
+    client->println(" - " + String(sys.config.hostname));
     client->print(F("Version "));
     client->println(VERSION);
     commandPrompt();
