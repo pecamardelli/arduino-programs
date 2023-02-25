@@ -36,5 +36,5 @@ void loop()
   telnet.checkAvailable();
   serial.checkAvailable();
 
-  nodes.checkRelays();
+  // nodes.checkRelays();
 }

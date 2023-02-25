@@ -13,9 +13,11 @@ void SerialChannel::checkAvailable()
 {
   if (client->available())
   {
-    char *input = getInput();
+    String input = getInput();
     Command *com = parser.parse(input);
     client->println(sys.exec(com));
-    delete com;
+
+    if (com)
+      delete com;
   }
 }

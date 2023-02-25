@@ -93,7 +93,7 @@ private:
 public:
     Command(/* args */);
     ~Command();
-    char **args;
+    String args[MAX_COMMAND_ARGS];
     uint8_t count;
     void freeMem();
 };
@@ -116,6 +116,7 @@ typedef struct _ethernet
 typedef struct _system
 {
     char hostname[MAX_HOSTNAME_LEN];
+    uint16_t relayCheckInterval;
     ethernet_t ethernetConfig;
 } system_t;
 
@@ -135,12 +136,13 @@ public:
 
     int getFreeMemory();
     bool charAllowed(char);
-    String setHostname(char *);
-    String setIpAddress(char *);
-    String setSubnetMask(char *);
-    String setDefaultGateway(char *);
-    String setDnsServer(char *);
+    String setHostname(String);
+    String setIpAddress(String);
+    String setSubnetMask(String);
+    String setDefaultGateway(String);
+    String setDnsServer(String);
     String exec(Command *);
+    String saveSystemData();
 };
 
 extern System sys;
@@ -158,7 +160,7 @@ private:
 public:
     Parser(/* args */);
     ~Parser();
-    Command *Parser::parse(char *);
+    Command *Parser::parse(String);
 };
 
 extern Parser parser;
@@ -175,13 +177,16 @@ private:
     bool charAllowed(char);
     const byte **specialChars;
 
+protected:
+    ChannelTypes type;
+
 public:
     Channel(/* args */);
     ~Channel();
 
 protected:
     T client;
-    char *getInput();
+    String getInput();
 };
 
 #endif
@@ -259,6 +264,7 @@ class NodeList
 private:
     uint8_t getAvailablePin();
     node_t *first, *last;
+    unsigned long lastCheckTimeStamp;
 
 public:
     NodeList(/* args */);
@@ -266,7 +272,7 @@ public:
     void checkRelays();
     Relay *searchByPin(uint8_t);
     bool isPinAvailable(uint8_t);
-    char *createRelay(uint8_t);
+    String createRelay(uint8_t);
     String getRelayInfo();
 };
 

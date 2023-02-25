@@ -19,16 +19,13 @@ Channel<T>::~Channel()
 }
 
 template <class T>
-char *Channel<T>::getInput()
+String Channel<T>::getInput()
 {
-    uint8_t charIndex = 0;
-    char c;
-
     if (client->available() <= 0)
         return;
 
-    // Looks like we have a command to parse. Let's do it.
-    char *input = (char *)calloc(MAX_COMMAND_LEN, sizeof(char));
+    char c;
+    String input;
 
     while (client->available() > 0)
     {
@@ -37,13 +34,10 @@ char *Channel<T>::getInput()
         //  Include letters, digits, and other allowed chars. Add more allowed characters
         //  at the definition of the specialChars array.
         if (isalpha(c) or isdigit(c) or charAllowed(c))
-        {
-            input[charIndex++] = (char)c;
-        }
+            input.concat(c);
         else
-        {
-            input[charIndex++] = (char)0x20;
-        }
+            input.concat((char)0x20);
+
         delay(5);
     }
 
@@ -55,7 +49,7 @@ bool Channel<T>::charAllowed(char c)
 {
     for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
     {
-        if (c == specialChars[i])
+        if (c == (char)specialChars[i])
             return true;
     }
     return false;

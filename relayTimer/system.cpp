@@ -45,56 +45,66 @@ int System::getFreeMemory()
 #endif // __arm__
 }
 
-String System::setHostname(char *newHostname)
+String System::setHostname(String newHostname)
 {
-  if (strlen(newHostname) == 0)
+  if (newHostname.length() == 0)
     return F("Error: hostname cannot be empty.");
 
-  if (strlen(newHostname) > MAX_HOSTNAME_LEN)
+  if (newHostname.length() > MAX_HOSTNAME_LEN)
     return F("Error: hostname exceedes maximum.");
 
   // Looks like we're good...
-  strncpy(config.hostname, newHostname, MAX_HOSTNAME_LEN);
+  newHostname.toCharArray(config.hostname, MAX_HOSTNAME_LEN);
+
+  configChanged = true;
 
   return newHostname;
 };
 
-String System::setIpAddress(char *newIpAddress)
+String System::setIpAddress(String newIpAddress)
 {
   if (!config.ethernetConfig.ipAddress.fromString(newIpAddress))
-    return F("Error: invalid ip address.");
+    return "Error invalid ip address: " + newIpAddress;
 
   Ethernet.setLocalIP(config.ethernetConfig.ipAddress);
+
+  configChanged = true;
 
   return newIpAddress;
 };
 
-String System::setSubnetMask(char *newSubnetMask)
+String System::setSubnetMask(String newSubnetMask)
 {
   if (!config.ethernetConfig.subnetMask.fromString(newSubnetMask))
     return F("Error: invalid subnet mask.");
 
   Ethernet.setSubnetMask(config.ethernetConfig.subnetMask);
 
+  configChanged = true;
+
   return newSubnetMask;
 };
 
-String System::setDefaultGateway(char *newDefaultGateway)
+String System::setDefaultGateway(String newDefaultGateway)
 {
   if (!config.ethernetConfig.gateway.fromString(newDefaultGateway))
     return F("Error: invalid default gateway.");
 
   Ethernet.setGatewayIP(config.ethernetConfig.gateway);
 
+  configChanged = true;
+
   return newDefaultGateway;
 };
 
-String System::setDnsServer(char *newDnsServer)
+String System::setDnsServer(String newDnsServer)
 {
   if (!config.ethernetConfig.dnsServer.fromString(newDnsServer))
     return F("Error: invalid DNS server.");
 
   Ethernet.setDnsServerIP(config.ethernetConfig.dnsServer);
+
+  configChanged = true;
 
   return newDnsServer;
 };
@@ -115,7 +125,7 @@ String System::exec(Command *com)
 
   // output += "Free memory before: " + String(getFreeMemory()));
 
-  if (strncmp(com->args[0], "help", 4) == 0)
+  if (com->args[0].equals("help"))
   {
     output += F("time\t\t\t--> Returns the current time.\n");
     output += F("relay (pinNumber)\t--> Runs command on specified relay. Use 'relay help' for further options.\n");
@@ -125,40 +135,40 @@ String System::exec(Command *com)
     output += F("exit\t\t\t--> Close connection (telnet only).\n");
     output += F("quit\t\t\t--> Close connection (telnet only).\n");
   }
-  else if (strncmp(com->args[0], "set", 3) == 0)
+  else if (com->args[0].equals("set"))
   {
-    if (strncmp(com->args[1], "help", 4) == 0 or !strlen(com->args[1]))
+    if (com->args[1].equals("help") || com->args[1].length() == 0)
     {
-      output += F("hostname\t\t--> Sets the system name.\n");
+      output += F("hostname\t--> Sets the system name.\n");
       output += F("ip\t\t--> Sets system's ip address.\n");
       output += F("mask\t\t--> Sets system's subnet mask.\n");
       output += F("gateway\t\t--> Sets system's default gateway.\n");
       output += F("dns\t\t--> Sets system's dns server.\n");
       output += F("mac\t\t--> Sets system's mac address.\n");
     }
-    else if (strncmp(com->args[1], "hostname", 8) == 0)
+    else if (com->args[1].equals("hostname"))
       output = setHostname(com->args[2]); // By default, args[2] is an empty string. setHostname will deal with it.
-    else if (strncmp(com->args[1], "ip", 2) == 0)
+    else if (com->args[1].equals("ip"))
       output = setIpAddress(com->args[2]);
-    else if (strncmp(com->args[1], "mask", 2) == 0)
+    else if (com->args[1].equals("mask"))
       output = setSubnetMask(com->args[2]);
-    else if (strncmp(com->args[1], "gateway", 2) == 0)
+    else if (com->args[1].equals("gateway"))
       output = setDefaultGateway(com->args[2]);
-    else if (strncmp(com->args[1], "dns", 2) == 0)
+    else if (com->args[1].equals("dns"))
       output = setDnsServer(com->args[2]);
-    else if (strncmp(com->args[1], "mac", 2) == 0)
+    else if (com->args[1].equals("mac"))
       output = F("Not implemented");
 
-    else if (strncmp(com->args[0], "relay", 5) == 0)
+    else if (com->args[0].equals("relay"))
     {
       output += F("Unknown subcommand \"");
       output += com->args[1];
       output += F("\"");
     }
   }
-  else if (strncmp(com->args[0], "relay", 5) == 0)
+  else if (com->args[0].equals("relay"))
   {
-    if (strncmp(com->args[1], "help", 4) == 0 or !strlen(com->args[1]))
+    if (com->args[1].equals("help") || com->args[1].length() == 0)
     {
       output += F("relay info\t\t\t\t-> Shows this information.\n");
       output += F("relay (pinNumber) create\t\t-> Creates a relay at the specified pin.\n");
@@ -176,20 +186,20 @@ String System::exec(Command *com)
       output += F("relay (pinNumber) off (pinNumber)\t-> Turns off the specified relay.\n");
       return output;
     }
-    else if (strncmp(com->args[1], "info", 4) == 0)
+    else if (com->args[1].equals("info"))
     {
       output = nodes.getRelayInfo();
       return output;
     }
 
-    const uint8_t pin = atoi(com->args[1]);
+    const uint8_t pin = com->args[1].toInt();
     // output += "Pin: " + String(pin));
 
-    if (strncmp(com->args[2], "create", 6) == 0)
+    if (com->args[2].equals("create"))
     {
       output = nodes.createRelay(pin);
     }
-    else if (strncmp(com->args[2], "on", 2) == 0)
+    else if (com->args[2].equals("on"))
     {
       Relay *relay = nodes.searchByPin(pin);
       if (relay == NULL)
@@ -205,7 +215,7 @@ String System::exec(Command *com)
       output += pin;
       output += F(" on");
     }
-    else if (strncmp(com->args[2], "off", 3) == 0)
+    else if (com->args[2].equals("off"))
     {
       Relay *relay = nodes.searchByPin(pin);
       if (relay == NULL)
@@ -228,25 +238,30 @@ String System::exec(Command *com)
       output += "\n";
     }
   }
-  else if (strncmp(com->args[0], "freemem", 7) == 0)
+  else if (com->args[0].equals("freemem"))
   {
     output = F("Free memory: ");
     output += String(getFreeMemory());
     output += F(" bytes.");
   }
-  else if (strncmp(com->args[0], "hostname", 8) == 0)
+  else if (com->args[0].equals("hostname"))
     output = config.hostname;
-  else if (strncmp(com->args[0], "sysinfo", 7) == 0)
+  else if (com->args[0].equals("sysinfo"))
   {
-    output = String(F("Hostname:\t")) + String(config.hostname) + "\n";
+    output = String(F("Board type:\t")) + BOARD + "\n";
+    output += String(F("Hostname:\t")) + String(config.hostname) + "\n";
     output += String(F("IP Address:\t")) + ipToString(Ethernet.localIP()) + "\n";
     output += String(F("Subnet mask:\t")) + ipToString(Ethernet.subnetMask()) + "\n";
     output += String(F("Gateway:\t")) + ipToString(Ethernet.gatewayIP()) + "\n";
     output += String(F("DNS Server:\t")) + ipToString(Ethernet.dnsServerIP()) + "\n";
+    output += String(F("Free memory:\t")) + getFreeMemory() + " bytes\n";
+    output += String(F("EEPROM length:\t")) + EEPROM.length() + " bytes\n";
   }
+  else if (com->args[0].equals("save"))
+    output = sys.saveSystemData();
   // else if (strncmp(com->args[0], "date", 4) == 0)
   //     output += clock.getDate());
-  else if (strncmp(com->args[0], "exit", 4) == 0 || strncmp(com->args[0], "quit", 4) == 0)
+  else if (com->args[0].equals("exit") || com->args[0].equals("quit"))
   {
     telnet.closeConnection();
   }
@@ -286,30 +301,25 @@ void System::loadSystemData()
   // Set a default IP address if it's not defined.
   // If the first byte is 0, then no ip address has been stored.
   if (config.ethernetConfig.ipAddress[0] == 0xff)
-  {
     config.ethernetConfig.ipAddress.fromString("192.168.40.8");
-  }
 
   // Set a default subnet mask if it's not defined.
   // If the first byte is 0, then no mask has been stored.
   if (config.ethernetConfig.subnetMask[0] == 0xff)
-  {
     config.ethernetConfig.subnetMask.fromString("255.255.255.0");
-  }
 
   // Set a default gateway if it's not defined.
   // If the first byte is 0, then no gateway has been stored.
   if (config.ethernetConfig.gateway[0] == 0xff)
-  {
     config.ethernetConfig.gateway.fromString("192.168.40.1");
-  }
 
   // Set a default dns server if it's not defined.
   // If the first byte is 0, then no dns server has been stored.
   if (config.ethernetConfig.dnsServer[0] == 0xff)
-  {
     config.ethernetConfig.dnsServer.fromString("179.42.171.21");
-  }
+
+  if (config.relayCheckInterval == 0xffff)
+    config.relayCheckInterval = 1000;
 
   // Ethernet.begin(config.mac, config.ip, config.dns, config.gateway, config.subnet);
 
@@ -370,6 +380,19 @@ void System::loadSystemData()
   //   }
   // } while (1);
 };
+
+String System::saveSystemData()
+{
+  if (!configChanged)
+    return F("No changes to save.");
+
+  eeAddress = EEPROM.length() - sizeof(config) - 1;
+  EEPROM.put(eeAddress, config);
+
+  configChanged = false;
+
+  return F("Config saved.");
+}
 
 String System::ipToString(IPAddress address)
 {

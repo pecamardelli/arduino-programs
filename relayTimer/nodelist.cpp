@@ -4,6 +4,7 @@ NodeList::NodeList(/* args */)
 {
     first = NULL;
     last = NULL;
+    lastCheckTimeStamp = 0;
 }
 
 NodeList::~NodeList()
@@ -49,10 +50,10 @@ bool NodeList::isPinAvailable(uint8_t pin)
     return true;
 }
 
-char *NodeList::createRelay(uint8_t pin)
+String NodeList::createRelay(uint8_t pin)
 {
     if (!isPinAvailable(pin))
-        return "Error: pin not available";
+        return F("Error: pin not available");
 
     node_t *aux = (node_t *)malloc(sizeof(node_t));
     aux->next = NULL; // Set to NULL to inform that it's a new list entry.
@@ -77,11 +78,14 @@ char *NodeList::createRelay(uint8_t pin)
         }
     }
 
-    return "Relay created.";
+    return F("Relay created.");
 }
 
 void NodeList::checkRelays()
 {
+    if (millis() - lastCheckTimeStamp < sys.config.relayCheckInterval)
+        return;
+
     //   DateTime now = clock.RTC.now();
     int startMins, endMins, currentMins;
 
@@ -145,6 +149,8 @@ void NodeList::checkRelays()
 
         aux = aux->next;
     }
+
+    lastCheckTimeStamp = millis();
 }
 
 String NodeList::getRelayInfo()
@@ -178,6 +184,8 @@ String NodeList::getRelayInfo()
 
         if (aux->changeFlag)
             output += "*";
+
+        output += "\n";
 
         aux = aux->next;
     }

@@ -10,32 +10,21 @@ Parser::~Parser()
 {
 }
 
-Command *Parser::parse(char *input)
+Command *Parser::parse(String input)
 {
   Command *com = new Command();
+  char buffer[MAX_COMMAND_LEN];
 
-  char *token = strtok(input, delimiter);
+  input.toCharArray(buffer, MAX_COMMAND_LEN);
+
+  char *token = strtok(buffer, delimiter);
 
   while (token != NULL && com->count < MAX_COMMAND_ARGS)
   {
-    com->args[com->count] = (char *)malloc(sizeof(char) * strlen(token));
-    strcpy(com->args[com->count], token);
+    com->args[com->count] = token;
     com->count++;
     token = strtok(NULL, delimiter);
   }
-
-  // ----- Do some debugging ----- //
-
-  // for (uint8_t i = 0; i < com->count; i++)
-  // {
-  //   Serial.print("Argument " + String(i) + ": ");
-  //   Serial.println(com->args[i]);
-  // }
-  // Serial.println("Total args: " + String(com->count));
-
-  // ---------------------------- //
-
-  free(input);
 
   return com;
 }
