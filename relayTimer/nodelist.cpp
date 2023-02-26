@@ -52,10 +52,17 @@ bool NodeList::isPinAvailable(uint8_t pin)
 
 String NodeList::createRelay(uint8_t pin)
 {
+    if (sys.getFreeMemory() <= sizeof(node_t))
+        return "Not enough memory.";
+
     if (!isPinAvailable(pin))
         return F("Error: pin not available");
 
     node_t *aux = (node_t *)malloc(sizeof(node_t));
+
+    if (!aux)
+        return "ERROR! Could not allocate memory.";
+
     aux->next = NULL; // Set to NULL to inform that it's a new list entry.
 
     pinMode(pin, OUTPUT);
@@ -105,18 +112,18 @@ void NodeList::checkRelays()
                     if (endMins < currentMins)
                     {
                         // switchRelay(aux->relay.pin, HIGH, false);
-                        aux->relay->setMode(HIGH);
+                        aux->relay->switchOff();
                     }
                     else
                     {
                         // switchRelay(aux->relay.pin, LOW, false);
-                        aux->relay->setMode(LOW);
+                        aux->relay->switchOn();
                     }
                 }
                 else
                 {
                     // switchRelay(aux->relay.pin, LOW, false);
-                    aux->relay->setMode(LOW);
+                    aux->relay->switchOn();
                 }
             }
             else
@@ -124,19 +131,19 @@ void NodeList::checkRelays()
                 if (startMins < endMins)
                 {
                     // switchRelay(aux->relay.pin, HIGH, false);
-                    aux->relay->setMode(HIGH);
+                    aux->relay->switchOff();
                 }
                 else
                 {
                     if (endMins > currentMins)
                     {
                         // switchRelay(aux->relay.pin, LOW, false);
-                        aux->relay->setMode(LOW);
+                        aux->relay->switchOn();
                     }
                     else
                     {
                         // switchRelay(aux->relay.pin, HIGH, false);
-                        aux->relay->setMode(HIGH);
+                        aux->relay->switchOff();
                     }
                 }
             }
@@ -144,7 +151,7 @@ void NodeList::checkRelays()
         else if (!aux->overrided)
         {
             // switchRelay(aux->relay.pin, HIGH, false);
-            aux->relay->setMode(HIGH);
+            aux->relay->switchOff();
         }
 
         aux = aux->next;

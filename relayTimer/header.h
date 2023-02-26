@@ -75,11 +75,13 @@ public:
 
     String setPin(uint8_t);
     String setDesc(char *);
-    String setMode(uint8_t);
     String setStartHour(uint8_t);
     String setStartMinute(uint8_t);
     String setEndHour(uint8_t);
     String setEndMinute(uint8_t);
+
+    String switchOn();
+    String switchOff();
 };
 
 #endif
@@ -129,6 +131,7 @@ private:
 
     void loadSystemData();
     String ipToString(IPAddress);
+    String resetConfig();
 
 public:
     System();
@@ -176,9 +179,6 @@ class Channel
 private:
     bool charAllowed(char);
     const byte **specialChars;
-
-protected:
-    ChannelTypes type;
 
 public:
     Channel(/* args */);

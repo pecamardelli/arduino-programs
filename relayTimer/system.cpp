@@ -206,14 +206,9 @@ String System::exec(Command *com)
       {
         output = F("No relay defined on pin ");
         output += pin;
-        return output;
       }
 
-      relay->setMode(LOW);
-
-      output = F("Relay ");
-      output += pin;
-      output += F(" on");
+      output = relay->switchOn();
     }
     else if (com->args[2].equals("off"))
     {
@@ -222,14 +217,9 @@ String System::exec(Command *com)
       {
         output = F("No relay defined on pin ");
         output += pin;
-        return output;
       }
 
-      relay->setMode(HIGH);
-
-      output = F("Relay ");
-      output += pin;
-      output += F(" off");
+      output = relay->switchOff();
     }
     else
     {
@@ -256,6 +246,12 @@ String System::exec(Command *com)
     output += String(F("DNS Server:\t")) + ipToString(Ethernet.dnsServerIP()) + "\n";
     output += String(F("Free memory:\t")) + getFreeMemory() + " bytes\n";
     output += String(F("EEPROM length:\t")) + EEPROM.length() + " bytes\n";
+  }
+  else if (com->args[0].equals("reset"))
+  {
+
+    if (com->args[1].equals("config"))
+      output = resetConfig();
   }
   else if (com->args[0].equals("save"))
     output = sys.saveSystemData();
@@ -403,4 +399,36 @@ String System::ipToString(IPAddress address)
   stringifiedAddress += String(address[3]);
 
   return stringifiedAddress;
+}
+
+String System::resetConfig()
+{
+  strcpy(config.hostname, "arduino");
+  config.ethernetConfig.ipAddress.fromString("192.168.40.8");
+  Ethernet.setLocalIP(config.ethernetConfig.ipAddress);
+
+  config.ethernetConfig.subnetMask.fromString("255.255.255.0");
+  Ethernet.setSubnetMask(config.ethernetConfig.subnetMask);
+
+  config.ethernetConfig.gateway.fromString("192.168.40.1");
+  Ethernet.setGatewayIP(config.ethernetConfig.gateway);
+
+  config.ethernetConfig.dnsServer.fromString("179.42.171.21");
+  Ethernet.setDnsServerIP(config.ethernetConfig.dnsServer);
+
+  config.ethernetConfig.macAddress[0] = 0xDE;
+  config.ethernetConfig.macAddress[1] = 0xAD;
+  config.ethernetConfig.macAddress[2] = 0xBE;
+  config.ethernetConfig.macAddress[3] = 0xEF;
+  config.ethernetConfig.macAddress[4] = 0xF0;
+  config.ethernetConfig.macAddress[5] = 0x18;
+  Ethernet.setMACAddress(config.ethernetConfig.macAddress);
+
+  config.relayCheckInterval = 3000;
+
+  configChanged = true;
+
+  saveSystemData();
+
+  return F("Configuration reset to defaults.");
 }

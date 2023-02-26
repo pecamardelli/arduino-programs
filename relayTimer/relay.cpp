@@ -129,18 +129,20 @@ String Relay::setPin(uint8_t newPin)
     }
 }
 
-String Relay::setMode(uint8_t mode)
+String Relay::switchOn()
 {
-    if (mode == HIGH || mode == LOW)
-    {
-        digitalWrite(data.pin, mode);
-        if (mode == LOW)
-            startTime = millis();
-        else
-            startTime = 0;
-    }
-    else
-        return F("Error: invalid mode.");
+    digitalWrite(data.pin, LOW);
+    startTime = millis();
+
+    return F("Relay switched on.");
+}
+
+String Relay::switchOff()
+{
+    digitalWrite(data.pin, HIGH);
+    startTime = 0;
+
+    return F("Relay switched off.");
 }
 
 String Relay::setDesc(char *newDesc)
