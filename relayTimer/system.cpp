@@ -56,7 +56,7 @@ String System::setHostname(String newHostname)
   // Looks like we're good...
   newHostname.toCharArray(config.hostname, MAX_HOSTNAME_LEN);
 
-  configChanged = true;
+  saveSystemData();
 
   return newHostname;
 };
@@ -68,7 +68,7 @@ String System::setIpAddress(String newIpAddress)
 
   Ethernet.setLocalIP(config.ethernetConfig.ipAddress);
 
-  configChanged = true;
+  saveSystemData();
 
   return newIpAddress;
 };
@@ -80,7 +80,7 @@ String System::setSubnetMask(String newSubnetMask)
 
   Ethernet.setSubnetMask(config.ethernetConfig.subnetMask);
 
-  configChanged = true;
+  saveSystemData();
 
   return newSubnetMask;
 };
@@ -92,7 +92,7 @@ String System::setDefaultGateway(String newDefaultGateway)
 
   Ethernet.setGatewayIP(config.ethernetConfig.gateway);
 
-  configChanged = true;
+  saveSystemData();
 
   return newDefaultGateway;
 };
@@ -104,7 +104,7 @@ String System::setDnsServer(String newDnsServer)
 
   Ethernet.setDnsServerIP(config.ethernetConfig.dnsServer);
 
-  configChanged = true;
+  saveSystemData();
 
   return newDnsServer;
 };
@@ -197,7 +197,11 @@ String System::exec(Command *com)
 
     if (com->args[2].equals("create"))
     {
-      output = nodes.createRelay(pin);
+      Relay *newRelay = nodes.createRelay(pin);
+      if (newRelay == NULL)
+        output = F("Error: pin not available");
+      else
+        output = nodes.addNode(newRelay);
     }
     else if (com->args[2].equals("on"))
     {
@@ -246,6 +250,7 @@ String System::exec(Command *com)
     output += String(F("DNS Server:\t")) + ipToString(Ethernet.dnsServerIP()) + "\n";
     output += String(F("Free memory:\t")) + getFreeMemory() + " bytes\n";
     output += String(F("EEPROM length:\t")) + EEPROM.length() + " bytes\n";
+    output += String(F("Relays defined:\t")) + nodes.getNodeNumber() + "\n";
   }
   else if (com->args[0].equals("reset"))
   {
@@ -253,8 +258,6 @@ String System::exec(Command *com)
     if (com->args[1].equals("config"))
       output = resetConfig();
   }
-  else if (com->args[0].equals("save"))
-    output = sys.saveSystemData();
   // else if (strncmp(com->args[0], "date", 4) == 0)
   //     output += clock.getDate());
   else if (com->args[0].equals("exit") || com->args[0].equals("quit"))
@@ -280,7 +283,7 @@ void System::loadSystemData()
   eeAddress = EEPROM.length() - sizeof(system_t) - 1;
   EEPROM.get(eeAddress, config);
 
-  if (config.hostname[0] = 0xff)
+  if (config.hostname[0] == 0xff)
     strcpy(config.hostname, "arduino");
 
   // Set a default mac address if it's not defined.
@@ -316,78 +319,12 @@ void System::loadSystemData()
 
   if (config.relayCheckInterval == 0xffff)
     config.relayCheckInterval = 1000;
-
-  // Ethernet.begin(config.mac, config.ip, config.dns, config.gateway, config.subnet);
-
-  // byte pos = 0;
-  // relayQuantity = 0;
-  // eeAddress = 0;
-
-  // // All relays are loaded into a dynamic list. This way, more relays can be added later.
-
-  // // From byte 0 to 100 is stored the "file system". Every two bytes is an integer
-  // // that represents a memory address where the relay data is stored on the EEPROM.
-  // for (byte i = 0; i < MAX_RELAY_NUMBER; i++)
-  // {
-  //   EEPROM.get(eeAddress, pos);
-  // }
-
-  // do
-  // {
-  //   node_t *aux = (node_t *)malloc(sizeof(node_t));
-
-  //   if (!aux)
-  //     break;
-  //   else
-  //   {
-  //     EEPROM.get(eeAddress, aux->relay);
-
-  //     if (aux->relay.type == 200)
-  //     {
-  //       if (!aux->relay.deleted)
-  //       {
-  //         if (first == NULL)
-  //         {
-  //           first = aux;
-  //           first->next = NULL;
-  //           last = first;
-  //         }
-  //         else
-  //         {
-  //           last->next = aux;
-  //           last = aux;
-  //           last->next = NULL;
-  //         }
-
-  //         pinMode(aux->relay.pin, OUTPUT);
-  //         digitalWrite(aux->relay.pin, HIGH);
-  //         aux->changeFlag = false;
-  //         aux->overrided = false;
-
-  //         relayQuantity++;
-  //       }
-  //       else
-  //         free(aux);
-
-  //       eeAddress += sizeof(relayData);
-  //     }
-  //     else
-  //       break;
-  //   }
-  // } while (1);
 };
 
-String System::saveSystemData()
+void System::saveSystemData()
 {
-  if (!configChanged)
-    return F("No changes to save.");
-
   eeAddress = EEPROM.length() - sizeof(config) - 1;
   EEPROM.put(eeAddress, config);
-
-  configChanged = false;
-
-  return F("Config saved.");
 }
 
 String System::ipToString(IPAddress address)

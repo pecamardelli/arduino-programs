@@ -4,6 +4,7 @@ extern NodeList nodes;
 
 Relay::Relay(uint8_t newPin)
 {
+    data.identifier = RELAY_IDENTIFIER;
     data.pin = newPin;
     strcpy(data.desc, "No description");
     data.status = disabled;
@@ -12,6 +13,19 @@ Relay::Relay(uint8_t newPin)
     data.startMin = 0;
     data.endHour = 0;
     data.endMin = 0;
+}
+
+Relay::Relay(relayData_t relayData)
+{
+    data.identifier = RELAY_IDENTIFIER;
+    data.pin = relayData.pin;
+    strcpy(data.desc, relayData.desc);
+    data.status = relayData.status;
+
+    data.startHour = relayData.startHour;
+    data.startMin = relayData.startMin;
+    data.endHour = relayData.endHour;
+    data.endMin = relayData.endMin;
 }
 
 Relay::~Relay()
@@ -115,6 +129,16 @@ String Relay::getUptime()
     return d + "d " + h + ":" + m + ":" + s;
 }
 
+relayData_t Relay::getData()
+{
+    return data;
+}
+
+uint16_t Relay::getEepromAddress()
+{
+    return eeAddress;
+}
+
 // -------------------------------------------- //
 
 String Relay::setPin(uint8_t newPin)
@@ -184,4 +208,9 @@ String Relay::setEndMinute(uint8_t minute)
         return F("Error: invalid minute.");
 
     data.endMin = minute;
+}
+
+void Relay::setEepromAddress(uint16_t newEeAddress)
+{
+    eeAddress = newEeAddress;
 }

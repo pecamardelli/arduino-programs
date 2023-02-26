@@ -14,9 +14,11 @@
 #define MAX_HOSTNAME_LEN 64
 #define RELAY_DESC_LEN 32
 
-#define STATUS_DISABLED 0x00
-#define STATUS_ENABLED 0x01
-#define STATUS_DELETED 0x02
+// Leaving this amount of memory reserved for future use.
+#define EEPROM_RESERVED_BYTES 128
+
+// Random integer to identify a relay in the EEPROM
+#define RELAY_IDENTIFIER 0xfa67b9c2
 
 #endif
 
@@ -41,6 +43,7 @@ enum RelayStatus
 
 typedef struct _relayData
 {
+    uint32_t identifier;
     uint8_t pin;
     uint8_t startHour;
     uint8_t startMin;
@@ -54,12 +57,15 @@ class Relay
 {
 private:
     relayData_t data;
+    uint16_t eeAddress;
 
 public:
     Relay(uint8_t);
+    Relay(relayData_t);
     ~Relay();
 
     unsigned long startTime;
+    bool overrided;
 
     uint8_t getPin();
     uint8_t getMode();
@@ -72,6 +78,9 @@ public:
     String getStartTime();
     String getEndTime();
     String getUptime();
+    uint8_t getIndex();
+    relayData_t getData();
+    uint16_t getEepromAddress();
 
     String setPin(uint8_t);
     String setDesc(char *);
@@ -79,6 +88,7 @@ public:
     String setStartMinute(uint8_t);
     String setEndHour(uint8_t);
     String setEndMinute(uint8_t);
+    void setEepromAddress(uint16_t);
 
     String switchOn();
     String switchOff();
@@ -132,6 +142,7 @@ private:
     void loadSystemData();
     String ipToString(IPAddress);
     String resetConfig();
+    void saveSystemData();
 
 public:
     System();
@@ -145,7 +156,6 @@ public:
     String setDefaultGateway(String);
     String setDnsServer(String);
     String exec(Command *);
-    String saveSystemData();
 };
 
 extern System sys;
@@ -254,8 +264,6 @@ public:
 typedef struct node
 {
     Relay *relay;
-    bool changeFlag;
-    bool overrided;
     struct node *next;
 } node_t;
 
@@ -266,14 +274,19 @@ private:
     node_t *first, *last;
     unsigned long lastCheckTimeStamp;
 
+    void saveRelay(Relay *);
+
 public:
     NodeList(/* args */);
     ~NodeList();
     void checkRelays();
     Relay *searchByPin(uint8_t);
     bool isPinAvailable(uint8_t);
-    String createRelay(uint8_t);
+    String addNode(Relay *);
+    Relay *createRelay(uint8_t);
     String getRelayInfo();
+    uint8_t getNodeNumber();
+    void loadRelays();
 };
 
 #endif

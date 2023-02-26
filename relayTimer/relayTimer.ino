@@ -29,6 +29,8 @@ void setup()
       sys.config.ethernetConfig.subnetMask);
 
   server.begin();
+
+  nodes.loadRelays();
 }
 
 void loop()

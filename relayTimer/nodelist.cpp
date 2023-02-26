@@ -5,6 +5,8 @@ NodeList::NodeList(/* args */)
     first = NULL;
     last = NULL;
     lastCheckTimeStamp = 0;
+
+    loadRelays();
 }
 
 NodeList::~NodeList()
@@ -50,25 +52,41 @@ bool NodeList::isPinAvailable(uint8_t pin)
     return true;
 }
 
-String NodeList::createRelay(uint8_t pin)
+Relay *NodeList::createRelay(uint8_t pin)
 {
-    if (sys.getFreeMemory() <= sizeof(node_t))
-        return "Not enough memory.";
-
     if (!isPinAvailable(pin))
-        return F("Error: pin not available");
+        // return F("Error: pin not available");
+        return NULL;
 
-    node_t *aux = (node_t *)malloc(sizeof(node_t));
+    Relay *newRelay = new Relay(pin);
 
-    if (!aux)
-        return "ERROR! Could not allocate memory.";
-
-    aux->next = NULL; // Set to NULL to inform that it's a new list entry.
+    uint16_t newRelayEepromAddress = EEPROM_RESERVED_BYTES + getNodeNumber() * sizeof(relayData_t);
+    newRelay->setEepromAddress(newRelayEepromAddress);
 
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
 
-    aux->relay = new Relay(pin);
+    return newRelay;
+}
+
+String NodeList::addNode(Relay *relay)
+{
+    if (sys.getFreeMemory() <= sizeof(node_t))
+    {
+        delete relay;
+        return "Not enough memory.";
+    }
+
+    node_t *aux = (node_t *)malloc(sizeof(node_t));
+
+    if (!aux)
+    {
+        delete relay;
+        return "ERROR! Could not allocate memory.";
+    }
+
+    aux->next = NULL; // Set to NULL to inform that it's a new list entry.
+    aux->relay = relay;
 
     if (aux->next == NULL)
     {
@@ -85,6 +103,8 @@ String NodeList::createRelay(uint8_t pin)
         }
     }
 
+    saveRelay(aux->relay);
+
     return F("Relay created.");
 }
 
@@ -94,12 +114,12 @@ void NodeList::checkRelays()
         return;
 
     //   DateTime now = clock.RTC.now();
-    int startMins, endMins, currentMins;
+    uint16_t startMins, endMins, currentMins;
 
     node_t *aux = first;
     while (aux != NULL)
     {
-        if (aux->relay->getStatus() == enabled && !aux->overrided)
+        if (aux->relay->getStatus() == enabled && !aux->relay->overrided)
         {
             startMins = aux->relay->getStartHour() * 60 + aux->relay->getStartMinute();
             endMins = aux->relay->getEndHour() * 60 + aux->relay->getEndMinute();
@@ -148,7 +168,7 @@ void NodeList::checkRelays()
                 }
             }
         }
-        else if (!aux->overrided)
+        else if (!aux->relay->overrided)
         {
             // switchRelay(aux->relay.pin, HIGH, false);
             aux->relay->switchOff();
@@ -186,16 +206,55 @@ String NodeList::getRelayInfo()
 
         String _mode = digitalRead(aux->relay->getPin()) ? "off" : "on";
         output += _mode + "\t";
-
         output += aux->relay->getUptime() + "\t";
-
-        if (aux->changeFlag)
-            output += "*";
-
         output += "\n";
 
         aux = aux->next;
     }
 
     return output;
+}
+
+uint8_t NodeList::getNodeNumber()
+{
+    uint8_t relayCount = 0;
+    node_t *aux = first;
+
+    while (aux != NULL)
+    {
+        relayCount++;
+        aux = aux->next;
+    }
+
+    return relayCount;
+}
+
+void NodeList::saveRelay(Relay *relay)
+{
+    EEPROM.put(relay->getEepromAddress(), relay->getData());
+}
+
+void NodeList::loadRelays()
+{
+    Serial.println(F("Loading relays..."));
+    // Starting memory position.
+    uint16_t eeAddress = EEPROM_RESERVED_BYTES;
+    uint8_t totalRelaysLoaded = 0;
+
+    relayData_t relayData;
+    EEPROM.get(eeAddress, relayData);
+
+    while (relayData.identifier == RELAY_IDENTIFIER && relayData.status != disabled)
+    {
+        Relay *relay = new Relay(relayData);
+        addNode(relay);
+        relay->setEepromAddress(eeAddress);
+
+        totalRelaysLoaded++;
+
+        eeAddress += sizeof(relayData_t);
+        EEPROM.get(eeAddress, relayData);
+    }
+    Serial.print(F("Total relays loaded: "));
+    Serial.println(totalRelaysLoaded);
 }
