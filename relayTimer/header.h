@@ -60,8 +60,8 @@ private:
     uint16_t eeAddress;
 
 public:
-    Relay(uint8_t);
-    Relay(relayData_t);
+    Relay(uint8_t, uint16_t);
+    Relay(relayData_t, uint16_t);
     ~Relay();
 
     unsigned long startTime;
@@ -83,12 +83,12 @@ public:
     uint16_t getEepromAddress();
 
     String setPin(uint8_t);
-    String setDesc(char *);
+    String setDesc(String);
     String setStartHour(uint8_t);
     String setStartMinute(uint8_t);
     String setEndHour(uint8_t);
     String setEndMinute(uint8_t);
-    void setEepromAddress(uint16_t);
+    String setStatus(RelayStatus);
 
     String switchOn();
     String switchOff();
@@ -274,8 +274,6 @@ private:
     node_t *first, *last;
     unsigned long lastCheckTimeStamp;
 
-    void saveRelay(Relay *);
-
 public:
     NodeList(/* args */);
     ~NodeList();
@@ -286,7 +284,9 @@ public:
     Relay *createRelay(uint8_t);
     String getRelayInfo();
     uint8_t getNodeNumber();
+    void saveRelay(Relay *);
     void loadRelays();
+    void eraseRelaysFromEEPROM();
 };
 
 #endif

@@ -5,8 +5,6 @@ NodeList::NodeList(/* args */)
     first = NULL;
     last = NULL;
     lastCheckTimeStamp = 0;
-
-    loadRelays();
 }
 
 NodeList::~NodeList()
@@ -58,23 +56,25 @@ Relay *NodeList::createRelay(uint8_t pin)
         // return F("Error: pin not available");
         return NULL;
 
-    Relay *newRelay = new Relay(pin);
+    uint16_t newRelayEepromAddress = EEPROM_RESERVED_BYTES + getNodeNumber() * (sizeof(relayData_t) + 1);
 
-    uint16_t newRelayEepromAddress = EEPROM_RESERVED_BYTES + getNodeNumber() * sizeof(relayData_t);
-    newRelay->setEepromAddress(newRelayEepromAddress);
+    Relay *newRelay = new Relay(pin, newRelayEepromAddress);
 
     pinMode(pin, OUTPUT);
     digitalWrite(pin, HIGH);
+
+    saveRelay(newRelay);
 
     return newRelay;
 }
 
 String NodeList::addNode(Relay *relay)
 {
+    Serial.println("Adding a new node...");
     if (sys.getFreeMemory() <= sizeof(node_t))
     {
         delete relay;
-        return "Not enough memory.";
+        return F("Not enough memory.");
     }
 
     node_t *aux = (node_t *)malloc(sizeof(node_t));
@@ -85,27 +85,24 @@ String NodeList::addNode(Relay *relay)
         return "ERROR! Could not allocate memory.";
     }
 
-    aux->next = NULL; // Set to NULL to inform that it's a new list entry.
+    aux->next = NULL;
     aux->relay = relay;
 
-    if (aux->next == NULL)
+    // if (aux->next == NULL)
+    // {
+    if (first == NULL)
     {
-        if (first == NULL)
-        {
-            first = aux;
-            last = aux;
-        }
-        else
-        {
-            last->next = aux;
-            last = aux;
-            // last->next  = NULL;  In this case, next has been set to NULL when memory was allocated.
-        }
+        first = aux;
+        last = aux;
     }
+    else
+    {
+        last->next = aux;
+        last = aux;
+    }
+    // }
 
-    saveRelay(aux->relay);
-
-    return F("Relay created.");
+    return F("Node added.");
 }
 
 void NodeList::checkRelays()
@@ -231,7 +228,15 @@ uint8_t NodeList::getNodeNumber()
 
 void NodeList::saveRelay(Relay *relay)
 {
-    EEPROM.put(relay->getEepromAddress(), relay->getData());
+    relayData_t relayData = relay->getData();
+    uint16_t eeAddress = relay->getEepromAddress();
+
+    Serial.print("Relay pin: ");
+    Serial.print(relayData.pin);
+    Serial.print(" - Address: ");
+    Serial.println(eeAddress);
+
+    EEPROM.put(eeAddress, relayData);
 }
 
 void NodeList::loadRelays()
@@ -239,22 +244,49 @@ void NodeList::loadRelays()
     Serial.println(F("Loading relays..."));
     // Starting memory position.
     uint16_t eeAddress = EEPROM_RESERVED_BYTES;
+    uint8_t eeAddressStep = sizeof(relayData_t) + 1;
     uint8_t totalRelaysLoaded = 0;
 
     relayData_t relayData;
     EEPROM.get(eeAddress, relayData);
 
-    while (relayData.identifier == RELAY_IDENTIFIER && relayData.status != disabled)
+    Serial.print("Expected identifier: ");
+    Serial.print(RELAY_IDENTIFIER);
+    Serial.print(" - Received: ");
+    Serial.print(relayData.identifier);
+    Serial.print(" - Status: ");
+    Serial.println(relayData.status);
+
+    while (relayData.identifier == RELAY_IDENTIFIER && relayData.status != deleted)
     {
-        Relay *relay = new Relay(relayData);
+        Relay *relay = new Relay(relayData, eeAddress);
+
         addNode(relay);
-        relay->setEepromAddress(eeAddress);
 
         totalRelaysLoaded++;
 
-        eeAddress += sizeof(relayData_t);
+        eeAddress += eeAddressStep;
         EEPROM.get(eeAddress, relayData);
+
+        Serial.print("Expected identifier: ");
+        Serial.print(RELAY_IDENTIFIER);
+        Serial.print(" - Received: ");
+        Serial.print(relayData.identifier);
+        Serial.print(" - Status: ");
+        Serial.println(relayData.status);
     }
+
     Serial.print(F("Total relays loaded: "));
     Serial.println(totalRelaysLoaded);
+}
+
+void NodeList::eraseRelaysFromEEPROM()
+{
+    uint16_t startAddress = EEPROM_RESERVED_BYTES;
+    uint16_t endAddress = EEPROM.length() - sizeof(system_t) - 1;
+
+    for (uint16_t i = startAddress; i < endAddress; i++)
+    {
+        EEPROM.write(i, 0xff);
+    }
 }

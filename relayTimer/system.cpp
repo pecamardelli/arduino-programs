@@ -158,8 +158,7 @@ String System::exec(Command *com)
       output = setDnsServer(com->args[2]);
     else if (com->args[1].equals("mac"))
       output = F("Not implemented");
-
-    else if (com->args[0].equals("relay"))
+    else
     {
       output += F("Unknown subcommand \"");
       output += com->args[1];
@@ -186,44 +185,50 @@ String System::exec(Command *com)
       output += F("relay (pinNumber) off (pinNumber)\t-> Turns off the specified relay.\n");
       return output;
     }
-    else if (com->args[1].equals("info"))
+    else if (com->args[1].equals("info") || com->args[1].equals("status"))
     {
       output = nodes.getRelayInfo();
       return output;
     }
 
     const uint8_t pin = com->args[1].toInt();
-    // output += "Pin: " + String(pin));
 
     if (com->args[2].equals("create"))
     {
       Relay *newRelay = nodes.createRelay(pin);
       if (newRelay == NULL)
-        output = F("Error: pin not available");
+        return F("Error: pin not available");
       else
-        output = nodes.addNode(newRelay);
+        return nodes.addNode(newRelay);
     }
-    else if (com->args[2].equals("on"))
-    {
-      Relay *relay = nodes.searchByPin(pin);
-      if (relay == NULL)
-      {
-        output = F("No relay defined on pin ");
-        output += pin;
-      }
 
+    Relay *relay = nodes.searchByPin(pin);
+    if (relay == NULL)
+    {
+      output = F("No relay defined on pin ");
+      output += pin;
+      return output;
+    }
+
+    if (com->args[2].equals("on"))
+    {
       output = relay->switchOn();
     }
     else if (com->args[2].equals("off"))
     {
-      Relay *relay = nodes.searchByPin(pin);
-      if (relay == NULL)
-      {
-        output = F("No relay defined on pin ");
-        output += pin;
-      }
-
       output = relay->switchOff();
+    }
+    else if (com->args[2].equals("description"))
+    {
+      output = relay->setDesc(com->args[3]);
+    }
+    else if (com->args[2].equals("enable"))
+    {
+      output = relay->setStatus(enabled);
+    }
+    else if (com->args[2].equals("disable"))
+    {
+      output = relay->setStatus(disabled);
     }
     else
     {
@@ -254,9 +259,15 @@ String System::exec(Command *com)
   }
   else if (com->args[0].equals("reset"))
   {
-
     if (com->args[1].equals("config"))
+    {
       output = resetConfig();
+    }
+    else if (com->args[1].equals("relays"))
+    {
+      nodes.eraseRelaysFromEEPROM();
+      output = F("All relays erased from EEPROM.");
+    }
   }
   // else if (strncmp(com->args[0], "date", 4) == 0)
   //     output += clock.getDate());

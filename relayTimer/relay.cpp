@@ -2,8 +2,9 @@
 
 extern NodeList nodes;
 
-Relay::Relay(uint8_t newPin)
+Relay::Relay(uint8_t newPin, uint16_t _eeAddress)
 {
+    eeAddress = _eeAddress;
     data.identifier = RELAY_IDENTIFIER;
     data.pin = newPin;
     strcpy(data.desc, "No description");
@@ -15,8 +16,9 @@ Relay::Relay(uint8_t newPin)
     data.endMin = 0;
 }
 
-Relay::Relay(relayData_t relayData)
+Relay::Relay(relayData_t relayData, uint16_t _eeAddress)
 {
+    eeAddress = _eeAddress;
     data.identifier = RELAY_IDENTIFIER;
     data.pin = relayData.pin;
     strcpy(data.desc, relayData.desc);
@@ -146,6 +148,10 @@ String Relay::setPin(uint8_t newPin)
     if (nodes.isPinAvailable(newPin))
     {
         data.pin = newPin;
+
+        nodes.saveRelay(this);
+
+        return "Ok";
     }
     else
     {
@@ -169,13 +175,16 @@ String Relay::switchOff()
     return F("Relay switched off.");
 }
 
-String Relay::setDesc(char *newDesc)
+String Relay::setDesc(String newDesc)
 {
-    if (strlen(newDesc) > RELAY_DESC_LEN)
+    if (newDesc.length() > RELAY_DESC_LEN)
         return F("Error: description too long.");
 
-    strcpy(data.desc, newDesc);
-    return newDesc;
+    newDesc.toCharArray(data.desc, RELAY_DESC_LEN);
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
 
 String Relay::setStartHour(uint8_t hour)
@@ -184,6 +193,10 @@ String Relay::setStartHour(uint8_t hour)
         return F("Error: invalid hour.");
 
     data.startHour = hour;
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
 
 String Relay::setStartMinute(uint8_t minute)
@@ -192,6 +205,10 @@ String Relay::setStartMinute(uint8_t minute)
         return F("Error: invalid minute.");
 
     data.startMin = minute;
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
 
 String Relay::setEndHour(uint8_t hour)
@@ -200,6 +217,10 @@ String Relay::setEndHour(uint8_t hour)
         return F("Error: invalid hour.");
 
     data.endHour = hour;
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
 
 String Relay::setEndMinute(uint8_t minute)
@@ -208,9 +229,17 @@ String Relay::setEndMinute(uint8_t minute)
         return F("Error: invalid minute.");
 
     data.endMin = minute;
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
 
-void Relay::setEepromAddress(uint16_t newEeAddress)
+String Relay::setStatus(RelayStatus newStatus)
 {
-    eeAddress = newEeAddress;
+    data.status = newStatus;
+
+    nodes.saveRelay(this);
+
+    return "Ok";
 }
