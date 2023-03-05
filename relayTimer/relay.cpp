@@ -187,8 +187,10 @@ String Relay::setDesc(String newDesc)
     return "Ok";
 }
 
-String Relay::setStartHour(uint8_t hour)
+String Relay::setStartHour(String startHour)
 {
+    const uint8_t hour = startHour.toInt();
+
     if (hour < 0 || hour > 23)
         return F("Error: invalid hour.");
 
@@ -199,8 +201,10 @@ String Relay::setStartHour(uint8_t hour)
     return "Ok";
 }
 
-String Relay::setStartMinute(uint8_t minute)
+String Relay::setStartMinute(String startMinute)
 {
+    const uint8_t minute = startMinute.toInt();
+
     if (minute < 0 || minute > 59)
         return F("Error: invalid minute.");
 
@@ -211,8 +215,10 @@ String Relay::setStartMinute(uint8_t minute)
     return "Ok";
 }
 
-String Relay::setEndHour(uint8_t hour)
+String Relay::setEndHour(String endHour)
 {
+    const uint8_t hour = endHour.toInt();
+
     if (hour < 0 || hour > 23)
         return F("Error: invalid hour.");
 
@@ -223,8 +229,10 @@ String Relay::setEndHour(uint8_t hour)
     return "Ok";
 }
 
-String Relay::setEndMinute(uint8_t minute)
+String Relay::setEndMinute(String endMinute)
 {
+    const uint8_t minute = endMinute.toInt();
+
     if (minute < 0 || minute > 59)
         return F("Error: invalid minute.");
 

@@ -84,10 +84,10 @@ public:
 
     String setPin(uint8_t);
     String setDesc(String);
-    String setStartHour(uint8_t);
-    String setStartMinute(uint8_t);
-    String setEndHour(uint8_t);
-    String setEndMinute(uint8_t);
+    String setStartHour(String);
+    String setStartMinute(String);
+    String setEndHour(String);
+    String setEndMinute(String);
     String setStatus(RelayStatus);
 
     String switchOn();

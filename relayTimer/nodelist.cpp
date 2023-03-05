@@ -231,10 +231,10 @@ void NodeList::saveRelay(Relay *relay)
     relayData_t relayData = relay->getData();
     uint16_t eeAddress = relay->getEepromAddress();
 
-    Serial.print("Relay pin: ");
-    Serial.print(relayData.pin);
-    Serial.print(" - Address: ");
-    Serial.println(eeAddress);
+    // Serial.print("Relay pin: ");
+    // Serial.print(relayData.pin);
+    // Serial.print(" - Address: ");
+    // Serial.println(eeAddress);
 
     EEPROM.put(eeAddress, relayData);
 }

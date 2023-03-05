@@ -230,6 +230,22 @@ String System::exec(Command *com)
     {
       output = relay->setStatus(disabled);
     }
+    else if (com->args[2].equals("starth"))
+    {
+      output = relay->setStartHour(com->args[3]);
+    }
+    else if (com->args[2].equals("startm"))
+    {
+      output = relay->setStartMinute(com->args[3]);
+    }
+    else if (com->args[2].equals("endh"))
+    {
+      output = relay->setEndHour(com->args[3]);
+    }
+    else if (com->args[2].equals("endm"))
+    {
+      output = relay->setEndMinute(com->args[3]);
+    }
     else
     {
       output += F("Unknown subcommand: ");
