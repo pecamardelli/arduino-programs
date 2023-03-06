@@ -1,16 +1,19 @@
 #include "header.h"
 
+EthernetServer server(23); // Telnet listens on port 23
+RTC_DS1307 RTC;
+
 System sys;
 Parser parser;
-EthernetServer server(23); // Telnet listens on port 23
 Telnet telnet;
 SerialChannel serial;
 NodeList nodes;
-// Clock clock;
+Clock clock;
 
 void setup()
 {
   Serial.begin(9600);
+
   // Check for Ethernet hardware present
   // if (Ethernet.hardwareStatus() == EthernetNoHardware)
   // {
@@ -29,6 +32,8 @@ void setup()
       sys.config.ethernetConfig.subnetMask);
 
   server.begin();
+
+  RTC.begin();
 
   nodes.loadRelays();
 }

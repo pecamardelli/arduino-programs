@@ -1,6 +1,7 @@
 
 #include <Ethernet.h>
 #include <EEPROM.h>
+#include <RTClib.h>
 
 // ----------- MACROS ------------- //
 #ifndef MACROS_H
@@ -14,9 +15,6 @@
 #define MAX_HOSTNAME_LEN 64
 #define RELAY_DESC_LEN 32
 
-// Leaving this amount of memory reserved for future use.
-#define EEPROM_RESERVED_BYTES 128
-
 // Random integer to identify a relay in the EEPROM
 #define RELAY_IDENTIFIER 0xfa67b9c2
 
@@ -26,9 +24,16 @@
 #if defined(ARDUINO_AVR_MEGA2560)
 #define BOARD "Mega 2560"
 #define DIGITAL_PINS 53
+
+// Leaving this amount of memory reserved for future use.
+#define EEPROM_RESERVED_BYTES 512
+
 #elif defined(ARDUINO_AVR_UNO)
 #define BOARD "Uno"
 #define DIGITAL_PINS 13
+
+// Leaving this amount of memory reserved for future use.
+#define EEPROM_RESERVED_BYTES 128
 #endif
 
 #ifndef RELAY_H
@@ -240,21 +245,21 @@ public:
 
 #ifndef CLOCK_H
 #define CLOCK_H
-// class Clock
-// {
-// private:
-//     const char **days;
 
-// public:
-//     Clock(/* args */);
-//     ~Clock();
-//     RTC_DS1307 RTC;
+class Clock
+{
+private:
+    String days[7];
 
-//     String setDateTime(char *, char *);
-//     String getDate();
-// };
+public:
+    Clock(/* args */);
+    ~Clock();
 
-// extern Clock clock;
+    String setDateTime(String, String);
+    String getDate();
+};
+
+extern Clock clock;
 
 #endif
 

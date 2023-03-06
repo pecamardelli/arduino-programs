@@ -33,7 +33,7 @@ String Channel<T>::getInput()
         // Serial.print(String(int(c)) + " ");
         //  Include letters, digits, and other allowed chars. Add more allowed characters
         //  at the definition of the specialChars array.
-        if (isalpha(c) or isdigit(c) or charAllowed(c))
+        if (isalpha(c) || isdigit(c) || charAllowed(c))
             input.concat(c);
         else
             input.concat((char)0x20);
@@ -49,7 +49,7 @@ bool Channel<T>::charAllowed(char c)
 {
     for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
     {
-        if (c == (char)specialChars[i])
+        if ((int)c == specialChars[i])
             return true;
     }
     return false;

@@ -158,6 +158,8 @@ String System::exec(Command *com)
       output = setDnsServer(com->args[2]);
     else if (com->args[1].equals("mac"))
       output = F("Not implemented");
+    else if (com->args[1].equals("date"))
+      output = clock.setDateTime(com->args[2], com->args[3]);
     else
     {
       output += F("Unknown subcommand \"");
@@ -272,6 +274,7 @@ String System::exec(Command *com)
     output += String(F("Free memory:\t")) + getFreeMemory() + " bytes\n";
     output += String(F("EEPROM length:\t")) + EEPROM.length() + " bytes\n";
     output += String(F("Relays defined:\t")) + nodes.getNodeNumber() + "\n";
+    output += String(F("System date:\t")) + clock.getDate() + "\n";
   }
   else if (com->args[0].equals("reset"))
   {
