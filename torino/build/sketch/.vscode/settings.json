@@ -1,0 +1,6 @@
+#line 1 "/home/pablin/arduino_programs/torino/.vscode/settings.json"
+{
+  "editor.defaultFormatter": "ms-vscode.cpptools",
+  "editor.formatOnPaste": true,
+  "editor.formatOnSave": true
+}

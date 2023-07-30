@@ -1,0 +1,42 @@
+[
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino"
+  },
+  {
+    "Sourcefile": null,
+    "Include": "",
+    "Includepath": "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/mega"
+  },
+  {
+    "Sourcefile": "/home/pablin/arduino_programs/torino/build/sketch/torino.ino.cpp",
+    "Include": "LCDWIKI_GUI.h",
+    "Includepath": "/home/pablin/Arduino/libraries/LCDWIKI_GUI"
+  },
+  {
+    "Sourcefile": "/home/pablin/arduino_programs/torino/build/sketch/torino.ino.cpp",
+    "Include": "LCDWIKI_KBV.h",
+    "Includepath": "/home/pablin/Arduino/libraries/LCDWIKI_KBV"
+  },
+  {
+    "Sourcefile": "/home/pablin/arduino_programs/torino/build/sketch/torino.ino.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/pablin/Arduino/libraries/LCDWIKI_GUI/LCDWIKI_GUI.cpp",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/pablin/Arduino/libraries/LCDWIKI_GUI/LCDWIKI_font.c",
+    "Include": "",
+    "Includepath": null
+  },
+  {
+    "Sourcefile": "/home/pablin/Arduino/libraries/LCDWIKI_KBV/LCDWIKI_KBV.cpp",
+    "Include": "",
+    "Includepath": null
+  }
+]

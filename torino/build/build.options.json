@@ -1,0 +1,11 @@
+{
+  "additionalFiles": "../../..,../../..,../../..,../../../..,../../../..,../../../..,../../../..,../../../..,../../../..,../../../..,../../../..,../../../..",
+  "builtInToolsFolders": "",
+  "compiler.optimization_flags": "",
+  "customBuildProperties": "",
+  "fqbn": "arduino:avr:mega:cpu=atmega2560",
+  "hardwareFolders": "/home/pablin/.arduino15/packages",
+  "otherLibrariesFolders": "/home/pablin/Arduino/libraries",
+  "runtime.ide.version": "10607",
+  "sketchLocation": "/home/pablin/arduino_programs/torino"
+}

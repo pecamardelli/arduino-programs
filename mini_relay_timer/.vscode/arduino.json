@@ -1,0 +1,6 @@
+{
+    "sketch": "mini_relay_timer.ino",
+    "output": "build",
+    "board": "arduino:avr:uno",
+    "port": "/dev/ttyACM0"
+}

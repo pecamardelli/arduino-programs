@@ -1,0 +1,8 @@
+#line 1 "/home/pablin/arduino_programs/relayTimer/.vscode/arduino.json"
+{
+    "sketch": "relayTimer.ino",
+    "output": "build",
+    "board": "arduino:avr:mega",
+    "port": "/dev/ttyACM0",
+    "configuration": "cpu=atmega2560"
+}
