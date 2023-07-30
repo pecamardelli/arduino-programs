@@ -17,6 +17,7 @@ typedef struct _relay
     // General vars
     uint8_t type;
     uint8_t pin;
+    bool enabled = false;
 } relay;
 
 // Relay Pins
@@ -51,8 +52,14 @@ const uint16_t SEASON_LONGEST_DAY_OF_THE_YEAR = 355;
 const uint8_t RANGE_MAX_TIME_VARIATION = 30;
 
 // Defining array of relays.
-const size_t ARRAY_LENGTH = 4;
-relay relayArray[ARRAY_LENGTH];
+const size_t MAX_RELAY_NUMBER = 4;
+relay relayArray[MAX_RELAY_NUMBER];
+
+// Array of special chars allowed in inputs
+const byte specialChars[] = {0x20, 0x2d, 0x2e, 0x2f, 0x3a};
+const uint8_t MAX_COMMAND_LEN = 64;
+const uint8_t MAX_COMMAND_ARGS = 8;
+const char *DELIMITER = " ";
 
 // Datetime variable used globally
 DateTime now;
