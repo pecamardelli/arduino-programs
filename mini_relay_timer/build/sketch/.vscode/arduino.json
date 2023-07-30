@@ -1,0 +1,7 @@
+#line 1 "/home/pablin/arduino_programs/mini_relay_timer/.vscode/arduino.json"
+{
+    "sketch": "mini_relay_timer.ino",
+    "output": "build",
+    "board": "arduino:avr:uno",
+    "port": "/dev/ttyACM0"
+}
