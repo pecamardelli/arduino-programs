@@ -15,6 +15,8 @@ const uint8_t MAX_COMMAND_ARGS = 16;
 const uint8_t MAX_HOSTNAME_LEN = 64;
 const uint8_t RELAY_DESC_LEN = 32;
 
+// Define max relay number
+const uint8_t MAX_RELAY_NUMBER = 4;
 // Random integer to identify a relay in the EEPROM
 const uint16_t RELAY_IDENTIFIER = 0xfa67b9c2;
 // Board pin number
@@ -35,7 +37,6 @@ enum RelayStatus
 
 typedef struct _relayData
 {
-    uint32_t identifier;
     uint8_t pin;
     uint8_t startHour;
     uint8_t startMin;
@@ -52,13 +53,13 @@ private:
     uint16_t eeAddress;
 
 public:
-    Relay(uint8_t, uint16_t);
-    Relay(relayData_t, uint16_t);
+    Relay();
     ~Relay();
 
     unsigned long startTime;
     bool overrided;
 
+    void setParams(relayData_t);
     uint8_t getPin();
     uint8_t getMode();
     String getDesc();
@@ -130,7 +131,6 @@ private:
     bool configChanged;
     uint16_t eeAddress;
 
-    void loadSystemData();
     String ipToString(IPAddress);
     String resetConfig();
     void saveSystemData();
@@ -139,6 +139,7 @@ public:
     System();
     system_t config;
 
+    void loadSystemData();
     int getFreeMemory();
     String setHostname(String);
     String setIpAddress(String);
@@ -251,29 +252,22 @@ extern Clock clock;
 #ifndef NODELIST_H
 #define NODELIST_H
 
-typedef struct node
-{
-    Relay *relay;
-    struct node *next;
-} node_t;
-
 class NodeList
 {
 private:
     uint8_t getAvailablePin();
-    node_t *first, *last;
     unsigned long lastCheckTimeStamp;
 
 public:
     NodeList(/* args */);
     ~NodeList();
+
+    Relay relayArray[MAX_RELAY_NUMBER];
+
     void checkRelays();
-    Relay *searchByPin(uint8_t);
+    uint8_t searchByPin(uint8_t);
     bool isPinAvailable(uint8_t);
-    String addNode(Relay *);
-    Relay *createRelay(uint8_t);
     String getRelayInfo();
-    uint8_t getNodeNumber();
     void saveRelay(Relay *);
     void loadRelays();
     void eraseRelaysFromEEPROM();

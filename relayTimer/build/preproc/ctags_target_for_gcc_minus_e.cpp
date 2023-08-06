@@ -2,7 +2,7 @@
 # 2 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino" 2
 
 EthernetServer server(23); // Telnet listens on port 23
-RTC_DS1307 RTC;
+RTC_DS3231 RTC;
 
 System sys;
 Parser parser;
@@ -14,6 +14,8 @@ Clock clock;
 void setup()
 {
   Serial.begin(9600);
+  Serial.println("Loading data");
+  sys.loadSystemData();
 
   // Check for Ethernet hardware present
   // if (Ethernet.hardwareStatus() == EthernetNoHardware)
@@ -24,17 +26,20 @@ void setup()
   // {
   //     Serial.println("Ethernet cable is not connected.");
   // }
-
+  Serial.println("eth");
   Ethernet.begin(
       sys.config.ethernetConfig.macAddress,
       sys.config.ethernetConfig.ipAddress,
       sys.config.ethernetConfig.dnsServer,
       sys.config.ethernetConfig.gateway,
       sys.config.ethernetConfig.subnetMask);
+  Serial.println("server");
 
   server.begin();
+  Serial.println("rtc");
 
   RTC.begin();
+  Serial.println("relays");
 
   nodes.loadRelays();
 }

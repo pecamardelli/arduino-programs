@@ -6,8 +6,6 @@ extern NodeList nodes;
 System::System()
 {
   configChanged = false;
-
-  loadSystemData();
 };
 
 #ifdef __arm__
@@ -179,17 +177,8 @@ String System::exec(Command *com)
 
     const uint8_t pin = com->args[1].toInt();
 
-    if (com->args[2].equals("create"))
-    {
-      Relay *newRelay = nodes.createRelay(pin);
-      if (newRelay == NULL)
-        return F("Error: pin not available");
-      else
-        return nodes.addNode(newRelay);
-    }
-
-    Relay *relay = nodes.searchByPin(pin);
-    if (relay == NULL)
+    uint8_t index = nodes.searchByPin(pin);
+    if (index == NULL)
     {
       output = F("No relay defined on pin ");
       output += pin;
@@ -198,39 +187,39 @@ String System::exec(Command *com)
 
     if (com->args[2].equals("on"))
     {
-      output = relay->switchOn();
+      output = nodes.relayArray[index].switchOn();
     }
     else if (com->args[2].equals("off"))
     {
-      output = relay->switchOff();
+      output = nodes.relayArray[index].switchOff();
     }
     else if (com->args[2].equals("description"))
     {
-      output = relay->setDesc(com->args[3]);
+      output = nodes.relayArray[index].setDesc(com->args[3]);
     }
     else if (com->args[2].equals("enable"))
     {
-      output = relay->setStatus(enabled);
+      output = nodes.relayArray[index].setStatus(enabled);
     }
     else if (com->args[2].equals("disable"))
     {
-      output = relay->setStatus(disabled);
+      output = nodes.relayArray[index].setStatus(disabled);
     }
     else if (com->args[2].equals("starth"))
     {
-      output = relay->setStartHour(com->args[3]);
+      output = nodes.relayArray[index].setStartHour(com->args[3]);
     }
     else if (com->args[2].equals("startm"))
     {
-      output = relay->setStartMinute(com->args[3]);
+      output = nodes.relayArray[index].setStartMinute(com->args[3]);
     }
     else if (com->args[2].equals("endh"))
     {
-      output = relay->setEndHour(com->args[3]);
+      output = nodes.relayArray[index].setEndHour(com->args[3]);
     }
     else if (com->args[2].equals("endm"))
     {
-      output = relay->setEndMinute(com->args[3]);
+      output = nodes.relayArray[index].setEndMinute(com->args[3]);
     }
     else
     {
@@ -257,7 +246,6 @@ String System::exec(Command *com)
     output += String(F("DNS Server:\t")) + ipToString(Ethernet.dnsServerIP()) + "\n";
     output += String(F("Free memory:\t")) + getFreeMemory() + " bytes\n";
     output += String(F("EEPROM length:\t")) + EEPROM.length() + " bytes\n";
-    output += String(F("Relays defined:\t")) + nodes.getNodeNumber() + "\n";
     output += String(F("System date:\t")) + clock.getDate() + "\n";
   }
   else if (com->args[0].equals("reset"))
@@ -298,41 +286,7 @@ void System::loadSystemData()
   EEPROM.get(eeAddress, config);
 
   if (config.hostname[0] == 0xff)
-    strcpy(config.hostname, "arduino");
-
-  // Set a default mac address if it's not defined.
-  if (config.ethernetConfig.macAddress[0] == 0xff)
-  {
-    config.ethernetConfig.macAddress[0] = 0xDE;
-    config.ethernetConfig.macAddress[1] = 0xAD;
-    config.ethernetConfig.macAddress[2] = 0xBE;
-    config.ethernetConfig.macAddress[3] = 0xEF;
-    config.ethernetConfig.macAddress[4] = 0xF0;
-    config.ethernetConfig.macAddress[5] = 0x18;
-  }
-
-  // Set a default IP address if it's not defined.
-  // If the first byte is 0, then no ip address has been stored.
-  if (config.ethernetConfig.ipAddress[0] == 0xff)
-    config.ethernetConfig.ipAddress.fromString("192.168.40.8");
-
-  // Set a default subnet mask if it's not defined.
-  // If the first byte is 0, then no mask has been stored.
-  if (config.ethernetConfig.subnetMask[0] == 0xff)
-    config.ethernetConfig.subnetMask.fromString("255.255.255.0");
-
-  // Set a default gateway if it's not defined.
-  // If the first byte is 0, then no gateway has been stored.
-  if (config.ethernetConfig.gateway[0] == 0xff)
-    config.ethernetConfig.gateway.fromString("192.168.40.1");
-
-  // Set a default dns server if it's not defined.
-  // If the first byte is 0, then no dns server has been stored.
-  if (config.ethernetConfig.dnsServer[0] == 0xff)
-    config.ethernetConfig.dnsServer.fromString("179.42.171.21");
-
-  if (config.relayCheckInterval == 0xffff)
-    config.relayCheckInterval = 1000;
+    resetConfig();
 };
 
 void System::saveSystemData()
@@ -375,7 +329,7 @@ String System::resetConfig()
   config.ethernetConfig.macAddress[5] = 0x18;
   Ethernet.setMACAddress(config.ethernetConfig.macAddress);
 
-  config.relayCheckInterval = 3000;
+  config.relayCheckInterval = 1000;
 
   configChanged = true;
 

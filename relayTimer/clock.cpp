@@ -1,6 +1,6 @@
 #include "header.h"
 
-extern RTC_DS1307 RTC;
+extern RTC_DS3231 RTC;
 
 Clock::Clock(/* args */)
 {

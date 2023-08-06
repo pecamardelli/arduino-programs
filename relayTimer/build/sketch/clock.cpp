@@ -1,7 +1,7 @@
 #line 1 "/home/pablin/arduino_programs/relayTimer/clock.cpp"
 #include "header.h"
 
-extern RTC_DS1307 RTC;
+extern RTC_DS3231 RTC;
 
 Clock::Clock(/* args */)
 {

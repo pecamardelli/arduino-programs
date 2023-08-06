@@ -3,8 +3,6 @@
 
 NodeList::NodeList(/* args */)
 {
-    first = NULL;
-    last = NULL;
     lastCheckTimeStamp = 0;
 }
 
@@ -12,17 +10,14 @@ NodeList::~NodeList()
 {
 }
 
-Relay *NodeList::searchByPin(uint8_t pin)
+uint8_t NodeList::searchByPin(uint8_t pin)
 {
-
-    node_t *aux = first;
-    while (aux != NULL)
+    for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
-        if (aux->relay->getPin() == pin)
+        if (relayArray[i].getPin() == pin)
         {
-            return aux->relay;
+            return i;
         }
-        aux = aux->next;
     }
 
     return NULL;
@@ -37,7 +32,7 @@ uint8_t NodeList::getAvailablePin()
             return k;
     }
 
-    return 0;
+    return NULL;
 }
 
 bool NodeList::isPinAvailable(uint8_t pin)
@@ -51,61 +46,6 @@ bool NodeList::isPinAvailable(uint8_t pin)
     return true;
 }
 
-Relay *NodeList::createRelay(uint8_t pin)
-{
-    if (!isPinAvailable(pin))
-        // return F("Error: pin not available");
-        return NULL;
-
-    uint16_t newRelayEepromAddress = EEPROM_RESERVED_BYTES + getNodeNumber() * (sizeof(relayData_t) + 1);
-
-    Relay *newRelay = new Relay(pin, newRelayEepromAddress);
-
-    pinMode(pin, OUTPUT);
-    digitalWrite(pin, HIGH);
-
-    saveRelay(newRelay);
-
-    return newRelay;
-}
-
-String NodeList::addNode(Relay *relay)
-{
-    Serial.println("Adding a new node...");
-    if (sys.getFreeMemory() <= sizeof(node_t))
-    {
-        delete relay;
-        return F("Not enough memory.");
-    }
-
-    node_t *aux = (node_t *)malloc(sizeof(node_t));
-
-    if (!aux)
-    {
-        delete relay;
-        return "ERROR! Could not allocate memory.";
-    }
-
-    aux->next = NULL;
-    aux->relay = relay;
-
-    // if (aux->next == NULL)
-    // {
-    if (first == NULL)
-    {
-        first = aux;
-        last = aux;
-    }
-    else
-    {
-        last->next = aux;
-        last = aux;
-    }
-    // }
-
-    return F("Node added.");
-}
-
 void NodeList::checkRelays()
 {
     if (millis() - lastCheckTimeStamp < sys.config.relayCheckInterval)
@@ -114,13 +54,12 @@ void NodeList::checkRelays()
     //   DateTime now = clock.RTC.now();
     uint16_t startMins, endMins, currentMins;
 
-    node_t *aux = first;
-    while (aux != NULL)
+    for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
-        if (aux->relay->getStatus() == enabled && !aux->relay->overrided)
+        if (relayArray[i].getStatus() == enabled && !relayArray[i].overrided)
         {
-            startMins = aux->relay->getStartHour() * 60 + aux->relay->getStartMinute();
-            endMins = aux->relay->getEndHour() * 60 + aux->relay->getEndMinute();
+            startMins = relayArray[i].getStartHour() * 60 + relayArray[i].getStartMinute();
+            endMins = relayArray[i].getEndHour() * 60 + relayArray[i].getEndMinute();
             currentMins = 720; // now.hour() * 60 + now.minute();
 
             if (startMins <= currentMins)
@@ -130,18 +69,18 @@ void NodeList::checkRelays()
                     if (endMins < currentMins)
                     {
                         // switchRelay(aux->relay.pin, HIGH, false);
-                        aux->relay->switchOff();
+                        relayArray[i].switchOff();
                     }
                     else
                     {
                         // switchRelay(aux->relay.pin, LOW, false);
-                        aux->relay->switchOn();
+                        relayArray[i].switchOn();
                     }
                 }
                 else
                 {
                     // switchRelay(aux->relay.pin, LOW, false);
-                    aux->relay->switchOn();
+                    relayArray[i].switchOn();
                 }
             }
             else
@@ -149,30 +88,28 @@ void NodeList::checkRelays()
                 if (startMins < endMins)
                 {
                     // switchRelay(aux->relay.pin, HIGH, false);
-                    aux->relay->switchOff();
+                    relayArray[i].switchOff();
                 }
                 else
                 {
                     if (endMins > currentMins)
                     {
                         // switchRelay(aux->relay.pin, LOW, false);
-                        aux->relay->switchOn();
+                        relayArray[i].switchOn();
                     }
                     else
                     {
                         // switchRelay(aux->relay.pin, HIGH, false);
-                        aux->relay->switchOff();
+                        relayArray[i].switchOff();
                     }
                 }
             }
         }
-        else if (!aux->relay->overrided)
+        else if (!relayArray[i].overrided)
         {
             // switchRelay(aux->relay.pin, HIGH, false);
-            aux->relay->switchOff();
+            relayArray[i].switchOff();
         }
-
-        aux = aux->next;
     }
 
     lastCheckTimeStamp = millis();
@@ -181,16 +118,15 @@ void NodeList::checkRelays()
 String NodeList::getRelayInfo()
 {
     String output = F("PIN\tENABLED\tDESCRIPTION\t\tSTART\tEND\tSTATUS\tUPTIME\n");
-    node_t *aux = first;
 
-    while (aux != NULL)
+    for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
-        output += String(aux->relay->getPin()) + "\t";
+        output += String(relayArray[i].getPin()) + "\t";
 
-        const char *_enabled = (aux->relay->getStatus()) ? "true" : "false";
-        output += String(_enabled) + "\t" + String(aux->relay->getDesc());
+        const char *_enabled = (relayArray[i].getStatus()) ? "true" : "false";
+        output += String(_enabled) + "\t" + String(relayArray[i].getDesc());
 
-        const size_t descLen = aux->relay->getDesc().length();
+        const size_t descLen = relayArray[i].getDesc().length();
 
         if (descLen < 8)
             output += "\t\t\t";
@@ -199,94 +135,42 @@ String NodeList::getRelayInfo()
         else
             output += "\t";
 
-        output += aux->relay->getStartTime() + "\t";
-        output += aux->relay->getEndTime() + "\t";
+        output += relayArray[i].getStartTime() + "\t";
+        output += relayArray[i].getEndTime() + "\t";
 
-        String _mode = digitalRead(aux->relay->getPin()) ? "off" : "on";
+        String _mode = digitalRead(relayArray[i].getPin()) ? "off" : "on";
         output += _mode + "\t";
-        output += aux->relay->getUptime() + "\t";
+        output += relayArray[i].getUptime() + "\t";
         output += "\n";
-
-        aux = aux->next;
     }
 
     return output;
-}
-
-uint8_t NodeList::getNodeNumber()
-{
-    uint8_t relayCount = 0;
-    node_t *aux = first;
-
-    while (aux != NULL)
-    {
-        relayCount++;
-        aux = aux->next;
-    }
-
-    return relayCount;
 }
 
 void NodeList::saveRelay(Relay *relay)
 {
     relayData_t relayData = relay->getData();
     uint16_t eeAddress = relay->getEepromAddress();
-
-    // Serial.print("Relay pin: ");
-    // Serial.print(relayData.pin);
-    // Serial.print(" - Address: ");
-    // Serial.println(eeAddress);
-
     EEPROM.put(eeAddress, relayData);
 }
 
 void NodeList::loadRelays()
 {
     Serial.println(F("Loading relays..."));
-    // Starting memory position.
-    uint16_t eeAddress = EEPROM_RESERVED_BYTES;
-    uint8_t eeAddressStep = sizeof(relayData_t) + 1;
-    uint8_t totalRelaysLoaded = 0;
+    uint16_t eeAddress = 0;
 
     relayData_t relayData;
-    EEPROM.get(eeAddress, relayData);
-
-    Serial.print("Expected identifier: ");
-    Serial.print(RELAY_IDENTIFIER);
-    Serial.print(" - Received: ");
-    Serial.print(relayData.identifier);
-    Serial.print(" - Status: ");
-    Serial.println(relayData.status);
-
-    while (relayData.identifier == RELAY_IDENTIFIER && relayData.status != deleted)
+    for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
-        Relay *relay = new Relay(relayData, eeAddress);
-
-        addNode(relay);
-
-        totalRelaysLoaded++;
-
-        eeAddress += eeAddressStep;
         EEPROM.get(eeAddress, relayData);
-
-        Serial.print("Expected identifier: ");
-        Serial.print(RELAY_IDENTIFIER);
-        Serial.print(" - Received: ");
-        Serial.print(relayData.identifier);
-        Serial.print(" - Status: ");
-        Serial.println(relayData.status);
+        relayArray[i].setParams(relayData);
+        eeAddress += sizeof(relayData_t);
     }
-
-    Serial.print(F("Total relays loaded: "));
-    Serial.println(totalRelaysLoaded);
 }
 
 void NodeList::eraseRelaysFromEEPROM()
 {
-    uint16_t startAddress = EEPROM_RESERVED_BYTES;
-    uint16_t endAddress = EEPROM.length() - sizeof(system_t) - 1;
-
-    for (uint16_t i = startAddress; i < endAddress; i++)
+    for (uint16_t i = 0; i < sizeof(relayData_t) * MAX_RELAY_NUMBER; i++)
     {
         EEPROM.write(i, 0xff);
     }

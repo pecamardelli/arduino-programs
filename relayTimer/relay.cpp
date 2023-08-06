@@ -2,36 +2,24 @@
 
 extern NodeList nodes;
 
-Relay::Relay(uint8_t newPin, uint16_t _eeAddress)
+Relay::Relay()
 {
-    eeAddress = _eeAddress;
-    data.identifier = RELAY_IDENTIFIER;
-    data.pin = newPin;
-    strcpy(data.desc, "No description");
-    data.status = disabled;
-
-    data.startHour = 0;
-    data.startMin = 0;
-    data.endHour = 0;
-    data.endMin = 0;
-}
-
-Relay::Relay(relayData_t relayData, uint16_t _eeAddress)
-{
-    eeAddress = _eeAddress;
-    data.identifier = RELAY_IDENTIFIER;
-    data.pin = relayData.pin;
-    strcpy(data.desc, relayData.desc);
-    data.status = relayData.status;
-
-    data.startHour = relayData.startHour;
-    data.startMin = relayData.startMin;
-    data.endHour = relayData.endHour;
-    data.endMin = relayData.endMin;
 }
 
 Relay::~Relay()
 {
+}
+
+void Relay::setParams(relayData_t params)
+{
+    data.pin = params.pin;
+    strcpy(data.desc, params.desc);
+    data.status = params.status;
+
+    data.startHour = params.startHour;
+    data.startMin = params.startMin;
+    data.endHour = params.endHour;
+    data.endMin = params.endMin;
 }
 
 uint8_t Relay::getPin()
@@ -155,7 +143,7 @@ String Relay::setPin(uint8_t newPin)
     }
     else
     {
-        return F("Error: invalid pin number.");
+        return F("Error: pin not available.");
     }
 }
 
