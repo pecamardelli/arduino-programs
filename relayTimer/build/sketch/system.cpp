@@ -8,24 +8,7 @@ System::System()
   configChanged = false;
 
   loadSystemData();
-
-  // Array of special chars allowed on inputs
-  specialChars[0] = 0x20;
-  specialChars[1] = 0x2d;
-  specialChars[2] = 0x2e;
-  specialChars[3] = 0x2f;
-  specialChars[4] = 0x3a;
 };
-
-bool System::charAllowed(char c)
-{
-  for (byte i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
-  {
-    if (c == specialChars[i])
-      return true;
-  }
-  return false;
-}
 
 #ifdef __arm__
 // should use uinstd.h to define sbrk but Due causes a conflict
@@ -266,7 +249,7 @@ String System::exec(Command *com)
     output = config.hostname;
   else if (com->args[0].equals("sysinfo"))
   {
-    output = String(F("Board type:\t")) + BOARD + "\n";
+    output = String(F("Board type:\tArduino Uno\n"));
     output += String(F("Hostname:\t")) + String(config.hostname) + "\n";
     output += String(F("IP Address:\t")) + ipToString(Ethernet.localIP()) + "\n";
     output += String(F("Subnet mask:\t")) + ipToString(Ethernet.subnetMask()) + "\n";

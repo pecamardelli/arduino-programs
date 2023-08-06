@@ -5,36 +5,22 @@
 #include <RTClib.h>
 
 // ----------- MACROS ------------- //
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #define VERSION F("2.0")
-#define BAUD_RATE 9600
 
-#define MAX_COMMAND_LEN 64
-#define MAX_COMMAND_ARGS 16
-#define MAX_HOSTNAME_LEN 64
-#define RELAY_DESC_LEN 32
+const uint8_t MAX_COMMAND_LEN = 64;
+const uint8_t MAX_COMMAND_ARGS = 16;
+const uint8_t MAX_HOSTNAME_LEN = 64;
+const uint8_t RELAY_DESC_LEN = 32;
 
 // Random integer to identify a relay in the EEPROM
-#define RELAY_IDENTIFIER 0xfa67b9c2
-
-#endif
-
-// ----------- BOARD RELATED ------------- //
-#if defined(ARDUINO_AVR_MEGA2560)
-#define BOARD "Mega 2560"
-#define DIGITAL_PINS 53
-
+const uint16_t RELAY_IDENTIFIER = 0xfa67b9c2;
+// Board pin number
+const uint8_t DIGITAL_PINS = 13;
 // Leaving this amount of memory reserved for future use.
-#define EEPROM_RESERVED_BYTES 512
-
-#elif defined(ARDUINO_AVR_UNO)
-#define BOARD "Uno"
-#define DIGITAL_PINS 13
-
-// Leaving this amount of memory reserved for future use.
-#define EEPROM_RESERVED_BYTES 128
+const uint8_t EEPROM_RESERVED_BYTES = 128;
 #endif
 
 #ifndef RELAY_H
@@ -141,7 +127,6 @@ typedef struct _system
 class System
 {
 private:
-    byte specialChars[6];
     bool configChanged;
     uint16_t eeAddress;
 
@@ -155,7 +140,6 @@ public:
     system_t config;
 
     int getFreeMemory();
-    bool charAllowed(char);
     String setHostname(String);
     String setIpAddress(String);
     String setSubnetMask(String);

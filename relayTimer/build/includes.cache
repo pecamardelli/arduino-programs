@@ -7,7 +7,7 @@
   {
     "Sourcefile": null,
     "Include": "",
-    "Includepath": "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/mega"
+    "Includepath": "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard"
   },
   {
     "Sourcefile": "/home/pablin/arduino_programs/relayTimer/build/sketch/relayTimer.ino.cpp",
