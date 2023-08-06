@@ -4,36 +4,30 @@
 #include <RTClib.h>
 
 // ----------- MACROS ------------- //
-#ifndef MACROS_H
-#define MACROS_H
+#ifndef CONSTANTS_H
+#define CONSTANTS_H
 
 #define VERSION F("2.0")
-#define BAUD_RATE 9600
-
-#define MAX_COMMAND_LEN 64
-#define MAX_COMMAND_ARGS 16
-#define MAX_HOSTNAME_LEN 64
-#define RELAY_DESC_LEN 32
+const unsigned long BAUD_RATE = 9600;
+const uint8_t MAX_COMMAND_LEN = 64;
+const uint8_t MAX_COMMAND_ARGS = 16;
+const uint8_t MAX_HOSTNAME_LEN = 64;
+const uint8_t RELAY_DESC_LEN = 32;
 
 // Random integer to identify a relay in the EEPROM
-#define RELAY_IDENTIFIER 0xfa67b9c2
+const uint32_t RELAY_IDENTIFIER = 0xfa67b9c2;
 
-#endif
+// Array of special chars allowed on inputs
+const byte specialChars[] = {0x20, 0x2d, 0x2e, 0x2f, 0x3a};
 
 // ----------- BOARD RELATED ------------- //
-#if defined(ARDUINO_AVR_MEGA2560)
-#define BOARD "Mega 2560"
-#define DIGITAL_PINS 53
+const uint8_t DIGITAL_PINS = 13;
 
 // Leaving this amount of memory reserved for future use.
-#define EEPROM_RESERVED_BYTES 512
+const uint16_t EEPROM_RESERVED_BYTES = 128;
 
-#elif defined(ARDUINO_AVR_UNO)
-#define BOARD "Uno"
-#define DIGITAL_PINS 13
+const String days[] = {"Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"};
 
-// Leaving this amount of memory reserved for future use.
-#define EEPROM_RESERVED_BYTES 128
 #endif
 
 #ifndef RELAY_H
@@ -140,7 +134,6 @@ typedef struct _system
 class System
 {
 private:
-    byte specialChars[6];
     bool configChanged;
     uint16_t eeAddress;
 
@@ -153,13 +146,8 @@ public:
     System();
     system_t config;
 
-    int getFreeMemory();
     bool charAllowed(char);
-    String setHostname(String);
-    String setIpAddress(String);
     String setSubnetMask(String);
-    String setDefaultGateway(String);
-    String setDnsServer(String);
     String exec(Command *);
 };
 
@@ -193,7 +181,6 @@ class Channel
 {
 private:
     bool charAllowed(char);
-    const byte **specialChars;
 
 public:
     Channel(/* args */);
@@ -249,14 +236,12 @@ public:
 class Clock
 {
 private:
-    String days[7];
-
 public:
     Clock(/* args */);
     ~Clock();
 
     String setDateTime(String, String);
-    String getDate();
+    char *getDate();
 };
 
 extern Clock clock;
@@ -285,7 +270,7 @@ public:
     void checkRelays();
     Relay *searchByPin(uint8_t);
     bool isPinAvailable(uint8_t);
-    String addNode(Relay *);
+    void addNode(Relay *);
     Relay *createRelay(uint8_t);
     String getRelayInfo();
     uint8_t getNodeNumber();

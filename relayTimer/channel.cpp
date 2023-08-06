@@ -5,12 +5,6 @@ extern NodeList nodes;
 template <class T>
 Channel<T>::Channel(/* args */)
 {
-    // Array of special chars allowed on inputs
-    specialChars[0] = 0x20;
-    specialChars[1] = 0x2d;
-    specialChars[2] = 0x2e;
-    specialChars[3] = 0x2f;
-    specialChars[4] = 0x3a;
 }
 
 template <class T>

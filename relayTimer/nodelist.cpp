@@ -68,21 +68,13 @@ Relay *NodeList::createRelay(uint8_t pin)
     return newRelay;
 }
 
-String NodeList::addNode(Relay *relay)
+void NodeList::addNode(Relay *relay)
 {
-    Serial.println("Adding a new node...");
-    if (sys.getFreeMemory() <= sizeof(node_t))
-    {
-        delete relay;
-        return F("Not enough memory.");
-    }
-
     node_t *aux = (node_t *)malloc(sizeof(node_t));
 
     if (!aux)
     {
         delete relay;
-        return "ERROR! Could not allocate memory.";
     }
 
     aux->next = NULL;
@@ -100,9 +92,6 @@ String NodeList::addNode(Relay *relay)
         last->next = aux;
         last = aux;
     }
-    // }
-
-    return F("Node added.");
 }
 
 void NodeList::checkRelays()
@@ -186,8 +175,7 @@ String NodeList::getRelayInfo()
     {
         output += String(aux->relay->getPin()) + "\t";
 
-        const char *_enabled = (aux->relay->getStatus()) ? "true" : "false";
-        output += String(_enabled) + "\t" + String(aux->relay->getDesc());
+        output += String(aux->relay->getStatus()) + "\t" + String(aux->relay->getDesc());
 
         const size_t descLen = aux->relay->getDesc().length();
 
@@ -231,17 +219,11 @@ void NodeList::saveRelay(Relay *relay)
     relayData_t relayData = relay->getData();
     uint16_t eeAddress = relay->getEepromAddress();
 
-    // Serial.print("Relay pin: ");
-    // Serial.print(relayData.pin);
-    // Serial.print(" - Address: ");
-    // Serial.println(eeAddress);
-
     EEPROM.put(eeAddress, relayData);
 }
 
 void NodeList::loadRelays()
 {
-    Serial.println(F("Loading relays..."));
     // Starting memory position.
     uint16_t eeAddress = EEPROM_RESERVED_BYTES;
     uint8_t eeAddressStep = sizeof(relayData_t) + 1;
@@ -249,13 +231,6 @@ void NodeList::loadRelays()
 
     relayData_t relayData;
     EEPROM.get(eeAddress, relayData);
-
-    Serial.print("Expected identifier: ");
-    Serial.print(RELAY_IDENTIFIER);
-    Serial.print(" - Received: ");
-    Serial.print(relayData.identifier);
-    Serial.print(" - Status: ");
-    Serial.println(relayData.status);
 
     while (relayData.identifier == RELAY_IDENTIFIER && relayData.status != deleted)
     {
@@ -267,17 +242,7 @@ void NodeList::loadRelays()
 
         eeAddress += eeAddressStep;
         EEPROM.get(eeAddress, relayData);
-
-        Serial.print("Expected identifier: ");
-        Serial.print(RELAY_IDENTIFIER);
-        Serial.print(" - Received: ");
-        Serial.print(relayData.identifier);
-        Serial.print(" - Status: ");
-        Serial.println(relayData.status);
     }
-
-    Serial.print(F("Total relays loaded: "));
-    Serial.println(totalRelaysLoaded);
 }
 
 void NodeList::eraseRelaysFromEEPROM()

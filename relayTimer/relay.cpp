@@ -148,14 +148,7 @@ String Relay::setPin(uint8_t newPin)
     if (nodes.isPinAvailable(newPin))
     {
         data.pin = newPin;
-
         nodes.saveRelay(this);
-
-        return "Ok";
-    }
-    else
-    {
-        return F("Error: invalid pin number.");
     }
 }
 
@@ -163,28 +156,21 @@ String Relay::switchOn()
 {
     digitalWrite(data.pin, LOW);
     startTime = millis();
-
-    return F("Relay switched on.");
 }
 
 String Relay::switchOff()
 {
     digitalWrite(data.pin, HIGH);
     startTime = 0;
-
-    return F("Relay switched off.");
 }
 
 String Relay::setDesc(String newDesc)
 {
     if (newDesc.length() > RELAY_DESC_LEN)
-        return F("Error: description too long.");
+        return;
 
     newDesc.toCharArray(data.desc, RELAY_DESC_LEN);
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }
 
 String Relay::setStartHour(String startHour)
@@ -192,13 +178,10 @@ String Relay::setStartHour(String startHour)
     const uint8_t hour = startHour.toInt();
 
     if (hour < 0 || hour > 23)
-        return F("Error: invalid hour.");
+        return;
 
     data.startHour = hour;
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }
 
 String Relay::setStartMinute(String startMinute)
@@ -206,13 +189,10 @@ String Relay::setStartMinute(String startMinute)
     const uint8_t minute = startMinute.toInt();
 
     if (minute < 0 || minute > 59)
-        return F("Error: invalid minute.");
+        return;
 
     data.startMin = minute;
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }
 
 String Relay::setEndHour(String endHour)
@@ -220,13 +200,10 @@ String Relay::setEndHour(String endHour)
     const uint8_t hour = endHour.toInt();
 
     if (hour < 0 || hour > 23)
-        return F("Error: invalid hour.");
+        return;
 
     data.endHour = hour;
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }
 
 String Relay::setEndMinute(String endMinute)
@@ -234,20 +211,14 @@ String Relay::setEndMinute(String endMinute)
     const uint8_t minute = endMinute.toInt();
 
     if (minute < 0 || minute > 59)
-        return F("Error: invalid minute.");
+        return;
 
     data.endMin = minute;
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }
 
 String Relay::setStatus(RelayStatus newStatus)
 {
     data.status = newStatus;
-
     nodes.saveRelay(this);
-
-    return "Ok";
 }

@@ -2,7 +2,7 @@
 # 2 "/home/pablin/arduino_programs/relayTimer/relayTimer.ino" 2
 
 EthernetServer server(23); // Telnet listens on port 23
-RTC_DS1307 RTC;
+RTC_DS3231 RTC;
 
 System sys;
 Parser parser;
