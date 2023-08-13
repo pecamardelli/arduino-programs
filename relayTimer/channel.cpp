@@ -55,5 +55,4 @@ bool Channel<T>::charAllowed(char c)
     return false;
 };
 
-template class Channel<EthernetClient *>;
 template class Channel<Stream *>;

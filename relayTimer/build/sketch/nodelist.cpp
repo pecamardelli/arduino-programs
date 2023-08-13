@@ -4,6 +4,7 @@
 NodeList::NodeList(/* args */)
 {
     lastCheckTimeStamp = 0;
+    validRelays = 0;
 }
 
 NodeList::~NodeList()
@@ -119,7 +120,7 @@ String NodeList::getRelayInfo()
 {
     String output = F("PIN\tENABLED\tDESCRIPTION\t\tSTART\tEND\tSTATUS\tUPTIME\n");
 
-    for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
+    for (uint8_t i = 0; i < validRelays; i++)
     {
         output += String(relayArray[i].getPin()) + "\t";
 
@@ -163,7 +164,9 @@ void NodeList::loadRelays()
     for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
         EEPROM.get(eeAddress, relayData);
-        relayArray[i].setParams(relayData);
+        if (relayArray[validRelays].setParams(relayData))
+            validRelays++;
+
         eeAddress += sizeof(relayData_t);
     }
 }
@@ -174,4 +177,38 @@ void NodeList::eraseRelaysFromEEPROM()
     {
         EEPROM.write(i, 0xff);
     }
+}
+
+void NodeList::addRelay(uint8_t pin)
+{
+    if (validRelays >= MAX_RELAY_NUMBER)
+    {
+        Error::print(maxRelayNumberReached);
+        return;
+    }
+
+    if (!isPinAvailable(pin))
+    {
+        Error::print(pinNotAvailable);
+        return;
+    }
+
+    if (pin < 0 || pin > DIGITAL_PINS)
+    {
+        Error::print(pinOutOfRange);
+        return;
+    }
+
+    relayArray[validRelays].setPin(pin);
+    relayArray[validRelays].setStatus(disabled);
+    relayArray[validRelays].setDesc(F("No description"));
+    relayArray[validRelays].setStartHour(F("0"));
+    relayArray[validRelays].setEndHour(F("0"));
+    relayArray[validRelays].setStartMinute(F("0"));
+    relayArray[validRelays].setEndMinute(F("0"));
+
+    // This number is one unit greater than the index of the relay in the array.
+    validRelays++;
+
+    Serial.println(F("Relay added"));
 }

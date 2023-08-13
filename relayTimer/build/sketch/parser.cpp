@@ -4,7 +4,7 @@
 Parser::Parser(/* args */)
 {
   // Using space character as delimiter
-  delimiter = (char *)0x20;
+  delimiter = " ";
 }
 
 Parser::~Parser()
@@ -22,8 +22,7 @@ Command *Parser::parse(String input)
 
   while (token != NULL && com->count < MAX_COMMAND_ARGS)
   {
-    com->args[com->count] = token;
-    Serial.println(com->args[com->count]);
+    com->args[com->count].concat(token);
     com->count++;
     token = strtok(NULL, delimiter);
   }

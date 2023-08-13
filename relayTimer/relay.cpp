@@ -10,16 +10,74 @@ Relay::~Relay()
 {
 }
 
-void Relay::setParams(relayData_t params)
+bool Relay::setParams(relayData_t params)
 {
+    // Validate data
+    if (params.pin < 0 || params.pin > DIGITAL_PINS)
+    {
+        Serial.println(F("Pin out of range."));
+        return false;
+    }
+
+    if (!nodes.isPinAvailable(params.pin))
+    {
+        Serial.println(F("Pin already in use."));
+        return false;
+    }
+
+    // Pin is valid
     data.pin = params.pin;
+
+    // Validating description
+    if (strlen(params.desc) > RELAY_DESC_LEN)
+    {
+        Serial.println(F("Description too long."));
+        return false;
+    }
     strcpy(data.desc, params.desc);
+
+    // Validating status
+    if (params.status != enabled && params.status != disabled)
+    {
+        Serial.println(F("Invalid status provided."));
+        return false;
+    }
     data.status = params.status;
 
+    // Validating time parameters
+    if (params.startHour < 0 || params.startHour > 23)
+    {
+
+        Serial.println(F("Invalid start hour."));
+        return false;
+    }
     data.startHour = params.startHour;
+
+    if (params.startMin < 0 || params.startMin > 59)
+    {
+
+        Serial.println(F("Invalid start minute."));
+        return false;
+    }
     data.startMin = params.startMin;
+
+    if (params.endHour < 0 || params.endHour > 23)
+    {
+
+        Serial.println(F("Invalid end hour."));
+        return false;
+    }
     data.endHour = params.endHour;
+
+    if (params.endMin < 0 || params.endMin > 59)
+    {
+
+        Serial.println(F("Invalid start minute."));
+        return false;
+    }
     data.endMin = params.endMin;
+
+    return true;
 }
 
 uint8_t Relay::getPin()

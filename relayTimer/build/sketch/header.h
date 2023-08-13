@@ -1,6 +1,5 @@
 #line 1 "/home/pablin/arduino_programs/relayTimer/header.h"
 
-#include <Ethernet.h>
 #include <EEPROM.h>
 #include <RTClib.h>
 
@@ -17,12 +16,8 @@ const uint8_t RELAY_DESC_LEN = 32;
 
 // Define max relay number
 const uint8_t MAX_RELAY_NUMBER = 4;
-// Random integer to identify a relay in the EEPROM
-const uint16_t RELAY_IDENTIFIER = 0xfa67b9c2;
 // Board pin number
 const uint8_t DIGITAL_PINS = 13;
-// Leaving this amount of memory reserved for future use.
-const uint8_t EEPROM_RESERVED_BYTES = 128;
 #endif
 
 #ifndef RELAY_H
@@ -59,7 +54,7 @@ public:
     unsigned long startTime;
     bool overrided;
 
-    void setParams(relayData_t);
+    bool setParams(relayData_t);
     uint8_t getPin();
     uint8_t getMode();
     String getDesc();
@@ -108,21 +103,10 @@ public:
 #ifndef SYSTEM_H
 #define SYSTEM_H
 
-typedef struct _ethernet
-{
-    byte macAddress[6];
-    IPAddress ipAddress;
-    IPAddress subnetMask;
-    IPAddress gateway;
-    IPAddress dnsServer;
-
-} ethernet_t;
-
 typedef struct _system
 {
     char hostname[MAX_HOSTNAME_LEN];
     uint16_t relayCheckInterval;
-    ethernet_t ethernetConfig;
 } system_t;
 
 class System
@@ -131,7 +115,6 @@ private:
     bool configChanged;
     uint16_t eeAddress;
 
-    String ipToString(IPAddress);
     String resetConfig();
     void saveSystemData();
 
@@ -192,28 +175,6 @@ protected:
 
 #endif
 
-#ifndef TELNET_H
-#define TELNET_H
-
-class Telnet : public Channel<EthernetClient *>
-{
-private:
-    boolean connected;
-    unsigned long timeOfLastActivity;
-    unsigned long allowedConnectTime;
-
-public:
-    Telnet(/* args */);
-    ~Telnet();
-    void commandPrompt();
-    void checkAvailable();
-    void closeConnection();
-};
-
-extern Telnet telnet;
-
-#endif
-
 #ifndef SERIAL_CHANNEL_H
 #define SERIAL_CHANNEL_H
 
@@ -263,7 +224,9 @@ public:
     ~NodeList();
 
     Relay relayArray[MAX_RELAY_NUMBER];
+    uint8_t validRelays;
 
+    void addRelay(uint8_t);
     void checkRelays();
     uint8_t searchByPin(uint8_t);
     bool isPinAvailable(uint8_t);
@@ -271,6 +234,29 @@ public:
     void saveRelay(Relay *);
     void loadRelays();
     void eraseRelaysFromEEPROM();
+};
+
+#endif
+
+#ifndef ERROR_H
+#define ERROR_H
+
+enum ErrorTypes
+{
+    pinNotAvailable,
+    pinOutOfRange,
+    maxRelayNumberReached
+};
+
+class Error
+{
+private:
+    /* data */
+public:
+    Error(/* args */);
+    ~Error();
+
+    static void print(ErrorTypes);
 };
 
 #endif
