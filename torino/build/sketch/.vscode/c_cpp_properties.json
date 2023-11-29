@@ -1,4 +1,4 @@
-#line 1 "/home/pablin/arduino_programs/torino/.vscode/c_cpp_properties.json"
+#line 1 "/home/pablin/arduino-programs/torino/.vscode/c_cpp_properties.json"
 {
     "version": 4,
     "configurations": [
@@ -17,14 +17,17 @@
             ],
             "intelliSenseMode": "gcc-x64",
             "includePath": [
-                "/home/pablin/arduino_libs/*",
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/mega",
+                "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+                "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+                "/home/pablin/Arduino/libraries/Adafruit_GFX_Library",
+                "/home/pablin/Arduino/libraries/Adafruit_BusIO",
+                "/home/pablin/Arduino/libraries/Adafruit_SH1106",
+                "/home/pablin/Arduino/libraries/RTClib/src",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
-                "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include",
-                "${workspaceFolder}/lib/LCDWIKI_GUI",
-                "${workspaceFolder}/lib/LCDWIKI_KBV"
+                "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"
             ],
             "forcedInclude": [
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino/Arduino.h"
