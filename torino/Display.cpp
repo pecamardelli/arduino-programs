@@ -1,6 +1,6 @@
 // Example code from https://electropeak.com/learn/interfacing-sh1106-1-3-inch-i2c-oled-128x64-display-with-arduino/#google_vignette
 
-#include "Screen.h"
+#include "Display.h"
 
 Adafruit_SH1106 display(OLED_RESET);
 
@@ -9,6 +9,8 @@ void initScreen()
     // By default, we'll generate the high voltage from the 3.3v line internally! (neat!)
     display.begin(SH1106_SWITCHCAPVCC, 0x3C); // initialize with the I2C addr 0x3D (for the 128x64)
     // Init done
+    display.clearDisplay();
+    display.display();
 
     Serial.print("Display width: ");
     Serial.println(display.width());

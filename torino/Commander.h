@@ -12,6 +12,12 @@
 #define _COMMANDER_H_
 
 #include <RTClib.h>
+#include <Arduino.h>
+
+enum ERROR_TYPES
+{
+    BAD_COMMAND
+};
 
 /**************************************************************************/
 /*!
@@ -22,7 +28,6 @@
 class Commander
 {
 private:
-    // Datetime variable used globally
     DateTime now;
 
     /**
@@ -34,12 +39,13 @@ private:
     const uint8_t MAX_COMMAND_ARGS = 8;
     const char *DELIMITER = " ";
     bool charAllowed(char c);
+    void printErrorMessage(ERROR_TYPES, String);
 
 public:
     Commander(/* args */);
     ~Commander();
     String getInput();
-    void parse(String);
+    void exec(String);
 };
 
 #endif // _COMMANDER_H_

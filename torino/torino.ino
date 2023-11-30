@@ -1,6 +1,7 @@
 #include "header.h"
 
 Commander commander;
+Flowmeter flowmeter;
 
 void setup()
 {
@@ -14,6 +15,6 @@ void loop()
     if (Serial.available())
     {
         String input = commander.getInput();
-        commander.parse(input);
+        commander.exec(input);
     }
 }

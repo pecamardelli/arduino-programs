@@ -15,10 +15,14 @@
 /**************************************************************************/
 
 #include "Commander.h"
-#include "Screen.h"
+#include "Display.h"
+#include "Flowmeter.h"
 
 float average = 0;
 float lastAverage = 0;
+
+extern Adafruit_SH1106 display;
+extern Flowmeter flowmeter;
 
 Commander::Commander(/* args */)
 {
@@ -84,7 +88,7 @@ bool Commander::charAllowed(char c)
     @return nothing
 */
 /**************************************************************************/
-void Commander::parse(String input)
+void Commander::exec(String input)
 {
     // Tokenizing arguments
     char *args[MAX_COMMAND_ARGS];
@@ -116,7 +120,7 @@ void Commander::parse(String input)
         Serial.print(':');
         Serial.println(now.second(), DEC);
     }
-    if (strncmp(args[0], "avg", 3) == 0)
+    else if (strncmp(args[0], "avg", 3) == 0)
     {
         average = atof(args[1]);
 
@@ -126,9 +130,64 @@ void Commander::parse(String input)
             drawFuelConsumption(average);
         }
     }
+    else if (strncmp(args[0], "set", 3) == 0)
+    {
+        if (strncmp(args[1], "ppl", 3) == 0)
+        {
+            flowmeter.setPulsesPerLiter(atoi(args[2]));
+        }
+        else
+        {
+            printErrorMessage(BAD_COMMAND, args[1]);
+        }
+    }
+    else if (strncmp(args[0], "show", 4) == 0)
+    {
+        if (strncmp(args[1], "ppl", 3) == 0)
+        {
+            Serial.print(F("Current pulses per liter: "));
+            Serial.println(flowmeter.getPulsesPerLiter());
+        }
+        else
+        {
+            printErrorMessage(BAD_COMMAND, args[1]);
+        }
+    }
+    else if (strncmp(args[0], "reset", 5) == 0)
+    {
+        if (strncmp(args[1], "pulses", 6) == 0)
+        {
+            flowmeter.resetPulses();
+            Serial.println(F("Pulses reset."));
+        }
+        else
+        {
+            printErrorMessage(BAD_COMMAND, args[1]);
+        }
+    }
     else
     {
-        Serial.print(F("Bad command: "));
-        Serial.println(args[0]);
+        printErrorMessage(BAD_COMMAND, args[0]);
     }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Print a standard error message.
+    @param  message The error message.
+    @return nothing
+*/
+/**************************************************************************/
+void Commander::printErrorMessage(ERROR_TYPES type, String message)
+{
+    switch (type)
+    {
+    case BAD_COMMAND:
+        Serial.print(F("Bad command: "));
+        break;
+    default:
+        break;
+    }
+
+    Serial.println(message);
 }
