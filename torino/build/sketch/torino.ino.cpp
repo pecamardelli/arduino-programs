@@ -5,6 +5,11 @@
 Commander commander;
 Flowmeter flowmeter;
 
+#line 6 "/home/pablin/arduino_programs/torino/torino.ino"
+void setup();
+#line 13 "/home/pablin/arduino_programs/torino/torino.ino"
+void loop();
+#line 6 "/home/pablin/arduino_programs/torino/torino.ino"
 void setup()
 {
     Serial.begin(9600);

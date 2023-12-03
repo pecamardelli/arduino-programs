@@ -1,5 +1,5 @@
-# 1 "/home/pablin/arduino-programs/torino/torino.ino"
-# 2 "/home/pablin/arduino-programs/torino/torino.ino" 2
+# 1 "/home/pablin/arduino_programs/torino/torino.ino"
+# 2 "/home/pablin/arduino_programs/torino/torino.ino" 2
 
 Commander commander;
 Flowmeter flowmeter;

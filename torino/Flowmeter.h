@@ -15,8 +15,8 @@
 
 /**************************************************************************/
 /*!
-    @brief  This class defines the logic to calculate and print fuel consumption
-            on the screen.
+    @brief  This class defines the logic to calculate and print fuel
+            consumption on the screen.
 */
 /**************************************************************************/
 class Flowmeter

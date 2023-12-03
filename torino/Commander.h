@@ -12,7 +12,6 @@
 #define _COMMANDER_H_
 
 #include <RTClib.h>
-#include <Arduino.h>
 
 enum ERROR_TYPES
 {

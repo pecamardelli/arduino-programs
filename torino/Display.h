@@ -28,7 +28,6 @@ SH1106 driver don't provide several functions such as scroll commands.
 
 #include <SPI.h>
 #include <Wire.h>
-#include <Adafruit_GFX.h>
 #include <Adafruit_SH1106.h>
 
 #define OLED_RESET 4
