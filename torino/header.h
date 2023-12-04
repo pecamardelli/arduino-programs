@@ -5,5 +5,6 @@
 #include "Commander.h"
 #include "Flowmeter.h"
 #include "System.h"
+#include "Clock.h"
 
 #endif

@@ -15,14 +15,9 @@
 /**************************************************************************/
 
 #include "Commander.h"
-#include "Display.h"
-#include "Flowmeter.h"
 
 float average = 0;
 float lastAverage = 0;
-
-extern Adafruit_SH1106 display;
-extern Flowmeter flowmeter;
 
 Commander::Commander(/* args */)
 {
@@ -108,17 +103,7 @@ void Commander::exec(String input)
 
     if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
     {
-        Serial.print(now.year(), DEC);
-        Serial.print('/');
-        Serial.print(now.month(), DEC);
-        Serial.print('/');
-        Serial.print(now.day(), DEC);
-        Serial.print(' ');
-        Serial.print(now.hour(), DEC);
-        Serial.print(':');
-        Serial.print(now.minute(), DEC);
-        Serial.print(':');
-        Serial.println(now.second(), DEC);
+        Serial.println(clock.getDate());
     }
     else if (strncmp(args[0], "avg", 3) == 0)
     {
@@ -135,6 +120,10 @@ void Commander::exec(String input)
         if (strncmp(args[1], "ppl", 3) == 0)
         {
             flowmeter.setPulsesPerLiter(atoi(args[2]));
+        }
+        else if (strncmp(args[1], "date", 4) == 0)
+        {
+            clock.setDateTime(args[2], args[3]);
         }
         else
         {

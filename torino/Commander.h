@@ -11,7 +11,13 @@
 #ifndef _COMMANDER_H_
 #define _COMMANDER_H_
 
-#include <RTClib.h>
+#include "Display.h"
+#include "Flowmeter.h"
+#include "Clock.h"
+
+extern Flowmeter flowmeter;
+extern Clock clock;
+extern Display display;
 
 enum ERROR_TYPES
 {
@@ -27,8 +33,6 @@ enum ERROR_TYPES
 class Commander
 {
 private:
-    DateTime now;
-
     /**
         Array of special chars allowed in inputs
     */

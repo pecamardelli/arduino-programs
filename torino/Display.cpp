@@ -4,7 +4,15 @@
 
 Adafruit_SH1106 display(OLED_RESET);
 
-void initScreen()
+Display::Display(/* args */)
+{
+}
+
+Display::~Display()
+{
+}
+
+void Display::begin()
 {
     // By default, we'll generate the high voltage from the 3.3v line internally! (neat!)
     display.begin(SH1106_SWITCHCAPVCC, 0x3C); // initialize with the I2C addr 0x3D (for the 128x64)

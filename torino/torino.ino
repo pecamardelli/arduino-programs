@@ -1,13 +1,16 @@
 #include "header.h"
 
+Clock clock;
 Commander commander;
 Flowmeter flowmeter;
+Display smallDisplay;
 
 void setup()
 {
     Serial.begin(9600);
     Serial.println("Initializing...");
-    initScreen();
+    smallDisplay.begin();
+    clock.begin();
 }
 
 void loop()
