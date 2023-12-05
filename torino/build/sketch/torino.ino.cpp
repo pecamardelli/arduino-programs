@@ -5,18 +5,28 @@
 Clock clock;
 Commander commander;
 Flowmeter flowmeter;
-Display smallDisplay;
 
-#line 8 "/home/pablin/arduino_programs/torino/torino.ino"
+#line 7 "/home/pablin/arduino_programs/torino/torino.ino"
 void setup();
-#line 16 "/home/pablin/arduino_programs/torino/torino.ino"
+#line 26 "/home/pablin/arduino_programs/torino/torino.ino"
 void loop();
-#line 8 "/home/pablin/arduino_programs/torino/torino.ino"
+#line 7 "/home/pablin/arduino_programs/torino/torino.ino"
 void setup()
 {
     Serial.begin(9600);
     Serial.println("Initializing...");
-    smallDisplay.begin();
+
+    // By default, we'll generate the high voltage from the 3.3v line internally! (neat!)
+    smallDisplay.begin(SH1106_SWITCHCAPVCC, 0x3C); // initialize with the I2C addr 0x3D (for the 128x64)
+    // Init done
+    smallDisplay.clearDisplay();
+    smallDisplay.display();
+
+    Serial.print("Display width: ");
+    Serial.println(smallDisplay.width());
+    Serial.print("Display height: ");
+    Serial.println(smallDisplay.height());
+
     clock.begin();
 }
 
@@ -27,5 +37,7 @@ void loop()
         String input = commander.getInput();
         commander.exec(input);
     }
+
+    clock.displayTime();
 }
 

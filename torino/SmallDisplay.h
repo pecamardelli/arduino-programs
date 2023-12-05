@@ -62,16 +62,6 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 #error("Height incorrect, please fix Adafruit_SH1106.h!");
 #endif
 
-class Display
-{
-private:
-    /* data */
-public:
-    Display(/* args */);
-    ~Display();
-    void begin();
-};
-
 void drawTorinoLogo();
 void drawFuelConsumption(float value);
 void draw();

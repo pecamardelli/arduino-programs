@@ -112,7 +112,7 @@ void Commander::exec(String input)
         if (average != lastAverage)
         {
             lastAverage = average;
-            drawFuelConsumption(average);
+            // drawFuelConsumption(average);
         }
     }
     else if (strncmp(args[0], "set", 3) == 0)
@@ -124,6 +124,50 @@ void Commander::exec(String input)
         else if (strncmp(args[1], "date", 4) == 0)
         {
             clock.setDateTime(args[2], args[3]);
+        }
+        else if (strncmp(args[1], "clock", 5) == 0)
+        {
+            if (strncmp(args[2], "display", 7) == 0)
+            {
+                if (strncmp(args[3], "time_x", 6) == 0)
+                {
+                    clock.setTimeDisplayX(atoi(args[4]));
+                }
+                else if (strncmp(args[3], "time_y", 6) == 0)
+                {
+                    clock.setTimeDisplayY(atoi(args[4]));
+                }
+                else if (strncmp(args[3], "time_size", 9) == 0)
+                {
+                    clock.setTimeDisplaySize(atoi(args[4]));
+                }
+                else
+                {
+                    printErrorMessage(BAD_COMMAND, args[3]);
+                }
+            }
+            else
+            {
+                printErrorMessage(BAD_COMMAND, args[2]);
+            }
+        }
+        else
+        {
+            printErrorMessage(BAD_COMMAND, args[1]);
+        }
+    }
+    else if (strncmp(args[0], "reset", 5) == 0)
+    {
+        if (strncmp(args[1], "clock", 5) == 0)
+        {
+            if (strncmp(args[2], "display", 7) == 0)
+            {
+                clock.resetProps();
+            }
+            else
+            {
+                printErrorMessage(BAD_COMMAND, args[2]);
+            }
         }
         else
         {
