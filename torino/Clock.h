@@ -12,9 +12,7 @@
 #define _CLOCK_H_
 
 #include <RTClib.h>
-#include "SmallDisplay.h"
-
-extern Adafruit_SH1106 smallDisplay;
+#include "DataDisplay.h"
 
 typedef struct _dateTimeProps
 {
@@ -35,7 +33,6 @@ typedef struct _dateTimeProps
 class Clock
 {
 private:
-    RTC_DS3231 RTC;
     uint8_t _hour;
     uint8_t _min;
     uint8_t _sec;
@@ -60,15 +57,22 @@ private:
 
     const String days[7] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"};
 
+    void setDisplayData();
+
 public:
     Clock();
     Clock(dateTimeProps);
     ~Clock();
 
+    RTC_DS3231 RTC;
+    DataDisplay *dateDisplayData;
+    DataDisplay *timeDisplayData;
+
     void begin();
     void setDateTime(char *_date, char *_time);
     String getDate();
-    void displayTime();
+    String getTime();
+    void refreshDisplayData();
 
     void setTimeDisplayX(uint8_t);
     void setTimeDisplayY(uint8_t);

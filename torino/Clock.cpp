@@ -9,66 +9,13 @@ Clock::Clock()
   props.dateDisplayX = defaultDateDisplayX;
   props.dateDisplayY = defaultDateDisplayY;
   props.dateDisplaySize = defaultDateDisplaySize;
+
+  setDisplayData();
 }
 
 Clock::Clock(dateTimeProps savedProps)
 {
-  lastUnixtime = 0;
-  refreshInterval = 1; // Amount of seconds between display refreshes.
-
-  if (savedProps.timeDisplayX > smallDisplay.width())
-  {
-    props.timeDisplayX = defaultTimeDisplayX;
-  }
-  else
-  {
-    props.timeDisplayX = savedProps.timeDisplayX;
-  }
-
-  if (savedProps.timeDisplayY > smallDisplay.height())
-  {
-    props.timeDisplayY = defaultTimeDisplayY;
-  }
-  else
-  {
-    props.timeDisplayY = savedProps.timeDisplayY;
-  }
-
-  if (savedProps.timeDisplaySize > 9)
-  {
-    props.timeDisplaySize = defaultTimeDisplaySize;
-  }
-  else
-  {
-    props.timeDisplaySize = savedProps.timeDisplaySize;
-  }
-
-  if (savedProps.dateDisplayX > smallDisplay.width())
-  {
-    props.dateDisplayX = defaultDateDisplayX;
-  }
-  else
-  {
-    props.dateDisplayX = savedProps.dateDisplayX;
-  }
-
-  if (savedProps.dateDisplayY > smallDisplay.height())
-  {
-    props.dateDisplayY = defaultDateDisplayY;
-  }
-  else
-  {
-    props.dateDisplayY = savedProps.dateDisplayY;
-  }
-
-  if (savedProps.dateDisplaySize > 9)
-  {
-    props.dateDisplaySize = defaultDateDisplaySize;
-  }
-  else
-  {
-    props.dateDisplaySize = savedProps.dateDisplaySize;
-  }
+  setDisplayData();
 }
 
 Clock::~Clock()
@@ -139,45 +86,61 @@ void Clock::setDateTime(char *_date, char *_time)
 
 /**************************************************************************/
 /*!
+    @brief  Sets the data to be displayed on the small screen.
+*/
+/**************************************************************************/
+void Clock::setDisplayData()
+{
+  timeDisplayData = new DataDisplay(5, 0, 4);
+  // Lambda function for refreshing the displayed time.
+  auto timeRefreshFc = []()
+  {
+    extern Clock clock;
+    clock.timeDisplayData->setText(clock.getTime());
+  };
+
+  timeDisplayData->refresh = timeRefreshFc;
+
+  dateDisplayData = new DataDisplay(4, 36, 2);
+  // Lambda function for refreshing the displayed date.
+  auto dateRefreshFc = []()
+  {
+    extern Clock clock;
+    clock.dateDisplayData->setText(clock.getDate());
+  };
+
+  dateDisplayData->refresh = dateRefreshFc;
+};
+
+/**************************************************************************/
+/*!
     @brief  Returns the current date in string format.
     @return The current date.
 */
 /**************************************************************************/
 String Clock::getDate()
 {
-  return this->RTC.now().timestamp();
+  return RTC.now().timestamp(now.TIMESTAMP_DATE);
 };
 
 /**************************************************************************/
 /*!
-    @brief  Prints the date and time on the small display.
+    @brief  Returns the current time formatted to hours and minutes.
+    @return The current time in format HH:MM.
 */
 /**************************************************************************/
-void Clock::displayTime()
+String Clock::getTime()
 {
-  now = this->RTC.now();
+  return RTC.now().timestamp(now.TIMESTAMP_TIME).substring(0, 5);
+}
 
-  if (lastUnixtime + refreshInterval > now.unixtime())
-  {
-    return;
-  }
-
-  smallDisplay.clearDisplay();
-
-  // Print time
-  smallDisplay.setCursor(props.timeDisplayX, props.timeDisplayY);
-  smallDisplay.setTextSize(props.timeDisplaySize);
-  smallDisplay.setTextColor(WHITE);
-  smallDisplay.print(now.timestamp(now.TIMESTAMP_TIME).substring(0, 5));
-
-  // Print date
-  smallDisplay.setCursor(props.dateDisplayX, props.dateDisplayY);
-  smallDisplay.setTextSize(props.dateDisplaySize);
-  smallDisplay.print(now.timestamp(now.TIMESTAMP_DATE));
-
-  smallDisplay.display();
-
-  lastUnixtime = now.unixtime();
+/**************************************************************************/
+/*!
+    @brief  Refreshes the data displayed on screen.
+*/
+/**************************************************************************/
+void Clock::refreshDisplayData(){
+    // displayData->setText(getTime());
 };
 
 /**************************************************************************/

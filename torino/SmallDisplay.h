@@ -19,16 +19,18 @@ All text above, and the splash screen must be included in any redistribution
 /*********************************************************************
 I change the adafruit SSD1306 to SH1106
 
-SH1106 driver don't provide several functions such as scroll commands.
+SH1106 driver doesn't provide several functions such as scroll commands.
 
 *********************************************************************/
 
-#ifndef _SCREEN_H_
-#define _SCREEN_H_
+#ifndef _SMALL_DISPLAY_H
+#define _SMALL_DISPLAY_H
 
 #include <SPI.h>
 #include <Wire.h>
+#include <RTClib.h>
 #include <Adafruit_SH1106.h>
+#include "DataDisplay.h"
 
 #define OLED_RESET 4
 
@@ -39,6 +41,8 @@ SH1106 driver don't provide several functions such as scroll commands.
 
 #define LOGO16_GLCD_HEIGHT 16
 #define LOGO16_GLCD_WIDTH 16
+
+#define MAX_DATA_TO_DISPLAY 3
 
 static const unsigned char PROGMEM logo16_glcd_bmp[] =
     {B00000000, B11000000,
@@ -61,6 +65,23 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 #if (SH1106_LCDHEIGHT != 64)
 #error("Height incorrect, please fix Adafruit_SH1106.h!");
 #endif
+class SmallDisplay
+{
+private:
+    DataDisplay *data[MAX_DATA_TO_DISPLAY] = {};
+
+    uint64_t currentMillis;
+    uint64_t lastMillis;
+    uint64_t refreshInterval;
+
+public:
+    SmallDisplay(/* args */);
+    ~SmallDisplay();
+
+    void begin();
+    void display();
+    void setDataSlot(uint8_t, DataDisplay *);
+};
 
 void drawTorinoLogo();
 void drawFuelConsumption(float value);
@@ -76,4 +97,4 @@ void testfillroundrect(void);
 void testdrawrect(void);
 void testdrawline();
 
-#endif // _SCREEN_H_
+#endif // _SMALL_DISPLAY_H

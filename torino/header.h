@@ -6,5 +6,6 @@
 #include "Flowmeter.h"
 #include "System.h"
 #include "Clock.h"
+#include "TempSensor.h"
 
 #endif

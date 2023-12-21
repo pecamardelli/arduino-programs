@@ -103,7 +103,7 @@ void Commander::exec(String input)
 
     if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
     {
-        Serial.println(clock.getDate());
+        Serial.print(clock.getDate() + " " + clock.getTime());
     }
     else if (strncmp(args[0], "avg", 3) == 0)
     {
