@@ -32,8 +32,10 @@ SH1106 driver doesn't provide several functions such as scroll commands.
 #include <Adafruit_SH1106.h>
 
 #include "Clock.h"
+#include "TempSensor.h"
 
 extern Clock clock;
+extern TempSensor tempSensor;
 
 #define OLED_RESET 4
 
@@ -80,8 +82,16 @@ private:
     const uint8_t defaultTimeDisplaySize = 4;
 
     const uint8_t defaultDateDisplayX = 4;
-    const uint8_t defaultDateDisplayY = 36;
-    const uint8_t defaultDateDisplaySize = 2;
+    const uint8_t defaultDateDisplayY = 35;
+    const uint8_t defaultDateDisplaySize = 1;
+
+    const uint8_t defaultTempDisplayX = 4;
+    const uint8_t defaultTempDisplayY = 50;
+    const uint8_t defaultTempDisplaySize = 2;
+
+    const uint8_t defaultHumdtDisplayX = 88;
+    const uint8_t defaultHumdtDisplayY = 50;
+    const uint8_t defaultHumdtDisplaySize = 2;
 
 public:
     SmallDisplay(/* args */);

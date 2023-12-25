@@ -21,26 +21,28 @@
 class Clock
 {
 private:
-    uint8_t _hour;
-    uint8_t _min;
-    uint8_t _sec;
-    uint8_t _year;
+    uint16_t _year;
     uint8_t _month;
     uint8_t _day;
 
-    DateTime now;
+    uint8_t _hour;
+    uint8_t _min;
+    uint8_t _sec;
 
-    const String days[7] = {"Dom", "Lun", "Mar", "Mie", "Jue", "Vie", "Sab"};
+    DateTime now;
 
 public:
     Clock();
     ~Clock();
+
+    const String days[7] = {"DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"};
 
     RTC_DS3231 RTC;
 
     void begin();
     void setDateTime(char *_date, char *_time);
     String getDate();
+    String getFullDate();
     String getTime();
 };
 

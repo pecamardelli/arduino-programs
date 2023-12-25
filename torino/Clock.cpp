@@ -11,6 +11,12 @@ Clock::~Clock()
 void Clock::begin()
 {
   RTC.begin();
+  // Si se ha perdido la corriente, fijar fecha y hora
+  if (RTC.lostPower())
+  {
+    // Fijar a fecha y hora de compilacion
+    RTC.adjust(DateTime(F(__DATE__), F(__TIME__)));
+  }
 }
 
 /**************************************************************************/
@@ -22,9 +28,6 @@ void Clock::begin()
 /**************************************************************************/
 void Clock::setDateTime(char *_date, char *_time)
 {
-  Serial.println(_date);
-  Serial.println(_time);
-
   if (sscanf(_date, "%d/%d/%d", &_year, &_month, &_day) != 3)
   {
     Serial.println(F("Bad date format (YYYY/MM/DD)"));
@@ -66,7 +69,9 @@ void Clock::setDateTime(char *_date, char *_time)
   else
     return;
 
-  RTC.adjust(DateTime(_year, _month, _day, _hour, _min, _sec));
+  // For some weird reason, the value of the _year variable is not recognized.
+  // Adding 0 to it solved the issue. Yeah, I know...
+  RTC.adjust(DateTime(_year + 0, _month, _day, _hour, _min, _sec));
 };
 
 /**************************************************************************/
@@ -78,6 +83,27 @@ void Clock::setDateTime(char *_date, char *_time)
 String Clock::getDate()
 {
   return RTC.now().timestamp(now.TIMESTAMP_DATE);
+};
+
+/**************************************************************************/
+/*!
+    @brief  Returns the current date with the day in string format.
+    @return The current date with the day.
+*/
+/**************************************************************************/
+String Clock::getFullDate()
+{
+  String fullDate;
+  now = RTC.now();
+
+  fullDate += days[now.dayOfTheWeek()] + " ";
+  fullDate += now.day() >= 10 ? String(now.day()) : "0" + String(now.day());
+  fullDate += "/";
+  fullDate += now.month() >= 10 ? String(now.month()) : "0" + String(now.month());
+  fullDate += "/";
+  fullDate += now.year();
+
+  return fullDate;
 };
 
 /**************************************************************************/

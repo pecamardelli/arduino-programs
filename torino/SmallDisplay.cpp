@@ -38,18 +38,33 @@ void SmallDisplay::display()
     }
 
     oled.clearDisplay();
+    oled.setTextColor(WHITE);
 
     // Time
     oled.setCursor(defaultTimeDisplayX, defaultTimeDisplayY);
     oled.setTextSize(defaultTimeDisplaySize);
-    oled.setTextColor(WHITE);
     oled.print(clock.getTime());
 
     // Date
-    oled.setCursor(defaultDateDisplayX, defaultDateDisplayY);
+    String fullDate = clock.getFullDate();
+    uint8_t fullDateX = (21 - fullDate.length()) * 3;
+    oled.setCursor(fullDateX, defaultDateDisplayY);
     oled.setTextSize(defaultDateDisplaySize);
-    oled.setTextColor(WHITE);
-    oled.print(clock.getDate());
+    oled.print(clock.getFullDate());
+
+    // Temperature
+    readings values = tempSensor.getReadings();
+
+    oled.setCursor(defaultTempDisplayX, defaultTempDisplayY);
+    oled.setTextSize(defaultTempDisplaySize);
+    oled.print(values.temp, 0);
+    oled.print("c");
+
+    // Humidity
+    oled.setCursor(defaultHumdtDisplayX, defaultHumdtDisplayY);
+    oled.setTextSize(defaultHumdtDisplaySize);
+    oled.print(values.humidity, 0);
+    oled.print("%");
 
     oled.display();
 

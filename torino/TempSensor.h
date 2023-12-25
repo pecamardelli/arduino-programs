@@ -33,18 +33,13 @@ class TempSensor
 {
 private:
   /* data */
-
   DateTime now;
-
-  uint32_t lastUnixtime;
-  uint8_t refreshInterval;
 
 public:
   TempSensor(/* args */);
   ~TempSensor();
 
   void begin();
-  void printTemp();
   readings getReadings();
 };
 
