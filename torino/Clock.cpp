@@ -2,20 +2,6 @@
 
 Clock::Clock()
 {
-  props.timeDisplayX = defaultTimeDisplayX;
-  props.timeDisplayY = defaultTimeDisplayY;
-  props.timeDisplaySize = defaultTimeDisplaySize;
-
-  props.dateDisplayX = defaultDateDisplayX;
-  props.dateDisplayY = defaultDateDisplayY;
-  props.dateDisplaySize = defaultDateDisplaySize;
-
-  setDisplayData();
-}
-
-Clock::Clock(dateTimeProps savedProps)
-{
-  setDisplayData();
 }
 
 Clock::~Clock()
@@ -68,8 +54,7 @@ void Clock::setDateTime(char *_date, char *_time)
 
     if (_month == 2 && _day == 29)
     {
-      int x = _year % 4;
-      if (x != 0)
+      if (_year % 4 != 0)
       {
         Serial.println(F("ERROR! Year "));
         Serial.println(String(_year));
@@ -82,34 +67,6 @@ void Clock::setDateTime(char *_date, char *_time)
     return;
 
   RTC.adjust(DateTime(_year, _month, _day, _hour, _min, _sec));
-};
-
-/**************************************************************************/
-/*!
-    @brief  Sets the data to be displayed on the small screen.
-*/
-/**************************************************************************/
-void Clock::setDisplayData()
-{
-  timeDisplayData = new DataDisplay(5, 0, 4);
-  // Lambda function for refreshing the displayed time.
-  auto timeRefreshFc = []()
-  {
-    extern Clock clock;
-    clock.timeDisplayData->setText(clock.getTime());
-  };
-
-  timeDisplayData->refresh = timeRefreshFc;
-
-  dateDisplayData = new DataDisplay(4, 36, 2);
-  // Lambda function for refreshing the displayed date.
-  auto dateRefreshFc = []()
-  {
-    extern Clock clock;
-    clock.dateDisplayData->setText(clock.getDate());
-  };
-
-  dateDisplayData->refresh = dateRefreshFc;
 };
 
 /**************************************************************************/
@@ -132,95 +89,4 @@ String Clock::getDate()
 String Clock::getTime()
 {
   return RTC.now().timestamp(now.TIMESTAMP_TIME).substring(0, 5);
-}
-
-/**************************************************************************/
-/*!
-    @brief  Refreshes the data displayed on screen.
-*/
-/**************************************************************************/
-void Clock::refreshDisplayData(){
-    // displayData->setText(getTime());
-};
-
-/**************************************************************************/
-/*!
-    @brief  Sets the x coordinate for the time showed on the small display.
-    @param  value The x coordinate for the time displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setTimeDisplayX(uint8_t value)
-{
-  props.timeDisplayX = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Sets the y coordinate for the time showed on the small display.
-    @param  value The y coordinate for the time displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setTimeDisplayY(uint8_t value)
-{
-  props.timeDisplayY = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Sets the size of time showed on the small display.
-    @param  value The size for the time displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setTimeDisplaySize(uint8_t value)
-{
-  props.timeDisplaySize = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Sets the x coordinate for the date showed on the small display.
-    @param  value The x coordinate for the date displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setDateDisplayX(uint8_t value)
-{
-  props.dateDisplayX = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Sets the y coordinate for the date showed on the small display.
-    @param  value The y coordinate for the date displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setDateDisplayY(uint8_t value)
-{
-  props.dateDisplayY = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Sets the size of date showed on the small display.
-    @param  value The size for the date displayed on screen.
-*/
-/**************************************************************************/
-void Clock::setDateDisplaySize(uint8_t value)
-{
-  props.dateDisplaySize = value;
-}
-
-/**************************************************************************/
-/*!
-    @brief  Resets all properties to their defaults.
-*/
-/**************************************************************************/
-void Clock::resetProps()
-{
-  props.timeDisplayX = defaultTimeDisplayX;
-  props.timeDisplayY = defaultTimeDisplayY;
-  props.timeDisplaySize = defaultTimeDisplaySize;
-
-  props.dateDisplayX = defaultDateDisplayX;
-  props.dateDisplayY = defaultDateDisplayY;
-  props.dateDisplaySize = defaultDateDisplaySize;
 }

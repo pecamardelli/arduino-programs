@@ -39,32 +39,21 @@ void SmallDisplay::display()
 
     oled.clearDisplay();
 
-    for (uint8_t i = 0; i < MAX_DATA_TO_DISPLAY; i++)
-    {
-        if (data[i] == nullptr)
-            continue;
+    // Time
+    oled.setCursor(defaultTimeDisplayX, defaultTimeDisplayY);
+    oled.setTextSize(defaultTimeDisplaySize);
+    oled.setTextColor(WHITE);
+    oled.print(clock.getTime());
 
-        oled.setCursor(data[i]->getX(), data[i]->getY());
-        oled.setTextSize(data[i]->getSize());
-        oled.setTextColor(WHITE);
-        data[i]->refresh();
-        oled.print(data[i]->getText());
-    }
+    // Date
+    oled.setCursor(defaultDateDisplayX, defaultDateDisplayY);
+    oled.setTextSize(defaultDateDisplaySize);
+    oled.setTextColor(WHITE);
+    oled.print(clock.getDate());
 
     oled.display();
 
     lastMillis = currentMillis;
-}
-
-void SmallDisplay::setDataSlot(uint8_t index, DataDisplay *_data)
-{
-    if (index >= MAX_DATA_TO_DISPLAY)
-    {
-        Serial.println(F("Error! Index out of bounds."));
-        return;
-    }
-
-    data[index] = _data;
 }
 
 void drawTorinoLogo()

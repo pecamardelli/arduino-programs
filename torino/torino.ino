@@ -14,9 +14,6 @@ void setup()
     smallDisplay.begin();
     clock.begin();
 
-    smallDisplay.setDataSlot(0, clock.timeDisplayData);
-    smallDisplay.setDataSlot(1, clock.dateDisplayData);
-
     tempSensor.begin();
 }
 

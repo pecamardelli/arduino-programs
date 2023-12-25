@@ -30,7 +30,10 @@ SH1106 driver doesn't provide several functions such as scroll commands.
 #include <Wire.h>
 #include <RTClib.h>
 #include <Adafruit_SH1106.h>
-#include "DataDisplay.h"
+
+#include "Clock.h"
+
+extern Clock clock;
 
 #define OLED_RESET 4
 
@@ -68,11 +71,17 @@ static const unsigned char PROGMEM logo16_glcd_bmp[] =
 class SmallDisplay
 {
 private:
-    DataDisplay *data[MAX_DATA_TO_DISPLAY] = {};
-
     uint64_t currentMillis;
     uint64_t lastMillis;
     uint64_t refreshInterval;
+
+    const uint8_t defaultTimeDisplayX = 5;
+    const uint8_t defaultTimeDisplayY = 0;
+    const uint8_t defaultTimeDisplaySize = 4;
+
+    const uint8_t defaultDateDisplayX = 4;
+    const uint8_t defaultDateDisplayY = 36;
+    const uint8_t defaultDateDisplaySize = 2;
 
 public:
     SmallDisplay(/* args */);
@@ -80,7 +89,6 @@ public:
 
     void begin();
     void display();
-    void setDataSlot(uint8_t, DataDisplay *);
 };
 
 void drawTorinoLogo();

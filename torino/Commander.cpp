@@ -131,15 +131,15 @@ void Commander::exec(String input)
             {
                 if (strncmp(args[3], "time_x", 6) == 0)
                 {
-                    clock.setTimeDisplayX(atoi(args[4]));
+                    // clock.setTimeDisplayX(atoi(args[4]));
                 }
                 else if (strncmp(args[3], "time_y", 6) == 0)
                 {
-                    clock.setTimeDisplayY(atoi(args[4]));
+                    // clock.setTimeDisplayY(atoi(args[4]));
                 }
                 else if (strncmp(args[3], "time_size", 9) == 0)
                 {
-                    clock.setTimeDisplaySize(atoi(args[4]));
+                    // clock.setTimeDisplaySize(atoi(args[4]));
                 }
                 else
                 {
@@ -162,7 +162,7 @@ void Commander::exec(String input)
         {
             if (strncmp(args[2], "display", 7) == 0)
             {
-                clock.resetProps();
+                // clock.resetProps();
             }
             else
             {
