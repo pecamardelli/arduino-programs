@@ -101,73 +101,15 @@ void Commander::exec(String input)
         token = strtok(NULL, DELIMITER);
     }
 
-    if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
+    if (clock.exec(args) == 0)
     {
-        Serial.print(clock.getDate() + " " + clock.getTime());
-    }
-    else if (strncmp(args[0], "avg", 3) == 0)
-    {
-        average = atof(args[1]);
-
-        if (average != lastAverage)
-        {
-            lastAverage = average;
-            // drawFuelConsumption(average);
-        }
+        // Do nothing.
     }
     else if (strncmp(args[0], "set", 3) == 0)
     {
         if (strncmp(args[1], "ppl", 3) == 0)
         {
             flowmeter.setPulsesPerLiter(atoi(args[2]));
-        }
-        else if (strncmp(args[1], "date", 4) == 0)
-        {
-            clock.setDateTime(args[2], args[3]);
-        }
-        else if (strncmp(args[1], "clock", 5) == 0)
-        {
-            if (strncmp(args[2], "display", 7) == 0)
-            {
-                if (strncmp(args[3], "time_x", 6) == 0)
-                {
-                    // clock.setTimeDisplayX(atoi(args[4]));
-                }
-                else if (strncmp(args[3], "time_y", 6) == 0)
-                {
-                    // clock.setTimeDisplayY(atoi(args[4]));
-                }
-                else if (strncmp(args[3], "time_size", 9) == 0)
-                {
-                    // clock.setTimeDisplaySize(atoi(args[4]));
-                }
-                else
-                {
-                    printErrorMessage(BAD_COMMAND, args[3]);
-                }
-            }
-            else
-            {
-                printErrorMessage(BAD_COMMAND, args[2]);
-            }
-        }
-        else
-        {
-            printErrorMessage(BAD_COMMAND, args[1]);
-        }
-    }
-    else if (strncmp(args[0], "reset", 5) == 0)
-    {
-        if (strncmp(args[1], "clock", 5) == 0)
-        {
-            if (strncmp(args[2], "display", 7) == 0)
-            {
-                // clock.resetProps();
-            }
-            else
-            {
-                printErrorMessage(BAD_COMMAND, args[2]);
-            }
         }
         else
         {
@@ -211,7 +153,7 @@ void Commander::exec(String input)
     @return nothing
 */
 /**************************************************************************/
-void Commander::printErrorMessage(ERROR_TYPES type, String message)
+void Commander::printErrorMessage(EXEC_STATUSES type, String message)
 {
     switch (type)
     {

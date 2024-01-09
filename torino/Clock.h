@@ -44,6 +44,7 @@ public:
     String getDate();
     String getFullDate();
     String getTime();
+    uint8_t exec(char *[]);
 };
 
 #endif // _CLOCK_H_

@@ -17,7 +17,7 @@
 extern Flowmeter flowmeter;
 extern Clock clock;
 
-enum ERROR_TYPES
+enum EXEC_STATUSES
 {
     BAD_COMMAND
 };
@@ -40,7 +40,7 @@ private:
     const uint8_t MAX_COMMAND_ARGS = 8;
     const char *DELIMITER = " ";
     bool charAllowed(char c);
-    void printErrorMessage(ERROR_TYPES, String);
+    void printErrorMessage(EXEC_STATUSES, String);
 
 public:
     Commander(/* args */);

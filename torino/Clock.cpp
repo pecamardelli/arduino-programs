@@ -49,8 +49,8 @@ void Clock::setDateTime(char *_date, char *_time)
          _month == 9 ||
          _month == 11))
     {
-      Serial.println(F("ERROR! Month "));
-      Serial.println(String(_month));
+      Serial.print(F("ERROR! Month "));
+      Serial.print(String(_month));
       Serial.println(F(" does not have 31 days."));
       return;
     }
@@ -115,4 +115,29 @@ String Clock::getFullDate()
 String Clock::getTime()
 {
   return RTC.now().timestamp(now.TIMESTAMP_TIME).substring(0, 5);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Executes a user command.
+    @param  command Array of strings representing the command itself and its arguments.
+*/
+/**************************************************************************/
+uint8_t Clock::exec(char *args[])
+{
+  if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
+  {
+    Serial.print(getDate() + " " + getTime());
+    return 0;
+  }
+  else if (strncmp(args[0], "set", 3) == 0)
+  {
+    if (strncmp(args[1], "date", 4) == 0)
+    {
+      setDateTime(args[2], args[3]);
+      return 0;
+    }
+  }
+
+  return 1;
 }
