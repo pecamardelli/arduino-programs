@@ -31,7 +31,7 @@ void setup()
   relayArray[2].type = RELAY_TYPE_RANGE;
   relayArray[2].duration = 240;
   relayArray[2].pin = PIN_INTERNAL_LIGHTS;
-  relayArray[2].enabled = false;
+  relayArray[2].enabled = true;
 
   pinMode(PIN_EXTERNAL_LIGHTS, 0x1);
   digitalWrite(PIN_EXTERNAL_LIGHTS, 0x1);
@@ -47,11 +47,11 @@ void setup()
     // Fijar a fecha y hora de compilacion
     rtc.adjust(DateTime((reinterpret_cast<const __FlashStringHelper *>(
 # 39 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
-                       (__extension__({static const char __c[] __attribute__((__progmem__)) = ("Jul 30 2023"); &__c[0];}))
+                       (__extension__({static const char __c[] __attribute__((__progmem__)) = ("Jan 20 2024"); &__c[0];}))
 # 39 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
                        )), (reinterpret_cast<const __FlashStringHelper *>(
 # 39 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
-                                    (__extension__({static const char __c[] __attribute__((__progmem__)) = ("14:18:15"); &__c[0];}))
+                                    (__extension__({static const char __c[] __attribute__((__progmem__)) = ("20:44:09"); &__c[0];}))
 # 39 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
                                     ))));
   }
@@ -346,23 +346,20 @@ void parse(String input)
       dateString.concat(args[4]);
 
       char dateCharArray[dateString.length()];
-
       dateString.toCharArray(dateCharArray, dateString.length() + 1);
-      Serial.println(dateString);
-      Serial.println(dateCharArray);
       rtc.adjust(DateTime(dateCharArray, args[5]));
     }
   }
   else
   {
     Serial.print((reinterpret_cast<const __FlashStringHelper *>(
-# 317 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
+# 314 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
                 (__extension__({static const char __c[] __attribute__((__progmem__)) = (
-# 317 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
+# 314 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
                 "Bad command: "
-# 317 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
+# 314 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino" 3
                 ); &__c[0];}))
-# 317 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
+# 314 "/home/pablin/arduino_programs/mini_relay_timer/mini_relay_timer.ino"
                 )));
     Serial.println(args[0]);
   }

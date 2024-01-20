@@ -45,7 +45,7 @@ void setup()
   relayArray[2].type = RELAY_TYPE_RANGE;
   relayArray[2].duration = 240;
   relayArray[2].pin = PIN_INTERNAL_LIGHTS;
-  relayArray[2].enabled = false;
+  relayArray[2].enabled = true;
 
   pinMode(PIN_EXTERNAL_LIGHTS, OUTPUT);
   digitalWrite(PIN_EXTERNAL_LIGHTS, HIGH);
@@ -328,10 +328,7 @@ void parse(String input)
       dateString.concat(args[4]);
 
       char dateCharArray[dateString.length()];
-
       dateString.toCharArray(dateCharArray, dateString.length() + 1);
-      Serial.println(dateString);
-      Serial.println(dateCharArray);
       rtc.adjust(DateTime(dateCharArray, args[5]));
     }
   }

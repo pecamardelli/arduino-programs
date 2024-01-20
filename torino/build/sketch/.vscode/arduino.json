@@ -1,8 +1,5 @@
-#line 1 "/home/pablin/arduino_programs/torino/.vscode/arduino.json"
+#line 1 "/home/pablin/arduino_programs/torino/motor_controller/.vscode/arduino.json"
 {
-    "sketch": "torino.ino",
-    "output": "build",
-    "configuration": "cpu=atmega2560",
-    "board": "arduino:avr:mega",
-    "port": "/dev/ttyACM0"
+    "sketch": "motor_controller.ino",
+    "board": "arduino:avr:uno"
 }

@@ -36,12 +36,12 @@ const uint8_t RELAY_TYPE_RANGE = 0x02;
 // Number of days of each month.
 uint8_t daysInMonth[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 // Season time range
-const uint16_t SEASON_MIN_START_MINUTE = 18 * 60 + 30; // 18:30 hs
+const uint16_t SEASON_MIN_START_MINUTE = 19 * 60; // 19:00 hs
 const uint16_t SEASON_MAX_START_MINUTE = 20 * 60 + 45; // 20:45 hs
 const uint16_t SEASON_START_TIMESPAN = SEASON_MAX_START_MINUTE - SEASON_MIN_START_MINUTE;
 
 const uint16_t SEASON_MIN_END_MINUTE = 6 * 60; // 06:00 hs
-const uint16_t SEASON_MAX_END_MINUTE = 8 * 60; // 08:00 hs
+const uint16_t SEASON_MAX_END_MINUTE = 8 * 60 + 20; // 08:20 hs
 const uint16_t SEASON_END_TIMESPAN = SEASON_MAX_END_MINUTE - SEASON_MIN_END_MINUTE;
 // June 21st is the shortest day of the year.
 const uint16_t SEASON_SHORTEST_DAY_OF_THE_YEAR = 31 * 3 + 28 + 30 + 21;
