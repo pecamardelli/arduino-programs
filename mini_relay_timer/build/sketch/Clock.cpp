@@ -88,27 +88,6 @@ String Clock::getDate()
 
 /**************************************************************************/
 /*!
-    @brief  Returns the current date with the day in string format.
-    @return The current date with the day.
-*/
-/**************************************************************************/
-String Clock::getFullDate()
-{
-  String fullDate;
-  now = RTC.now();
-
-  fullDate += days[now.dayOfTheWeek()] + " ";
-  fullDate += now.day() >= 10 ? String(now.day()) : "0" + String(now.day());
-  fullDate += "/";
-  fullDate += now.month() >= 10 ? String(now.month()) : "0" + String(now.month());
-  fullDate += "/";
-  fullDate += now.year();
-
-  return fullDate;
-};
-
-/**************************************************************************/
-/*!
     @brief  Returns the current time formatted to hours and minutes.
     @return The current time in format HH:MM.
 */
@@ -120,29 +99,10 @@ String Clock::getTime()
 
 /**************************************************************************/
 /*!
-    @brief  Executes a user command.
-    @param  command Array of strings representing the command itself and its arguments.
+    @brief  Calculates the day number of the year.
+    @return  the current day number of the year.
 */
 /**************************************************************************/
-uint8_t Clock::exec(char *args[])
-{
-  if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
-  {
-    Serial.print(getDate() + " " + getTime());
-    return 0;
-  }
-  else if (strncmp(args[0], "set", 3) == 0)
-  {
-    if (strncmp(args[1], "date", 4) == 0)
-    {
-      setDateTime(args[2], args[3]);
-      return 0;
-    }
-  }
-
-  return 1;
-}
-
 uint16_t Clock::calculateDayOfYear()
 {
   const uint8_t day = now.day();
@@ -192,4 +152,33 @@ uint16_t Clock::calculateDayOfYear()
 
   doy += day;
   return doy;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Executes a user command.
+    @param  command Array of strings representing the command itself and its arguments.
+*/
+/**************************************************************************/
+uint8_t Clock::exec(char *args[])
+{
+  if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
+  {
+    Serial.print(getDate() + " " + getTime());
+    return COMMAND_SUCCESSFUL;
+  }
+  else if (strncmp(args[0], "set", 3) == 0)
+  {
+    if (strncmp(args[1], "date", 4) == 0)
+    {
+      setDateTime(args[2], args[3]);
+      return COMMAND_SUCCESSFUL;
+    }
+    else
+    {
+      return 1;
+    }
+  }
+
+  return 0;
 }

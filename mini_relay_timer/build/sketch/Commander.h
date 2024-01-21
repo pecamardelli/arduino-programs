@@ -12,14 +12,12 @@
 #ifndef _COMMANDER_H_
 #define _COMMANDER_H_
 
+#include "common.h"
 #include "Clock.h"
+#include "Relay.h"
 
 extern Clock clock;
-
-enum EXEC_STATUSES
-{
-    BAD_COMMAND
-};
+extern Relay relays;
 
 /**************************************************************************/
 /*!

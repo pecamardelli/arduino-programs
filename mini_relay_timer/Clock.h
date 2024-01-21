@@ -12,6 +12,7 @@
 #define _CLOCK_H_
 
 #include <RTClib.h>
+#include "common.h"
 
 /**************************************************************************/
 /*!
@@ -44,7 +45,6 @@ public:
     void begin();
     void setDateTime(char *_date, char *_time);
     String getDate();
-    String getFullDate();
     String getTime();
     uint8_t exec(char *[]);
     uint16_t calculateDayOfYear();

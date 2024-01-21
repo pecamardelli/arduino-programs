@@ -8,34 +8,44 @@ Relay::~Relay()
 {
 }
 
+/**************************************************************************/
+/*!
+    @brief  Initializes all the stuff for the relays.
+*/
+/**************************************************************************/
 void Relay::begin()
 {
     // External lights
     relayArray[0].type = RELAY_TYPE_SEASON;
-    relayArray[0].pin = PIN_EXTERNAL_LIGHTS;
+    relayArray[0].pin = pinExternalLights;
     relayArray[0].enabled = true;
 
     // Streetlight
     relayArray[1].type = RELAY_TYPE_SEASON;
-    relayArray[1].pin = PIN_GARDEN_LIGHTS;
+    relayArray[1].pin = pinGardenLights;
     relayArray[1].enabled = true;
 
     // Internal lights
     relayArray[2].type = RELAY_TYPE_RANGE;
     relayArray[2].duration = 240;
-    relayArray[2].pin = PIN_INTERNAL_LIGHTS;
+    relayArray[2].pin = pinInternalLights;
     relayArray[2].enabled = true;
 
-    pinMode(PIN_EXTERNAL_LIGHTS, OUTPUT);
-    digitalWrite(PIN_EXTERNAL_LIGHTS, HIGH);
+    pinMode(pinExternalLights, OUTPUT);
+    digitalWrite(pinExternalLights, HIGH);
 
-    pinMode(PIN_GARDEN_LIGHTS, OUTPUT);
-    digitalWrite(PIN_GARDEN_LIGHTS, HIGH);
+    pinMode(pinGardenLights, OUTPUT);
+    digitalWrite(pinGardenLights, HIGH);
 
-    pinMode(PIN_INTERNAL_LIGHTS, OUTPUT);
-    digitalWrite(PIN_INTERNAL_LIGHTS, HIGH);
+    pinMode(pinInternalLights, OUTPUT);
+    digitalWrite(pinInternalLights, HIGH);
 }
 
+/**************************************************************************/
+/*!
+    @brief  Checks the start and end minute for all the relays.
+*/
+/**************************************************************************/
 void Relay::relay_check()
 {
     for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
@@ -50,12 +60,12 @@ void Relay::relay_check()
         case RELAY_TYPE_RANGE:
             uint16_t currentMinute = clock.RTC.now().hour() * 60 + clock.RTC.now().minute();
             uint16_t seasonStartMinute = getSeasonStartMins();
-            if (seasonStartMinute - RANGE_MAX_TIME_VARIATION <= currentMinute)
+            if (seasonStartMinute - rangeMaxTimeVariation <= currentMinute)
             {
                 continue;
             }
-            relayArray[i].startMinute = seasonStartMinute - round(random(RANGE_MAX_TIME_VARIATION));
-            relayArray[i].endMinute = relayArray[i].startMinute + relayArray[i].duration + round(RANGE_MAX_TIME_VARIATION * random(-1, 1));
+            relayArray[i].startMinute = seasonStartMinute - round(random(rangeMaxTimeVariation));
+            relayArray[i].endMinute = relayArray[i].startMinute + relayArray[i].duration + round(rangeMaxTimeVariation * random(-1, 1));
             if (relayArray[i].endMinute >= 1440)
                 relayArray[i].endMinute = 1438;
             break;
@@ -64,6 +74,11 @@ void Relay::relay_check()
         }
 }
 
+/**************************************************************************/
+/*!
+    @brief  Turns on or off the relays.
+*/
+/**************************************************************************/
 void Relay::relay_watch()
 {
     uint16_t currentMinute = clock.RTC.now().hour() * 60 + clock.RTC.now().minute();
@@ -121,13 +136,44 @@ void Relay::relay_watch()
 uint16_t Relay::getSeasonStartMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-    float ratio = sin(PI * dayOfTheYear / SEASON_LONGEST_DAY_OF_THE_YEAR);
-    return (uint16_t)SEASON_MAX_START_MINUTE - round(SEASON_START_TIMESPAN * ratio);
+    float ratio = sin(PI * dayOfTheYear / seasonLongestDayOfTheYear);
+    return (uint16_t)seasonMaxStartMinute - round(seasonStartTimespan * ratio);
 }
 
 uint16_t Relay::getSeasonEndMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-    float ratio = sin(PI * dayOfTheYear / SEASON_LONGEST_DAY_OF_THE_YEAR);
-    return (uint16_t)SEASON_MIN_END_MINUTE + round(SEASON_START_TIMESPAN * ratio);
+    float ratio = sin(PI * dayOfTheYear / seasonLongestDayOfTheYear);
+    return (uint16_t)seasonMinEndMinute + round(seasonStartTimespan * ratio);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Executes a user command.
+    @param  command Array of strings representing the command itself and its arguments.
+*/
+/**************************************************************************/
+uint8_t Relay::exec(char *args[])
+{
+    if (strncmp(args[0], "show", 4) == 0)
+    {
+        if (strncmp(args[1], "relay", 5) == 0)
+        {
+            if (strncmp(args[2], "values", 6) == 0)
+            {
+                Serial.println("Relay values");
+                return COMMAND_SUCCESSFUL;
+            }
+            else
+            {
+                return 2;
+            }
+        }
+        else
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }

@@ -98,38 +98,23 @@ void Commander::exec(String input)
         token = strtok(NULL, DELIMITER);
     }
 
-    if (clock.exec(args) == 0)
-    {
-        // Do nothing.
-    }
-    else if (strncmp(args[0], "relay", 5) == 0)
-    {
-        // Now check if args[1] is a valid pin number.
-        // const int relayNumber = atoi(args[1]);
+    uint8_t result = clock.exec(args);
 
-        // if (relayNumber < 0 || relayNumber >= MAX_RELAY_NUMBER)
-        // {
-        //     Serial.print(F("Bad relay number: "));
-        //     Serial.println(relayNumber);
-        //     return;
-        // }
-        // else if (strncmp(args[2], "enable", 6) == 0)
-        // {
-        //     relayArray[relayNumber].enabled = true;
-        // }
-        // else if (strncmp(args[2], "disable", 7) == 0)
-        // {
-        //     relayArray[relayNumber].enabled = false;
-        // }
-        // else
-        // {
-        //     Serial.print(F("Bad subcommand: "));
-        //     Serial.println(args[2]);
-        // }
-    }
-    else
+    if (result == COMMAND_SUCCESSFUL)
     {
-        printErrorMessage(BAD_COMMAND, args[0]);
+        return;
+    }
+
+    result = relays.exec(args);
+    if (result == COMMAND_SUCCESSFUL)
+    {
+        return;
+    }
+
+    if (result >= 0)
+    {
+
+        printErrorMessage(BAD_COMMAND, args[result]);
     }
 }
 
