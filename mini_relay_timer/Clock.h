@@ -46,7 +46,7 @@ public:
     void setDateTime(char *_date, char *_time);
     String getDate();
     String getTime();
-    uint8_t exec(char *[]);
+    EXEC_STATUSES exec(String[]);
     uint16_t calculateDayOfYear();
 };
 

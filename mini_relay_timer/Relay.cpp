@@ -153,27 +153,34 @@ uint16_t Relay::getSeasonEndMins()
     @param  command Array of strings representing the command itself and its arguments.
 */
 /**************************************************************************/
-uint8_t Relay::exec(char *args[])
+EXEC_STATUSES Relay::exec(String args[])
 {
-    if (strncmp(args[0], "show", 4) == 0)
+    if (args[0].equals("show"))
     {
-        if (strncmp(args[1], "relay", 5) == 0)
+        if (args[1].equals("relay"))
         {
-            if (strncmp(args[2], "values", 6) == 0)
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+            if (args[2].equals("values"))
             {
                 Serial.println("Relay values");
                 return COMMAND_SUCCESSFUL;
             }
             else
             {
-                return 2;
+                printErrorMessage(BAD_COMMAND, args[2]);
+                return BAD_COMMAND;
             }
         }
         else
         {
-            return 1;
+            printErrorMessage(BAD_COMMAND, args[1]);
+            return BAD_COMMAND;
         }
     }
 
-    return 0;
+    return NO_COMMAND;
 }

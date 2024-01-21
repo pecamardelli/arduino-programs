@@ -27,11 +27,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp.o"
   ],
-  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp"
+  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -61,11 +61,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/mini_relay_timer.ino.cpp",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/common.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/mini_relay_timer.ino.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/common.cpp.o"
   ],
-  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/mini_relay_timer.ino.cpp"
+  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/common.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -129,11 +129,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp.o"
   ],
-  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Relay.cpp"
+  "file": "/home/pablin/arduino_programs/mini_relay_timer/build/sketch/Clock.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -199,108 +199,6 @@
    "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Wire/utility/twi.c.o"
   ],
   "file": "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src/utility/twi.c"
- },
- {
-  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
-  "arguments": [
-   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
-   "-I/home/pablin/Arduino/libraries/RTClib/src",
-   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/RTClib/src/RTC_Millis.cpp",
-   "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_Millis.cpp.o"
-  ],
-  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_Millis.cpp"
- },
- {
-  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
-  "arguments": [
-   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
-   "-I/home/pablin/Arduino/libraries/RTClib/src",
-   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/RTClib/src/RTC_Micros.cpp",
-   "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_Micros.cpp.o"
-  ],
-  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_Micros.cpp"
- },
- {
-  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
-  "arguments": [
-   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
-   "-c",
-   "-g",
-   "-Os",
-   "-w",
-   "-std=gnu++11",
-   "-fpermissive",
-   "-fno-exceptions",
-   "-ffunction-sections",
-   "-fdata-sections",
-   "-fno-threadsafe-statics",
-   "-Wno-error=narrowing",
-   "-MMD",
-   "-flto",
-   "-mmcu=atmega328p",
-   "-DF_CPU=16000000L",
-   "-DARDUINO=10607",
-   "-DARDUINO_AVR_UNO",
-   "-DARDUINO_ARCH_AVR",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
-   "-I/home/pablin/Arduino/libraries/RTClib/src",
-   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
-   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/RTClib/src/RTC_DS3231.cpp",
-   "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_DS3231.cpp.o"
-  ],
-  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_DS3231.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -398,11 +296,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/RTClib/src/RTClib.cpp",
+   "/home/pablin/Arduino/libraries/RTClib/src/RTC_DS3231.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTClib.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_DS3231.cpp.o"
   ],
-  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTClib.cpp"
+  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_DS3231.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -466,6 +364,108 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+   "/home/pablin/Arduino/libraries/RTClib/src/RTC_Millis.cpp",
+   "-o",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_Millis.cpp.o"
+  ],
+  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_Millis.cpp"
+ },
+ {
+  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
+  "arguments": [
+   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+   "-I/home/pablin/Arduino/libraries/RTClib/src",
+   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+   "/home/pablin/Arduino/libraries/RTClib/src/RTC_Micros.cpp",
+   "-o",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTC_Micros.cpp.o"
+  ],
+  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTC_Micros.cpp"
+ },
+ {
+  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
+  "arguments": [
+   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+   "-I/home/pablin/Arduino/libraries/RTClib/src",
+   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
+   "/home/pablin/Arduino/libraries/RTClib/src/RTClib.cpp",
+   "-o",
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/RTClib/RTClib.cpp.o"
+  ],
+  "file": "/home/pablin/Arduino/libraries/RTClib/src/RTClib.cpp"
+ },
+ {
+  "directory": "/home/pablin/arduino_programs/mini_relay_timer",
+  "arguments": [
+   "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/bin/avr-g++",
+   "-c",
+   "-g",
+   "-Os",
+   "-w",
+   "-std=gnu++11",
+   "-fpermissive",
+   "-fno-exceptions",
+   "-ffunction-sections",
+   "-fdata-sections",
+   "-fno-threadsafe-statics",
+   "-Wno-error=narrowing",
+   "-MMD",
+   "-flto",
+   "-mmcu=atmega328p",
+   "-DF_CPU=16000000L",
+   "-DARDUINO=10607",
+   "-DARDUINO_AVR_UNO",
+   "-DARDUINO_ARCH_AVR",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/Wire/src",
+   "-I/home/pablin/Arduino/libraries/RTClib/src",
+   "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
+   "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
    "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_BusIO_Register.cpp",
    "-o",
    "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Adafruit_BusIO/Adafruit_BusIO_Register.cpp.o"
@@ -500,11 +500,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp",
+   "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp.o"
   ],
-  "file": "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp"
+  "file": "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",
@@ -534,11 +534,11 @@
    "-I/home/pablin/Arduino/libraries/RTClib/src",
    "-I/home/pablin/Arduino/libraries/Adafruit_BusIO",
    "-I/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/libraries/SPI/src",
-   "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp",
+   "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp",
    "-o",
-   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp.o"
+   "/home/pablin/arduino_programs/mini_relay_timer/build/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp.o"
   ],
-  "file": "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_SPIDevice.cpp"
+  "file": "/home/pablin/Arduino/libraries/Adafruit_BusIO/Adafruit_I2CDevice.cpp"
  },
  {
   "directory": "/home/pablin/arduino_programs/mini_relay_timer",

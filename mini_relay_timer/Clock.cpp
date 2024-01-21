@@ -159,25 +159,26 @@ uint16_t Clock::calculateDayOfYear()
     @param  command Array of strings representing the command itself and its arguments.
 */
 /**************************************************************************/
-uint8_t Clock::exec(char *args[])
+EXEC_STATUSES Clock::exec(String args[])
 {
-  if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
+  if (args[0].equals("date") || args[0].equals("time"))
   {
     Serial.print(getDate() + " " + getTime());
     return COMMAND_SUCCESSFUL;
   }
-  else if (strncmp(args[0], "set", 3) == 0)
+  else if (args[0].equals("set"))
   {
-    if (strncmp(args[1], "date", 4) == 0)
+    if (args[1].equals("date"))
     {
-      setDateTime(args[2], args[3]);
+      // setDateTime(args[2], args[3]);
       return COMMAND_SUCCESSFUL;
     }
     else
     {
-      return 1;
+      printErrorMessage(BAD_COMMAND, args[1]);
+      return BAD_COMMAND;
     }
   }
 
-  return 0;
+  return NO_COMMAND;
 }

@@ -83,7 +83,7 @@ bool Commander::charAllowed(char c)
 void Commander::exec(String input)
 {
     // Tokenizing arguments
-    char *args[MAX_COMMAND_ARGS];
+    String args[MAX_COMMAND_ARGS];
     char buffer[MAX_COMMAND_LEN];
     uint8_t index = 0;
 
@@ -93,12 +93,12 @@ void Commander::exec(String input)
 
     while (token != NULL && index < MAX_COMMAND_ARGS)
     {
-        args[index] = token;
+        args[index].concat(token);
         index++;
         token = strtok(NULL, DELIMITER);
     }
 
-    uint8_t result = clock.exec(args);
+    int result = clock.exec(args);
 
     if (result == COMMAND_SUCCESSFUL)
     {
@@ -111,30 +111,8 @@ void Commander::exec(String input)
         return;
     }
 
-    if (result >= 0)
+    if (result == NO_COMMAND)
     {
-
-        printErrorMessage(BAD_COMMAND, args[result]);
+        printErrorMessage(BAD_COMMAND, args[0]);
     }
-}
-
-/**************************************************************************/
-/*!
-    @brief  Print a standard error message.
-    @param  message The error message.
-    @return nothing
-*/
-/**************************************************************************/
-void Commander::printErrorMessage(EXEC_STATUSES type, String message)
-{
-    switch (type)
-    {
-    case BAD_COMMAND:
-        Serial.print(F("Bad command: "));
-        break;
-    default:
-        break;
-    }
-
-    Serial.println(message);
 }

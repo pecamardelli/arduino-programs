@@ -73,7 +73,7 @@ public:
     void begin();
     void relay_check();
     void relay_watch();
-    uint8_t exec(char *args[]);
+    EXEC_STATUSES exec(String[]);
 };
 
 #endif // _RELAY_H_
