@@ -162,7 +162,7 @@ EXEC_STATUSES Relay::exec(String args[])
         {
             if (args[2].length() == 0)
             {
-                printErrorMessage(TOO_FEW_ARGUMENTS, args[1] + " " + args[1]);
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
                 return TOO_FEW_ARGUMENTS;
             }
             if (args[2].equals("values"))

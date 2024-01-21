@@ -43,7 +43,7 @@ public:
     RTC_DS3231 RTC;
 
     void begin();
-    void setDateTime(char *_date, char *_time);
+    void setDateTime(String, String);
     String getDate();
     String getTime();
     EXEC_STATUSES exec(String[]);

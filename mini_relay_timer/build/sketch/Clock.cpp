@@ -27,8 +27,14 @@ void Clock::begin()
     @param  _time The time in format HH:MM:SS.
 */
 /**************************************************************************/
-void Clock::setDateTime(char *_date, char *_time)
+void Clock::setDateTime(String date, String time)
 {
+  char _date[date.length() + 1];
+  date.toCharArray(_date, date.length() + 1);
+
+  char _time[time.length() + 1];
+  time.toCharArray(_time, time.length() + 1);
+
   if (sscanf(_date, "%d/%d/%d", &_year, &_month, &_day) != 3)
   {
     Serial.println(F("Bad date format (YYYY/MM/DD)"));
@@ -171,7 +177,7 @@ EXEC_STATUSES Clock::exec(String args[])
   {
     if (args[1].equals("date"))
     {
-      // setDateTime(args[2], args[3]);
+      setDateTime(args[2], args[3]);
       return COMMAND_SUCCESSFUL;
     }
     else
