@@ -17,9 +17,24 @@ void printErrorMessage(EXEC_STATUSES type, String message)
     case TOO_FEW_ARGUMENTS:
         Serial.print(F("Too few arguments for "));
         break;
+    case BAD_INPUT:
+        Serial.print(F("Bad input for "));
+    case VALUE_OUT_OF_RANGE:
+        Serial.print(F("Value out of range: "));
     default:
         break;
     }
 
     Serial.println(message);
+}
+
+/**************************************************************************/
+/*!
+    @brief  Print a separator for being used between lines.
+    @return nothing
+*/
+/**************************************************************************/
+void printSeparator()
+{
+    Serial.println(F("----------------------------------"));
 }

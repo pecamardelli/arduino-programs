@@ -47,6 +47,12 @@ private:
     /* data */
     uint16_t getSeasonStartMins();
     uint16_t getSeasonEndMins();
+    void setSeasonMinStartMinute(long);
+    void setSeasonMaxStartMinute(long);
+    void setSeasonMinEndMinute(long);
+    void setSeasonMaxEndMinute(long);
+    void setSeasonShortestDayOfTheYear(uint16_t);
+    void setSeasonLongestDayOfTheYear(uint16_t);
     // Defining array of relays.
     relay relayArray[MAX_RELAY_NUMBER];
     // Max variation in minutes of the start and end time when type is RANGE

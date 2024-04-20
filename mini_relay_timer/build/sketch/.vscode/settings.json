@@ -2,5 +2,9 @@
 {
   "editor.defaultFormatter": "ms-vscode.cpptools",
   "editor.formatOnPaste": true,
-  "editor.formatOnSave": true
+  "editor.formatOnSave": true,
+  "C_Cpp.files.exclude": {
+    "**/.vscode": true,
+    "**/.vs": true
+  }
 }

@@ -76,7 +76,7 @@ void Relay::relay_check()
 
 /**************************************************************************/
 /*!
-    @brief  Turns on or off the relays.
+    @brief  Turns on or off the relays based on the calculated start an end minute.
 */
 /**************************************************************************/
 void Relay::relay_watch()
@@ -147,6 +147,78 @@ uint16_t Relay::getSeasonEndMins()
     return (uint16_t)seasonMinEndMinute + round(seasonStartTimespan * ratio);
 }
 
+void Relay::setSeasonMinStartMinute(long minutes)
+{
+
+    if (minutes < 0 || minutes > 1440)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(minutes));
+        return;
+    }
+
+    seasonMinStartMinute = minutes;
+}
+
+void Relay::setSeasonMaxStartMinute(long minutes)
+{
+
+    if (minutes < 0 || minutes > 1440)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(minutes));
+        return;
+    }
+
+    seasonMaxStartMinute = minutes;
+}
+
+void Relay::setSeasonMinEndMinute(long minutes)
+{
+
+    if (minutes < 0 || minutes > 1440)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(minutes));
+        return;
+    }
+
+    seasonMinEndMinute = minutes;
+}
+
+void Relay::setSeasonMaxEndMinute(long minutes)
+{
+
+    if (minutes < 0 || minutes > 1440)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(minutes));
+        return;
+    }
+
+    seasonMaxEndMinute = minutes;
+}
+
+void Relay::setSeasonShortestDayOfTheYear(uint16_t day)
+{
+
+    if (day < 0 || day > 366)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(day));
+        return;
+    }
+
+    seasonShortestDayOfTheYear = day;
+}
+
+void Relay::setSeasonLongestDayOfTheYear(uint16_t day)
+{
+
+    if (day < 0 || day > 366)
+    {
+        printErrorMessage(VALUE_OUT_OF_RANGE, String(day));
+        return;
+    }
+
+    seasonLongestDayOfTheYear = day;
+}
+
 /**************************************************************************/
 /*!
     @brief  Executes a user command.
@@ -164,21 +236,115 @@ EXEC_STATUSES Relay::exec(String args[])
                 printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
                 return TOO_FEW_ARGUMENTS;
             }
+
             if (args[2].equals("values"))
             {
-                Serial.println("Relay values");
+                printSeparator();
+                Serial.print(F("rangeMaxTimeVariation: "));
+                Serial.println(rangeMaxTimeVariation);
+                printSeparator();
+
+                Serial.print(F("seasonMinStartMinute: "));
+                Serial.println(seasonMinStartMinute);
+                Serial.print(F("seasonMaxStartMinute: "));
+                Serial.println(seasonMaxStartMinute);
+                Serial.print(F("seasonStartTimespan: "));
+                Serial.println(seasonStartTimespan);
+                printSeparator();
+
+                Serial.print(F("seasonMinEndMinute: "));
+                Serial.println(seasonMinEndMinute);
+                Serial.print(F("seasonMaxEndMinute: "));
+                Serial.println(seasonMaxEndMinute);
+                Serial.print(F("seasonEndTimespan: "));
+                Serial.println(seasonEndTimespan);
+                printSeparator();
+
+                Serial.print(F("seasonShortestDayOfTheYear: "));
+                Serial.println(seasonShortestDayOfTheYear);
+                printSeparator();
+
+                Serial.print(F("seasonLongestDayOfTheYear: "));
+                Serial.println(seasonLongestDayOfTheYear);
+                printSeparator();
+
                 return COMMAND_SUCCESSFUL;
             }
-            else
-            {
-                printErrorMessage(BAD_COMMAND, args[2]);
-                return BAD_COMMAND;
-            }
         }
-        else
+    }
+    else if (args[0].equals(F("set")))
+    {
+        if (args[1].equals(F("seasonMinStartMinute")))
         {
-            printErrorMessage(BAD_COMMAND, args[1]);
-            return BAD_COMMAND;
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonMinStartMinute(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
+        }
+        else if (args[1].equals(F("seasonMaxStartMinute")))
+        {
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonMaxStartMinute(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
+        }
+        else if (args[1].equals(F("seasonMinEndMinute")))
+        {
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonMinEndMinute(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
+        }
+        else if (args[1].equals(F("seasonMaxEndMinute")))
+        {
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonMaxEndMinute(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
+        }
+        else if (args[1].equals(F("seasonShortestDayOfTheYear")))
+        {
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonShortestDayOfTheYear(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
+        }
+        else if (args[1].equals(F("seasonLongestDayOfTheYear")))
+        {
+            if (args[2].length() == 0)
+            {
+                printErrorMessage(TOO_FEW_ARGUMENTS, args[0] + " " + args[1]);
+                return TOO_FEW_ARGUMENTS;
+            }
+
+            setSeasonLongestDayOfTheYear(args[2].toInt());
+
+            return COMMAND_SUCCESSFUL;
         }
     }
 

@@ -78,7 +78,6 @@ bool Commander::charAllowed(char c)
 /*!
     @brief  Process the command and prints the result.
     @param  input The command.
-    @return nothing
 */
 /**************************************************************************/
 void Commander::exec(String input)

@@ -180,11 +180,6 @@ EXEC_STATUSES Clock::exec(String args[])
       setDateTime(args[2], args[3]);
       return COMMAND_SUCCESSFUL;
     }
-    else
-    {
-      printErrorMessage(BAD_COMMAND, args[1]);
-      return BAD_COMMAND;
-    }
   }
 
   return NO_COMMAND;

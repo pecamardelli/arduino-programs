@@ -17,6 +17,8 @@
 
 enum EXEC_STATUSES
 {
+  VALUE_OUT_OF_RANGE = -6,
+  BAD_INPUT = -5,
   NO_COMMAND = -4,
   TOO_FEW_ARGUMENTS = -3,
   COMMAND_SUCCESSFUL = -2,
@@ -24,5 +26,6 @@ enum EXEC_STATUSES
 };
 
 void printErrorMessage(EXEC_STATUSES, String);
+void printSeparator();
 
 #endif // _COMMON_H_
