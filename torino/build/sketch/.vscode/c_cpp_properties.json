@@ -1,4 +1,4 @@
-#line 1 "/home/pablin/arduino_programs/torino/motor_controller/.vscode/c_cpp_properties.json"
+#line 1 "/home/pablin/arduino-programs/torino/motor_controller/.vscode/c_cpp_properties.json"
 {
     "version": 4,
     "configurations": [
@@ -19,6 +19,7 @@
             "includePath": [
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/cores/arduino",
                 "/home/pablin/.arduino15/packages/arduino/hardware/avr/1.8.6/variants/standard",
+                "/home/pablin/Arduino/libraries/L293D/src",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/lib/gcc/avr/7.3.0/include-fixed",
                 "/home/pablin/.arduino15/packages/arduino/tools/avr-gcc/7.3.0-atmel3.6.1-arduino7/avr/include"

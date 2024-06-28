@@ -1,5 +1,6 @@
-#line 1 "/home/pablin/arduino_programs/torino/motor_controller/.vscode/arduino.json"
+#line 1 "/home/pablin/arduino-programs/torino/motor_controller/.vscode/arduino.json"
 {
     "sketch": "motor_controller.ino",
-    "board": "arduino:avr:uno"
+    "board": "arduino:avr:uno",
+    "port": "/dev/ttyACM0"
 }

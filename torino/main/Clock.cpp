@@ -26,8 +26,14 @@ void Clock::begin()
     @param  _time The time in format HH:MM:SS.
 */
 /**************************************************************************/
-void Clock::setDateTime(char *_date, char *_time)
+void Clock::setDateTime(String date, String time)
 {
+  char _date[date.length() + 1];
+  date.toCharArray(_date, date.length() + 1);
+
+  char _time[time.length() + 1];
+  time.toCharArray(_time, time.length() + 1);
+
   if (sscanf(_date, "%d/%d/%d", &_year, &_month, &_day) != 3)
   {
     Serial.println(F("Bad date format (YYYY/MM/DD)"));
@@ -123,21 +129,21 @@ String Clock::getTime()
     @param  command Array of strings representing the command itself and its arguments.
 */
 /**************************************************************************/
-uint8_t Clock::exec(char *args[])
+EXEC_STATUSES Clock::exec(String args[])
 {
-  if (strncmp(args[0], "date", 4) == 0 || strncmp(args[0], "time", 4) == 0)
+  if (args[0].equals("date") || args[0].equals("time"))
   {
     Serial.print(getDate() + " " + getTime());
-    return 0;
+    return COMMAND_SUCCESSFUL;
   }
-  else if (strncmp(args[0], "set", 3) == 0)
+  else if (args[0].equals("set"))
   {
-    if (strncmp(args[1], "date", 4) == 0)
+    if (args[1].equals("date"))
     {
       setDateTime(args[2], args[3]);
-      return 0;
+      return COMMAND_SUCCESSFUL;
     }
   }
 
-  return 1;
+  return NO_COMMAND;
 }

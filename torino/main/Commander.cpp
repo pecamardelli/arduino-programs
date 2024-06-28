@@ -15,6 +15,7 @@
 /**************************************************************************/
 
 #include "Commander.h"
+#include "common.h"
 
 float average = 0;
 float lastAverage = 0;
@@ -26,7 +27,6 @@ Commander::Commander(/* args */)
 Commander::~Commander()
 {
 }
-
 /**************************************************************************/
 /*!
     @brief  Reads the serial port and sanitizes the input.
@@ -80,13 +80,12 @@ bool Commander::charAllowed(char c)
 /*!
     @brief  Process the command and prints the result.
     @param  input The command.
-    @return nothing
 */
 /**************************************************************************/
 void Commander::exec(String input)
 {
     // Tokenizing arguments
-    char *args[MAX_COMMAND_ARGS];
+    String args[MAX_COMMAND_ARGS];
     char buffer[MAX_COMMAND_LEN];
     uint8_t index = 0;
 
@@ -96,73 +95,20 @@ void Commander::exec(String input)
 
     while (token != NULL && index < MAX_COMMAND_ARGS)
     {
-        args[index] = token;
+        args[index].concat(token);
         index++;
         token = strtok(NULL, DELIMITER);
     }
 
-    if (clock.exec(args) == 0)
+    int result = clock.exec(args);
+
+    if (result == COMMAND_SUCCESSFUL)
     {
-        // Do nothing.
+        return;
     }
-    else if (strncmp(args[0], "set", 3) == 0)
-    {
-        if (strncmp(args[1], "ppl", 3) == 0)
-        {
-            flowmeter.setPulsesPerLiter(atoi(args[2]));
-        }
-        else
-        {
-            printErrorMessage(BAD_COMMAND, args[1]);
-        }
-    }
-    else if (strncmp(args[0], "show", 4) == 0)
-    {
-        if (strncmp(args[1], "ppl", 3) == 0)
-        {
-            Serial.print(F("Current pulses per liter: "));
-            Serial.println(flowmeter.getPulsesPerLiter());
-        }
-        else
-        {
-            printErrorMessage(BAD_COMMAND, args[1]);
-        }
-    }
-    else if (strncmp(args[0], "reset", 5) == 0)
-    {
-        if (strncmp(args[1], "pulses", 6) == 0)
-        {
-            flowmeter.resetPulses();
-            Serial.println(F("Pulses reset."));
-        }
-        else
-        {
-            printErrorMessage(BAD_COMMAND, args[1]);
-        }
-    }
-    else
+
+    if (result == NO_COMMAND)
     {
         printErrorMessage(BAD_COMMAND, args[0]);
     }
-}
-
-/**************************************************************************/
-/*!
-    @brief  Print a standard error message.
-    @param  message The error message.
-    @return nothing
-*/
-/**************************************************************************/
-void Commander::printErrorMessage(EXEC_STATUSES type, String message)
-{
-    switch (type)
-    {
-    case BAD_COMMAND:
-        Serial.print(F("Bad command: "));
-        break;
-    default:
-        break;
-    }
-
-    Serial.println(message);
 }

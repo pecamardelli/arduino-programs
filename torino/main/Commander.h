@@ -13,14 +13,10 @@
 
 #include "Flowmeter.h"
 #include "Clock.h"
+#include "common.h"
 
 extern Flowmeter flowmeter;
 extern Clock clock;
-
-enum EXEC_STATUSES
-{
-    BAD_COMMAND
-};
 
 /**************************************************************************/
 /*!
@@ -40,7 +36,6 @@ private:
     const uint8_t MAX_COMMAND_ARGS = 8;
     const char *DELIMITER = " ";
     bool charAllowed(char c);
-    void printErrorMessage(EXEC_STATUSES, String);
 
 public:
     Commander(/* args */);

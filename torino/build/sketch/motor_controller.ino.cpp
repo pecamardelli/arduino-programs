@@ -1,12 +1,22 @@
+#line 1 "/home/pablin/arduino-programs/torino/motor_controller/motor_controller.ino"
 #include <Arduino.h>
-#line 1 "/home/pablin/arduino_programs/torino/motor_controller/motor_controller.ino"
-#line 1 "/home/pablin/arduino_programs/torino/motor_controller/motor_controller.ino"
-void setup();
-#line 5 "/home/pablin/arduino_programs/torino/motor_controller/motor_controller.ino"
-void loop();
-#line 1 "/home/pablin/arduino_programs/torino/motor_controller/motor_controller.ino"
-void setup(){
+#include <L293D.h>
 
+#define MOTOR_A 1      // motor pin a
+#define MOTOR_B 2      // motor pin b
+#define MOTOR_ENABLE 3 // Enable (also PWM pin)
+
+// Create motor object using given pins
+L293D motor(MOTOR_A, MOTOR_B, MOTOR_ENABLE);
+
+void setup()
+{
+    // begin --> true false, enables disables PWM
+    motor.begin(true);
+    // Speed -100%...0..100%
+    motor.SetMotorSpeed(100);
 }
 
-void loop(){} 
+void loop()
+{
+}

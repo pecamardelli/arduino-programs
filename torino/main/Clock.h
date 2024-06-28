@@ -12,6 +12,7 @@
 #define _CLOCK_H_
 
 #include <RTClib.h>
+#include "common.h"
 
 /**************************************************************************/
 /*!
@@ -40,11 +41,11 @@ public:
     RTC_DS3231 RTC;
 
     void begin();
-    void setDateTime(char *_date, char *_time);
+    void setDateTime(String, String);
     String getDate();
     String getFullDate();
     String getTime();
-    uint8_t exec(char *[]);
+    EXEC_STATUSES exec(String[]);
 };
 
 #endif // _CLOCK_H_
