@@ -1,5 +1,7 @@
 #include "header.h"
 
+// System system;
+System sys;
 SmallDisplay smallDisplay;
 Clock clock;
 Commander commander;
@@ -11,9 +13,11 @@ void setup()
     Serial.begin(9600);
     Serial.println("Initializing...");
 
-    smallDisplay.begin();
-    clock.begin();
+    Serial.println(sys.systemData.hostname);
 
+    smallDisplay.begin();
+    smallDisplay.drawTorinoLogo();
+    clock.begin();
     tempSensor.begin();
 }
 
@@ -25,7 +29,13 @@ void loop()
         commander.exec(input);
     }
 
-    smallDisplay.display();
-    // clock.displayTime();
-    // tempSensor.printTemp();
+    // SMALL DISPLAY 
+    readings values = tempSensor.getReadings();
+
+    smallDisplay.display(
+        clock.getFullDate(),
+        clock.getTime(),
+        String(round(values.temp)) + "c",
+        String(round(values.humidity)) + "%"
+    );
 }

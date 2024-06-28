@@ -1,6 +1,8 @@
 {
-  "editor.defaultFormatter": "ms-vscode.cpptools",
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
-  "cmake.configureOnOpen": true
+  "cmake.configureOnOpen": true,
+  "C_Cpp.clang_format_fallbackStyle": "Google",
+  "C_Cpp.formatting": "clangFormat"
 }

@@ -29,8 +29,10 @@ void TempSensor::begin()
 /**************************************************************************/
 readings TempSensor::getReadings()
 {
-    readings values = {dht.readTemperature(),
-                       dht.readHumidity()};
+    readings values = {
+        dht.readTemperature(),
+        dht.readHumidity()
+    };
 
     return values;
 }

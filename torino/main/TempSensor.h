@@ -14,9 +14,6 @@
 // Incluimos librería
 #include <DHT.h>
 #include <RTClib.h>
-#include "Clock.h"
-
-extern Clock clock;
 
 // Definimos el pin digital donde se conecta el sensor
 #define DHTPIN 2

@@ -2,6 +2,7 @@
 
 System::System(/* args */)
 {
+    loadSystemData();
 }
 
 System::~System()
@@ -42,4 +43,53 @@ sys_data System::getSystemData()
 void System::updateSystemData(sys_data updatedData)
 {
     systemData = updatedData;
+    saveSystemData();
+}
+
+bool System::setSystemName(String name)
+{
+    if (name.length() > MAX_HOSTNAME_CHARS)
+    {
+        Serial.print(F("Name too long! Max length is "));
+        Serial.println(MAX_HOSTNAME_CHARS);
+        return false;
+    }
+
+    name.toCharArray(systemData.hostname, name.length() + 1);
+    saveSystemData();
+
+    return true;
+}
+
+
+/**************************************************************************/
+/*!
+    @brief  Executes a user command.
+    @param  args Array of Strings representing the command itself and its arguments.
+*/
+/**************************************************************************/
+EXEC_STATUSES System::exec(String args[])
+{
+  if (args[0].equals("hostname"))
+  {
+    if (args[1].length() > 0)
+    {
+        if(setSystemName(args[1]))
+        {
+            return COMMAND_SUCCESSFUL;
+        }
+        else
+        {
+            return BAD_COMMAND;
+        }
+
+    }
+    else
+    {
+        Serial.println(systemData.hostname);
+        return COMMAND_SUCCESSFUL;
+    }
+  }
+
+  return NO_COMMAND;
 }

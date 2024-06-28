@@ -31,12 +31,6 @@ SH1106 driver doesn't provide several functions such as scroll commands.
 #include <RTClib.h>
 #include <Adafruit_SH1106.h>
 
-#include "Clock.h"
-#include "TempSensor.h"
-
-extern Clock clock;
-extern TempSensor tempSensor;
-
 #define OLED_RESET 4
 
 #define NUMFLAKES 10
@@ -98,10 +92,10 @@ public:
     ~SmallDisplay();
 
     void begin();
-    void display();
+    void display(String, String, String, String);
+    void drawTorinoLogo();
 };
 
-void drawTorinoLogo();
 void drawFuelConsumption(float value);
 void draw();
 void testdrawbitmap(const uint8_t *, uint8_t, uint8_t);

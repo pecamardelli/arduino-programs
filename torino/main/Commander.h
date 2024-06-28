@@ -11,10 +11,12 @@
 #ifndef _COMMANDER_H_
 #define _COMMANDER_H_
 
+#include "System.h"
 #include "Flowmeter.h"
 #include "Clock.h"
 #include "common.h"
 
+extern System sys;
 extern Flowmeter flowmeter;
 extern Clock clock;
 

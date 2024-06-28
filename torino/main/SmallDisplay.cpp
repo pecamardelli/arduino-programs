@@ -28,7 +28,7 @@ void SmallDisplay::begin()
     Serial.println(oled.height());
 }
 
-void SmallDisplay::display()
+void SmallDisplay::display(String date, String time, String temp, String humidity)
 {
     currentMillis = millis();
 
@@ -43,35 +43,29 @@ void SmallDisplay::display()
     // Time
     oled.setCursor(defaultTimeDisplayX, defaultTimeDisplayY);
     oled.setTextSize(defaultTimeDisplaySize);
-    oled.print(clock.getTime());
+    oled.print(time);
 
     // Date
-    String fullDate = clock.getFullDate();
-    uint8_t fullDateX = (21 - fullDate.length()) * 3;
+    uint8_t fullDateX = (21 - date.length()) * 3;
     oled.setCursor(fullDateX, defaultDateDisplayY);
     oled.setTextSize(defaultDateDisplaySize);
-    oled.print(clock.getFullDate());
-
-    // Temperature
-    readings values = tempSensor.getReadings();
+    oled.print(date);
 
     oled.setCursor(defaultTempDisplayX, defaultTempDisplayY);
     oled.setTextSize(defaultTempDisplaySize);
-    oled.print(values.temp, 0);
-    oled.print("c");
+    oled.print(temp);
 
     // Humidity
     oled.setCursor(defaultHumdtDisplayX, defaultHumdtDisplayY);
     oled.setTextSize(defaultHumdtDisplaySize);
-    oled.print(values.humidity, 0);
-    oled.print("%");
+    oled.print(humidity);
 
     oled.display();
 
     lastMillis = currentMillis;
 }
 
-void drawTorinoLogo()
+void SmallDisplay::drawTorinoLogo()
 {
     // Clear the buffer.
     oled.clearDisplay();

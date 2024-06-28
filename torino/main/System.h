@@ -14,6 +14,7 @@
 
 #include <EEPROM.h>
 #include <Arduino.h>
+#include "common.h"
 
 #ifdef __arm__
 // should use uinstd.h to define sbrk but Due causes a conflict
@@ -54,6 +55,7 @@ class System
 private:
     void loadSystemData();
     void saveSystemData();
+    bool setSystemName(String);
 
 public:
     System(/* args */);
@@ -63,6 +65,7 @@ public:
 
     sys_data getSystemData();
     void updateSystemData(sys_data);
+    EXEC_STATUSES exec(String[]);
 };
 
 #endif

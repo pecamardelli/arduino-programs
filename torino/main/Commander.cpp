@@ -100,7 +100,14 @@ void Commander::exec(String input)
         token = strtok(NULL, DELIMITER);
     }
 
-    int result = clock.exec(args);
+    EXEC_STATUSES result = clock.exec(args);
+
+    if (result == COMMAND_SUCCESSFUL)
+    {
+        return;
+    }
+
+    result = sys.exec(args);
 
     if (result == COMMAND_SUCCESSFUL)
     {
