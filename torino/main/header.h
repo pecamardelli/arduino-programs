@@ -5,6 +5,7 @@
 #include "Commander.h"
 #include "CurrentSensor.h"
 #include "Flowmeter.h"
+#include "SDCard.h"
 #include "SmallDisplay.h"
 #include "System.h"
 #include "TempSensor.h"

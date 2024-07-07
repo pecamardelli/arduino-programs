@@ -11,14 +11,16 @@
 #ifndef _COMMANDER_H_
 #define _COMMANDER_H_
 
-#include "System.h"
-#include "Flowmeter.h"
 #include "Clock.h"
+#include "Flowmeter.h"
+#include "SDCard.h"
+#include "System.h"
 #include "common.h"
 
 extern System sys;
 extern Flowmeter flowmeter;
 extern Clock clock;
+extern SDCard sdCard;
 
 /**************************************************************************/
 /*!
@@ -26,24 +28,23 @@ extern Clock clock;
             logic.
 */
 /**************************************************************************/
-class Commander
-{
-private:
-    /**
-        Array of special chars allowed in inputs
-    */
-    const byte specialChars[5] = {0x20, 0x2d, 0x2e, 0x2f, 0x3a};
+class Commander {
+ private:
+  /**
+      Array of special chars allowed in inputs
+  */
+  const byte specialChars[5] = {0x20, 0x2d, 0x2e, 0x2f, 0x3a};
 
-    const uint8_t MAX_COMMAND_LEN = 64;
-    const uint8_t MAX_COMMAND_ARGS = 8;
-    const char *DELIMITER = " ";
-    bool charAllowed(char c);
+  const uint8_t MAX_COMMAND_LEN = 64;
+  const uint8_t MAX_COMMAND_ARGS = 8;
+  const char *DELIMITER = " ";
+  bool charAllowed(char c);
 
-public:
-    Commander(/* args */);
-    ~Commander();
-    String getInput();
-    void exec(String);
+ public:
+  Commander(/* args */);
+  ~Commander();
+  String getInput();
+  void exec(String);
 };
 
-#endif // _COMMANDER_H_
+#endif  // _COMMANDER_H_

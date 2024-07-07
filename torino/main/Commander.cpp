@@ -15,47 +15,41 @@
 /**************************************************************************/
 
 #include "Commander.h"
+
 #include "common.h"
 
 float average = 0;
 float lastAverage = 0;
 
-Commander::Commander(/* args */)
-{
-}
+Commander::Commander(/* args */) {}
 
-Commander::~Commander()
-{
-}
+Commander::~Commander() {}
 /**************************************************************************/
 /*!
     @brief  Reads the serial port and sanitizes the input.
     @return Stringified and sanitized input.
 */
 /**************************************************************************/
-String Commander::getInput()
-{
-    if (Serial.available() <= 0)
-        return;
+String Commander::getInput() {
+  if (Serial.available() <= 0) return;
 
-    char c;
-    String input;
+  char c;
+  String input;
 
-    while (Serial.available() > 0)
-    {
-        c = Serial.read();
-        // Serial.print(String(int(c)) + " ");
-        //  Include letters, digits, and other allowed chars. Add more allowed characters
-        //  at the definition of the specialChars array.
-        if (isalpha(c) || isdigit(c) || charAllowed(c))
-            input.concat(c);
-        else
-            input.concat((char)0x20);
+  while (Serial.available() > 0) {
+    c = Serial.read();
+    // Serial.print(String(int(c)) + " ");
+    //  Include letters, digits, and other allowed chars. Add more allowed
+    //  characters at the definition of the specialChars array.
+    if (isalpha(c) || isdigit(c) || charAllowed(c))
+      input.concat(c);
+    else
+      input.concat((char)0x20);
 
-        delay(5);
-    }
+    delay(5);
+  }
 
-    return input;
+  return input;
 };
 
 /**************************************************************************/
@@ -66,14 +60,11 @@ String Commander::getInput()
     @return boolean value
 */
 /**************************************************************************/
-bool Commander::charAllowed(char c)
-{
-    for (uint8_t i = 0; i < sizeof(specialChars) / sizeof(byte); i++)
-    {
-        if ((int)c == specialChars[i])
-            return true;
-    }
-    return false;
+bool Commander::charAllowed(char c) {
+  for (uint8_t i = 0; i < sizeof(specialChars) / sizeof(byte); i++) {
+    if ((int)c == specialChars[i]) return true;
+  }
+  return false;
 };
 
 /**************************************************************************/
@@ -82,40 +73,41 @@ bool Commander::charAllowed(char c)
     @param  input The command.
 */
 /**************************************************************************/
-void Commander::exec(String input)
-{
-    // Tokenizing arguments
-    String args[MAX_COMMAND_ARGS];
-    char buffer[MAX_COMMAND_LEN];
-    uint8_t index = 0;
+void Commander::exec(String input) {
+  // Tokenizing arguments
+  String args[MAX_COMMAND_ARGS];
+  char buffer[MAX_COMMAND_LEN];
+  uint8_t index = 0;
 
-    input.toCharArray(buffer, MAX_COMMAND_LEN);
+  input.toCharArray(buffer, MAX_COMMAND_LEN);
 
-    char *token = strtok(buffer, DELIMITER);
+  char *token = strtok(buffer, DELIMITER);
 
-    while (token != NULL && index < MAX_COMMAND_ARGS)
-    {
-        args[index].concat(token);
-        index++;
-        token = strtok(NULL, DELIMITER);
-    }
+  while (token != NULL && index < MAX_COMMAND_ARGS) {
+    args[index].concat(token);
+    index++;
+    token = strtok(NULL, DELIMITER);
+  }
 
-    EXEC_STATUSES result = clock.exec(args);
+  EXEC_STATUSES result = clock.exec(args);
 
-    if (result == COMMAND_SUCCESSFUL)
-    {
-        return;
-    }
+  if (result == COMMAND_SUCCESSFUL) {
+    return;
+  }
 
-    result = sys.exec(args);
+  result = sdCard.exec(args);
 
-    if (result == COMMAND_SUCCESSFUL)
-    {
-        return;
-    }
+  if (result == COMMAND_SUCCESSFUL) {
+    return;
+  }
 
-    if (result == NO_COMMAND)
-    {
-        printErrorMessage(BAD_COMMAND, args[0]);
-    }
+  result = sys.exec(args);
+
+  if (result == COMMAND_SUCCESSFUL) {
+    return;
+  }
+
+  if (result == NO_COMMAND) {
+    printErrorMessage(BAD_COMMAND, args[0]);
+  }
 }

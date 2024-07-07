@@ -8,6 +8,7 @@ CurrentSensor currentSensor;
 Flowmeter flowmeter;
 TempSensor tempSensor;
 VoltSensor voltSensor;
+SDCard sdCard;
 
 void setup() {
   Serial.begin(9600);
@@ -19,6 +20,7 @@ void setup() {
   smallDisplay.drawTorinoLogo();
   clock.begin();
   tempSensor.begin();
+  sdCard.begin();
 }
 
 void loop() {
@@ -39,6 +41,6 @@ void loop() {
   amperes = currentSensor.getMeasure();
   pulses = flowmeter.checkPulse();
 
-  Serial.print("Current = ");
-  Serial.println(amperes, 2);
+  // Serial.print("Current = ");
+  // Serial.println(amperes, 2);
 }

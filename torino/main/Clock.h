@@ -12,6 +12,7 @@
 #define _CLOCK_H_
 
 #include <RTClib.h>
+
 #include "common.h"
 
 /**************************************************************************/
@@ -19,33 +20,33 @@
     @brief  This class defines all utilities to work with dates and time.
 */
 /**************************************************************************/
-class Clock
-{
-private:
-    uint16_t _year;
-    uint8_t _month;
-    uint8_t _day;
+class Clock {
+ private:
+  uint16_t _year;
+  uint8_t _month;
+  uint8_t _day;
 
-    uint8_t _hour;
-    uint8_t _min;
-    uint8_t _sec;
+  uint8_t _hour;
+  uint8_t _min;
+  uint8_t _sec;
 
-    DateTime now;
+  DateTime now;
 
-public:
-    Clock();
-    ~Clock();
+ public:
+  Clock();
+  ~Clock();
 
-    const String days[7] = {"DOMINGO", "LUNES", "MARTES", "MIERCOLES", "JUEVES", "VIERNES", "SABADO"};
+  const String days[7] = {"DOMINGO", "LUNES",   "MARTES", "MIERCOLES",
+                          "JUEVES",  "VIERNES", "SABADO"};
 
-    RTC_DS3231 RTC;
+  RTC_DS3231 RTC;
 
-    void begin();
-    void setDateTime(String, String);
-    String getDate();
-    String getFullDate();
-    String getTime();
-    EXEC_STATUSES exec(String[]);
+  void begin();
+  EXEC_STATUSES setDateTime(String, String);
+  String getDate();
+  String getFullDate();
+  String getTime();
+  EXEC_STATUSES exec(String[]);
 };
 
-#endif // _CLOCK_H_
+#endif  // _CLOCK_H_
