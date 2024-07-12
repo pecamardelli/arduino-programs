@@ -24,12 +24,7 @@ float lastAverage = 0;
 Commander::Commander(/* args */) {}
 
 Commander::~Commander() {}
-/**************************************************************************/
-/*!
-    @brief  Reads the serial port and sanitizes the input.
-    @return Stringified and sanitized input.
-*/
-/**************************************************************************/
+
 String Commander::getInput() {
   if (Serial.available() <= 0) return;
 
@@ -52,14 +47,6 @@ String Commander::getInput() {
   return input;
 };
 
-/**************************************************************************/
-/*!
-    @brief  Check if a received char is allowed. It checks if it's included
-            in the 'specialChars' array.
-    @param  c The received character.
-    @return boolean value
-*/
-/**************************************************************************/
 bool Commander::charAllowed(char c) {
   for (uint8_t i = 0; i < sizeof(specialChars) / sizeof(byte); i++) {
     if ((int)c == specialChars[i]) return true;
@@ -67,12 +54,6 @@ bool Commander::charAllowed(char c) {
   return false;
 };
 
-/**************************************************************************/
-/*!
-    @brief  Process the command and prints the result.
-    @param  input The command.
-*/
-/**************************************************************************/
 void Commander::exec(String input) {
   // Tokenizing arguments
   String args[MAX_COMMAND_ARGS];

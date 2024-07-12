@@ -12,8 +12,6 @@ SDCard sdCard;
 
 void setup() {
   Serial.begin(9600);
-  Serial.println("Initializing...");
-
   Serial.println(sys.systemData.hostname);
 
   smallDisplay.begin();
@@ -36,11 +34,7 @@ void loop() {
                        String(round(values.temp)) + "c",
                        String(round(values.humidity)) + "%");
 
-  // Print results to Serial Monitor to 2 decimal places
   volts = voltSensor.getMeasure();
   amperes = currentSensor.getMeasure();
   pulses = flowmeter.checkPulse();
-
-  // Serial.print("Current = ");
-  // Serial.println(amperes, 2);
 }

@@ -3,23 +3,16 @@
 // Inicializamos el sensor DHT11
 DHT dht(DHTPIN, DHTTYPE);
 
-TempSensor::TempSensor(/* args */)
-{
-}
+TempSensor::TempSensor(/* args */) {}
 
-TempSensor::~TempSensor()
-{
-}
+TempSensor::~TempSensor() {}
 
 /**************************************************************************/
 /*!
     @brief  Initializes the DHT temperature sensor.
 */
 /**************************************************************************/
-void TempSensor::begin()
-{
-    dht.begin();
-}
+void TempSensor::begin() { dht.begin(); }
 
 /**************************************************************************/
 /*!
@@ -27,12 +20,8 @@ void TempSensor::begin()
     @return A struct containing the values of the temperature and humidity.
 */
 /**************************************************************************/
-readings TempSensor::getReadings()
-{
-    readings values = {
-        dht.readTemperature(),
-        dht.readHumidity()
-    };
+readings TempSensor::getReadings() {
+  readings values = {dht.readTemperature(), dht.readHumidity()};
 
-    return values;
+  return values;
 }
