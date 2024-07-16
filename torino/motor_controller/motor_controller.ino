@@ -1,21 +1,23 @@
-#include <Arduino.h>
-#include <L293D.h>
+#include <AFMotor.h>
 
-#define MOTOR_A 1      // motor pin a
-#define MOTOR_B 2      // motor pin b
-#define MOTOR_ENABLE 3 // Enable (also PWM pin)
-
-// Create motor object using given pins
-L293D motor(MOTOR_A, MOTOR_B, MOTOR_ENABLE);
+AF_DCMotor motor(3);
 
 void setup()
 {
-    // begin --> true false, enables disables PWM
-    motor.begin(true);
-    // Speed -100%...0..100%
-    motor.SetMotorSpeed(100);
+    // Set initial speed of the motor & stop
+    motor.setSpeed(200);
+    motor.run(RELEASE);
 }
 
 void loop()
 {
+    uint8_t i;
+
+    // Turn on motor
+    motor.run(FORWARD);
+
+    motor.setSpeed(200);
+    // Now turn off motor
+    // motor.run(RELEASE);
+    delay(1000);
 }

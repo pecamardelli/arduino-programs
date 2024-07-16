@@ -3,6 +3,7 @@
 
 #include "Clock.h"
 #include "Commander.h"
+#include "CoolantTempSensor.h"
 #include "CurrentSensor.h"
 #include "Flowmeter.h"
 #include "SDCard.h"
@@ -13,6 +14,7 @@
 
 float volts;
 float amperes;
+float coolantTemp;
 uint64_t pulses;
 
 #endif

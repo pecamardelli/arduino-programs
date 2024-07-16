@@ -88,6 +88,12 @@ void Commander::exec(String input) {
     return;
   }
 
+  // result = dcMotor.exec(args);
+
+  // if (result == COMMAND_SUCCESSFUL) {
+  //   return;
+  // }
+
   if (result == NO_COMMAND) {
     printErrorMessage(BAD_COMMAND, args[0]);
   }

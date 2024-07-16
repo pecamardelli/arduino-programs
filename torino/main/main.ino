@@ -9,6 +9,7 @@ Flowmeter flowmeter;
 TempSensor tempSensor;
 VoltSensor voltSensor;
 SDCard sdCard;
+CoolantTempSensor coolantTempSensor;
 
 void setup() {
   Serial.begin(9600);
@@ -36,5 +37,11 @@ void loop() {
 
   volts = voltSensor.getMeasure();
   amperes = currentSensor.getMeasure();
+  coolantTemp = coolantTempSensor.getMeasure();
   pulses = flowmeter.checkPulse();
+
+  Serial.print("Temperatura= ");
+  Serial.print(coolantTemp);
+  Serial.println(" C");
+  delay(100);
 }
