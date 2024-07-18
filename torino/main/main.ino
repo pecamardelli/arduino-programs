@@ -10,6 +10,8 @@ TempSensor tempSensor;
 VoltSensor voltSensor;
 SDCard sdCard;
 CoolantTempSensor coolantTempSensor;
+Potentiometer potentiometer(0);
+StepperMotor stepper;
 
 void setup() {
   Serial.begin(9600);
@@ -31,17 +33,15 @@ void loop() {
   // SMALL DISPLAY
   readings values = tempSensor.getReadings();
 
-  smallDisplay.display(clock.getFullDate(), clock.getTime(),
-                       String(round(values.temp)) + "c",
-                       String(round(values.humidity)) + "%");
+  // smallDisplay.display(clock.getFullDate(), clock.getTime(),
+  //                      String(round(values.temp)) + "c",
+  //                      String(round(values.humidity)) + "%");
 
-  volts = voltSensor.getMeasure();
-  amperes = currentSensor.getMeasure();
-  coolantTemp = coolantTempSensor.getMeasure();
-  pulses = flowmeter.checkPulse();
-
-  Serial.print("Temperatura= ");
-  Serial.print(coolantTemp);
-  Serial.println(" C");
-  delay(100);
+  // volts = voltSensor.getMeasure();
+  // amperes = currentSensor.getMeasure();
+  // coolantTemp = coolantTempSensor.getMeasure();
+  // pulses = flowmeter.checkPulse();
+  // stepper.engage();
+  Serial.println("Hola");
+  // delay(100);
 }
