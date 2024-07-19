@@ -12,17 +12,17 @@
 #define _COMMANDER_H_
 
 #include "Clock.h"
-// #include "DCMotor.h"
 #include "Flowmeter.h"
 #include "SDCard.h"
 #include "System.h"
+#include "TempGauge.h"
 #include "common.h"
 
 extern System sys;
 extern Flowmeter flowmeter;
 extern Clock clock;
 extern SDCard sdCard;
-// extern DCMotor dcMotor;
+extern TempGauge tempGauge;
 
 /**************************************************************************/
 /*!

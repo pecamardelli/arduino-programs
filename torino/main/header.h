@@ -9,8 +9,8 @@
 #include "Potentiometer.h"
 #include "SDCard.h"
 #include "SmallDisplay.h"
-#include "StepperMotor.h"
 #include "System.h"
+#include "TempGauge.h"
 #include "TempSensor.h"
 #include "VoltSensor.h"
 

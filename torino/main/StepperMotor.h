@@ -16,7 +16,9 @@ class StepperMotor {
   StepperMotor(/* args */);
   ~StepperMotor();
 
-  void engage();
+  void forward();
+  void backward();
+  void stop();
 };
 
 #endif

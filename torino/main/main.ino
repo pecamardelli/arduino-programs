@@ -10,8 +10,7 @@ TempSensor tempSensor;
 VoltSensor voltSensor;
 SDCard sdCard;
 CoolantTempSensor coolantTempSensor;
-Potentiometer potentiometer(0);
-StepperMotor stepper;
+TempGauge tempGauge;
 
 void setup() {
   Serial.begin(9600);
@@ -41,7 +40,9 @@ void loop() {
   // amperes = currentSensor.getMeasure();
   // coolantTemp = coolantTempSensor.getMeasure();
   // pulses = flowmeter.checkPulse();
-  // stepper.engage();
-  Serial.println("Hola");
+  // stepper.forward();
+  // Serial.println(potentiometer.getMeasure());
+  tempGauge.setTemperature(80);
+
   // delay(100);
 }
