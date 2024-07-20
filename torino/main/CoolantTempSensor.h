@@ -6,6 +6,13 @@
 
 class CoolantTempSensor {
  private:
+  DeviceAddress tempDeviceAddress;
+  bool inited = false;
+  int resolution = 12;
+  unsigned long lastTempRequest = 0;
+  int delayInMillis = 0;
+  float temperature = 0.0;
+  void setup();
   /* data */
  public:
   CoolantTempSensor(/* args */);

@@ -21,29 +21,44 @@ void TempGauge::setup() {
 }
 
 void TempGauge::loop() {
-  if (!inited) setup();
+  if (!inited) return setup();
+  int currentAngle = angleSensor.getMeasure();
+  int nextAngle = tempToAngle(currentTemperature);
+  unsigned long currentMillisBetweenSteps =
+      getMillisBetweenSteps(currentAngle, nextAngle);
+  if ((millis() - lastStepMillis) < currentMillisBetweenSteps) return;
+
+  // Serial.print(currentAngle);
+  // Serial.print(" ");
+  Serial.print(currentTemperature);
+  Serial.print(" ");
+  Serial.println(currentMillisBetweenSteps);
 
   if (currentTemperature != lastTemperature) {
-    int currentAngle = angleSensor.getMeasure();
-    int nextAngle = tempToAngle(currentTemperature);
-
-    // Serial.print(currentAngle);
-    // Serial.print(" ");
-    // Serial.print(nextAngle);
-    // Serial.print(" ");
-    // Serial.println(conversions[0].angle);
-
     if (currentAngle < nextAngle) {
       stepper.forward(1);
       steps++;
+      lastStepMillis = millis();
     } else if (currentAngle > nextAngle) {
       stepper.backward(1);
       steps--;
+      lastStepMillis = millis();
     } else {
       stepper.stop();
       lastTemperature = currentTemperature;
     }
   }
+}
+
+unsigned long TempGauge::getMillisBetweenSteps(int currentAngle,
+                                               int nextAngle) {
+  float threshold = 6;
+  int angleDifference = abs(nextAngle - currentAngle);
+
+  if (angleDifference < threshold)
+    return millisBetweenSteps * (1 - pow(angleDifference / threshold, 0.33));
+  else
+    return 0;
 }
 
 void TempGauge::setTemperature(float temp) {

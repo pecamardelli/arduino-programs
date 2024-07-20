@@ -42,13 +42,13 @@ class TempGauge {
   float currentTemperature = minTemp;
   float lastTemperature = currentTemperature;
   Potentiometer angleSensor = Potentiometer(0);
-  int angleAverage = 0;
-  int angleSum = 0;
-  int angleAverageStep = 1;
+  unsigned long lastStepMillis = 0;
+  unsigned long millisBetweenSteps = 400;
   StepperMotor stepper;
   bool inited = false;
   void setup();
   int tempToAngle(float);
+  unsigned long getMillisBetweenSteps(int, int);
 
  public:
   TempGauge(/* args */);

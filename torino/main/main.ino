@@ -38,9 +38,10 @@ void loop() {
 
   // volts = voltSensor.getMeasure();
   // amperes = currentSensor.getMeasure();
-  // coolantTemp = coolantTempSensor.getMeasure();
+  coolantTemp = coolantTempSensor.getMeasure();
   // pulses = flowmeter.checkPulse();
   // stepper.forward();
-  // Serial.println(potentiometer.getMeasure());
+  // Serial.println(coolantTemp);
+  tempGauge.setTemperature(coolantTemp);
   tempGauge.loop();
 }

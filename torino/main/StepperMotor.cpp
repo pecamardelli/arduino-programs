@@ -1,6 +1,6 @@
 #include "StepperMotor.h"
 
-StepperMotor::StepperMotor(/* args */) { myStepper.setSpeed(1); }
+StepperMotor::StepperMotor(/* args */) { myStepper.setSpeed(5); }
 
 StepperMotor::~StepperMotor() {}
 
