@@ -3,6 +3,7 @@
 #ifndef _STEPPER_MOTOR_H_
 #define _STEPPER_MOTOR_H_
 
+#include <Arduino.h>
 #include <Stepper.h>
 
 class StepperMotor {
@@ -16,8 +17,8 @@ class StepperMotor {
   StepperMotor(/* args */);
   ~StepperMotor();
 
-  void forward();
-  void backward();
+  void forward(int);
+  void backward(int);
   void stop();
 };
 

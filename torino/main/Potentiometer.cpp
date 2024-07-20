@@ -8,10 +8,20 @@ Potentiometer::~Potentiometer() {}
 void Potentiometer::setPin(int _pin) { pin = _pin; }
 
 int Potentiometer::getMeasure() {
-  // reading = round(analogRead(pin) / 5) * 5;
-  reading = analogRead(pin);
-  if (reading % 2 == 0)
-    return reading;
-  else
-    return reading + 1;
+  return analogRead(pin);
+  // return angle;
+
+  // if (angleAverageStep <= 5) {
+  //   angleSum += angle;
+  //   angleAverage = angleSum / angleAverageStep;
+  //   if (angleAverage % 2 != 0) angleAverage++;
+  //   angleAverageStep++;
+  // } else {
+  //   angleSum = 0;
+  //   angleAverageStep = 1;
+  // }
+  // if (angle % 2 == 0)
+  //   return angle;
+  // else
+  //   return angle + 1;
 }

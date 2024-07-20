@@ -6,6 +6,9 @@
 class Potentiometer {
  private:
   int pin;
+  int angleAverage = 0;
+  int angleSum = 0;
+  int angleAverageStep = 1;
   int reading = 0;
 
  public:

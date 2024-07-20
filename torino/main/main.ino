@@ -42,7 +42,5 @@ void loop() {
   // pulses = flowmeter.checkPulse();
   // stepper.forward();
   // Serial.println(potentiometer.getMeasure());
-  tempGauge.setTemperature(80);
-
-  // delay(100);
+  tempGauge.loop();
 }
