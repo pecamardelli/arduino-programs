@@ -11,16 +11,22 @@ VoltSensor voltSensor;
 SDCard sdCard;
 CoolantTempSensor coolantTempSensor;
 TempGauge tempGauge;
+CircularDisplay circularDisplay;
 
 void setup() {
   Serial.begin(9600);
   Serial.println(sys.systemData.hostname);
 
+  // Relay that commands direct power input.
+  pinMode(RELAY_PIN, OUTPUT);
+  digitalWrite(RELAY_PIN, LOW);
+
   smallDisplay.begin();
   smallDisplay.drawTorinoLogo();
   clock.begin();
   tempSensor.begin();
-  sdCard.begin();
+  // sdCard.begin();
+  circularDisplay.setup();
 }
 
 void loop() {
@@ -36,12 +42,20 @@ void loop() {
   //                      String(round(values.temp)) + "c",
   //                      String(round(values.humidity)) + "%");
 
-  // volts = voltSensor.getMeasure();
-  // amperes = currentSensor.getMeasure();
+  volts = voltSensor.getMeasure();
+  engineIsOn = volts > 10;
+  amperes = currentSensor.getMeasure();
   coolantTemp = coolantTempSensor.getMeasure();
-  // pulses = flowmeter.checkPulse();
-  // stepper.forward();
-  // Serial.println(coolantTemp);
   tempGauge.setTemperature(coolantTemp);
   tempGauge.loop();
+  circularDisplay.loop();
+
+  Serial.print("Volts: ");
+  Serial.print(volts);
+  Serial.print(" - Amp: ");
+  Serial.print(amperes);
+  Serial.print(" - Temp: ");
+  Serial.print(coolantTemp);
+  Serial.print(" - Car is on: ");
+  Serial.println(engineIsOn);
 }

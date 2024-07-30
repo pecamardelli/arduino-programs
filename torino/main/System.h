@@ -12,16 +12,17 @@
 #ifndef _SYSTEM_H_
 #define _SYSTEM_H_
 
-#include <EEPROM.h>
 #include <Arduino.h>
+#include <EEPROM.h>
+
 #include "common.h"
 
 #ifdef __arm__
 // should use uinstd.h to define sbrk but Due causes a conflict
 extern "C" char *sbrk(int incr);
-#else  // __ARM__
+#else   // __ARM__
 extern char *__brkval;
-#endif // __arm__
+#endif  // __arm__
 
 #define MAX_HOSTNAME_CHARS 32
 #define MAX_SYSTEM_DESCRIPTION_CHARS 64
@@ -34,14 +35,13 @@ extern char *__brkval;
 #define MAX_ANALOG_PINS 6
 #endif
 
-typedef struct _sys_data
-{
-    // System related
-    char hostname[MAX_HOSTNAME_CHARS];
-    char description[MAX_SYSTEM_DESCRIPTION_CHARS];
-    // Flowmeter related
-    uint8_t pin;
-    uint16_t pulsesPerLiter;
+typedef struct _sys_data {
+  // System related
+  char hostname[MAX_HOSTNAME_CHARS];
+  char description[MAX_SYSTEM_DESCRIPTION_CHARS];
+  // Flowmeter related
+  uint8_t pin;
+  uint16_t pulsesPerLiter;
 } sys_data;
 
 /**************************************************************************/
@@ -50,22 +50,22 @@ typedef struct _sys_data
             the system.
 */
 /**************************************************************************/
-class System
-{
-private:
-    void loadSystemData();
-    void saveSystemData();
-    bool setSystemName(String);
+class System {
+ private:
+  void loadSystemData();
+  void saveSystemData();
+  bool setSystemName(String);
 
-public:
-    System(/* args */);
-    ~System();
-    sys_data systemData;
-    int getFreeMemory();
+ public:
+  System(/* args */);
+  ~System();
+  sys_data systemData;
+  int getFreeMemory();
 
-    sys_data getSystemData();
-    void updateSystemData(sys_data);
-    EXEC_STATUSES exec(String[]);
+  sys_data getSystemData();
+  void updateSystemData(sys_data);
+  void shutdown();
+  EXEC_STATUSES exec(String[]);
 };
 
 #endif

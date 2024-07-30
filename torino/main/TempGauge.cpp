@@ -10,9 +10,9 @@ void TempGauge::setup() {
   int angle = angleSensor.getMeasure();
 
   if (angle < minAngle) {
-    stepper.forward(1);
+    stepper.step(1);
   } else if (angle > minAngle) {
-    stepper.backward(1);
+    stepper.step(-1);
   } else {
     Serial.println(F("Temperature Gauge Inited."));
     stepper.stop();
@@ -26,21 +26,22 @@ void TempGauge::loop() {
   int nextAngle = tempToAngle(currentTemperature);
   unsigned long currentMillisBetweenSteps =
       getMillisBetweenSteps(currentAngle, nextAngle);
-  if ((millis() - lastStepMillis) < currentMillisBetweenSteps) return;
+  if ((millis() - lastStepMillis) < currentMillisBetweenSteps)
+    return stepper.stop();
 
   // Serial.print(currentAngle);
   // Serial.print(" ");
-  Serial.print(currentTemperature);
-  Serial.print(" ");
-  Serial.println(currentMillisBetweenSteps);
+  // Serial.print(currentTemperature);
+  // Serial.print(" ");
+  // Serial.println(currentMillisBetweenSteps);
 
   if (currentTemperature != lastTemperature) {
     if (currentAngle < nextAngle) {
-      stepper.forward(1);
+      stepper.step(1);
       steps++;
       lastStepMillis = millis();
     } else if (currentAngle > nextAngle) {
-      stepper.backward(1);
+      stepper.step(-1);
       steps--;
       lastStepMillis = millis();
     } else {

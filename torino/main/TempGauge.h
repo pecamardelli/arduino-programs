@@ -17,8 +17,10 @@
   140° -> 596° -> 410 steps
 */
 
+#include <Stepper.h>
+
 #include "Potentiometer.h"
-#include "StepperMotor.h"
+// #include "StepperMotor.h"
 #include "common.h"
 
 typedef struct Conversion {
@@ -44,7 +46,8 @@ class TempGauge {
   Potentiometer angleSensor = Potentiometer(0);
   unsigned long lastStepMillis = 0;
   unsigned long millisBetweenSteps = 400;
-  StepperMotor stepper;
+  // Pins entered in sequence IN1-IN3-IN2-IN4 for proper step sequence
+  Stepper stepper = Stepper(2038, 8, 10, 9, 11);
   bool inited = false;
   void setup();
   int tempToAngle(float);

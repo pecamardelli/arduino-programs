@@ -13,7 +13,7 @@
 
 #include "common.h"
 
-#define VOLT_SENSOR_INPUT_PIN A0
+#define VOLT_SENSOR_INPUT_PIN A7
 
 class VoltSensor {
  private:

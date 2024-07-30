@@ -1,6 +1,7 @@
 #ifndef _HEADER_H_
 #define _HEADER_H_
 
+#include "CircularDisplay.h"
 #include "Clock.h"
 #include "Commander.h"
 #include "CoolantTempSensor.h"
@@ -18,5 +19,6 @@ float volts;
 float amperes;
 float coolantTemp;
 uint64_t pulses;
+bool engineIsOn = false;
 
 #endif
