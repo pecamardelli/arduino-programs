@@ -1,6 +1,6 @@
 #include "CoolantTempSensor.h"
 
-OneWire ourWire(2);
+OneWire ourWire(47);
 DallasTemperature sensors(&ourWire);
 
 CoolantTempSensor::CoolantTempSensor(/* args */) {}

@@ -18,7 +18,7 @@
 float volts;
 float amperes;
 float coolantTemp;
-uint64_t pulses;
+int _pulses;
 bool engineIsOn = false;
 
 #endif

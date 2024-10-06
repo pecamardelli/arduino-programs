@@ -48,7 +48,8 @@ void loop() {
   coolantTemp = coolantTempSensor.getMeasure();
   tempGauge.setTemperature(coolantTemp);
   tempGauge.loop();
-  circularDisplay.loop();
+  _pulses = flowmeter.checkPulse();
+  // circularDisplay.loop();
 
   Serial.print("Volts: ");
   Serial.print(volts);
@@ -56,6 +57,8 @@ void loop() {
   Serial.print(amperes);
   Serial.print(" - Temp: ");
   Serial.print(coolantTemp);
+  Serial.print(" - Pulses: ");
+  Serial.print(_pulses);
   Serial.print(" - Car is on: ");
   Serial.println(engineIsOn);
 }
