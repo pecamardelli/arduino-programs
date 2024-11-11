@@ -11,7 +11,7 @@ void TempGauge::setup() {
   int angle = angleSensor.getMeasure();
 
   if (debugMode == TEMP) {
-    Serial.print("TEMP: setting up -> Angle: ");
+    Serial.print("TEMP: setting up -> ANGLE: ");
     Serial.println(angle);
   }
 
@@ -36,12 +36,13 @@ void TempGauge::loop() {
     return stepper.stop();
 
   if (debugMode == TEMP) {
+    Serial.print("ANGLE: ");
     Serial.print(currentAngle);
-    Serial.print(" ");
+    Serial.print(" - TEMP: ");
     Serial.print(currentTemperature);
-    Serial.print(" ");
+    Serial.print(" - LAST TEMP: ");
     Serial.print(lastTemperature);
-    Serial.print(" ");
+    Serial.print(" - MILLIS: ");
     Serial.println(currentMillisBetweenSteps);
   }
 

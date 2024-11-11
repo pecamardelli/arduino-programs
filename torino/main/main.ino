@@ -52,15 +52,15 @@ void loop() {
   // circularDisplay.loop();
 
   if (debugMode == READINGS) {
-    Serial.print("Volts: ");
+    Serial.print("VOLTS: ");
     Serial.print(volts);
-    Serial.print(" - Amp: ");
+    Serial.print(" - AMPS: ");
     Serial.print(amperes);
-    Serial.print(" - Temp: ");
+    Serial.print(" - TEMP: ");
     Serial.print(coolantTemp);
-    Serial.print(" - Pulses: ");
+    Serial.print(" - PULSES: ");
     Serial.print(_pulses);
-    Serial.print(" - Ignition: ");
+    Serial.print(" - IGN: ");
     Serial.println(ignition);
   }
 }
