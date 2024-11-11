@@ -28,7 +28,7 @@ class Flowmeter {
  private:
   uint64_t pulses = 0;
   uint16_t pulsesPerLiter = 287;  // Default experimental value.
-  const uint8_t pin = 46;
+  const uint8_t pin = 38;
   int lastPinState = NULL;
   int currentPinState = NULL;
 

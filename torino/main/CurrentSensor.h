@@ -14,8 +14,8 @@
 #include "common.h"
 
 class CurrentSensor {
- private:
-  int pin = A1;
+private:
+  int pin = A2;
   // Floats for ADC voltage & Input voltage
   float adcVoltage = 0.0;
   float inVoltage = 0.0;
@@ -32,7 +32,7 @@ class CurrentSensor {
   // Integer for ADC value
   int adcValue = 0;
 
- public:
+public:
   CurrentSensor(/* args */);
   ~CurrentSensor();
   float getMeasure();

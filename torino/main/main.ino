@@ -11,7 +11,7 @@ VoltSensor voltSensor;
 SDCard sdCard;
 CoolantTempSensor coolantTempSensor;
 TempGauge tempGauge;
-CircularDisplay circularDisplay;
+// CircularDisplay circularDisplay;
 
 void setup() {
   Serial.begin(9600);
@@ -26,7 +26,7 @@ void setup() {
   clock.begin();
   tempSensor.begin();
   // sdCard.begin();
-  circularDisplay.setup();
+  // circularDisplay.setup();
 }
 
 void loop() {
