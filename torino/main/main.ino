@@ -35,15 +35,15 @@ void loop() {
     commander.exec(input);
   }
 
-  // SMALL DISPLAY
   readings values = tempSensor.getReadings();
 
+  // SMALL DISPLAY
   // smallDisplay.display(clock.getFullDate(), clock.getTime(),
   //                      String(round(values.temp)) + "c",
   //                      String(round(values.humidity)) + "%");
 
   volts = voltSensor.getMeasure();
-  engineIsOn = volts > 10;
+  ignition = volts > 10;
   amperes = currentSensor.getMeasure();
   coolantTemp = coolantTempSensor.getMeasure();
   tempGauge.setTemperature(coolantTemp);
@@ -51,14 +51,16 @@ void loop() {
   _pulses = flowmeter.checkPulse();
   // circularDisplay.loop();
 
-  Serial.print("Volts: ");
-  Serial.print(volts);
-  Serial.print(" - Amp: ");
-  Serial.print(amperes);
-  Serial.print(" - Temp: ");
-  Serial.print(coolantTemp);
-  Serial.print(" - Pulses: ");
-  Serial.print(_pulses);
-  Serial.print(" - Car is on: ");
-  Serial.println(engineIsOn);
+  if (debugMode == READINGS) {
+    Serial.print("Volts: ");
+    Serial.print(volts);
+    Serial.print(" - Amp: ");
+    Serial.print(amperes);
+    Serial.print(" - Temp: ");
+    Serial.print(coolantTemp);
+    Serial.print(" - Pulses: ");
+    Serial.print(_pulses);
+    Serial.print(" - Ignition: ");
+    Serial.println(ignition);
+  }
 }

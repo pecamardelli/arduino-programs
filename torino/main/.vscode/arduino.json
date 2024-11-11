@@ -1,6 +1,6 @@
 {
     "sketch": "main.ino",
-    "output": "build",
+    "output": "../build",
     "board": "arduino:avr:mega",
     "port": "/dev/ttyACM0",
     "configuration": "cpu=atmega2560"

@@ -66,6 +66,17 @@ EXEC_STATUSES System::exec(String args[]) {
       Serial.println(systemData.hostname);
       return COMMAND_SUCCESSFUL;
     }
+  } else if (args[0].equals("debug")) {
+    if (args[1].equals("readings")) {
+      debugMode = READINGS;
+      return COMMAND_SUCCESSFUL;
+    } else if (args[1].equals("temp")) {
+      debugMode = TEMP;
+      return COMMAND_SUCCESSFUL;
+    } else if (args[1].equals("disable")) {
+      debugMode = DISABLED;
+      return COMMAND_SUCCESSFUL;
+    }
   }
 
   return NO_COMMAND;

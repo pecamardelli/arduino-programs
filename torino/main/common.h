@@ -25,6 +25,8 @@ enum EXEC_STATUSES {
   BAD_COMMAND = -1,
 };
 
+enum DEBUG { DISABLED, READINGS, TEMP };
+
 void printErrorMessage(EXEC_STATUSES, String);
 void printSeparator();
 

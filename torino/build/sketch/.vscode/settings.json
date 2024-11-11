@@ -1,7 +1,0 @@
-#line 1 "/home/pablin/arduino-programs/torino/motor_controller/.vscode/settings.json"
-{
-  "editor.defaultFormatter": "ms-vscode.cpptools",
-  "editor.formatOnPaste": true,
-  "editor.formatOnSave": true,
-  "cmake.configureOnOpen": true
-}

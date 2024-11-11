@@ -12,6 +12,8 @@
 #ifndef _SYSTEM_H_
 #define _SYSTEM_H_
 
+extern int debugMode;
+
 #include <Arduino.h>
 #include <EEPROM.h>
 

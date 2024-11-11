@@ -19,6 +19,8 @@ float volts;
 float amperes;
 float coolantTemp;
 int _pulses;
-bool engineIsOn = false;
+bool ignition = false;
+
+int debugMode;
 
 #endif
