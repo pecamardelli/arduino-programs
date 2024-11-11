@@ -25,24 +25,21 @@
 
 extern int debugMode;
 
-typedef struct Conversion {
+struct Conversion {
   uint8_t temp;
   uint16_t angle;
-  uint16_t steps;
 };
 
 class TempGauge {
  private:
   const Conversion conversions[13] = {
-      {20, 390, 0},    {30, 396, 50},   {40, 400, 50},   {50, 428, 78},
-      {60, 440, 118},  {70, 463, 158},  {80, 482, 200},  {90, 509, 244},
-      {100, 531, 286}, {110, 549, 325}, {120, 560, 335}, {130, 573, 370},
-      {140, 586, 410}};
+      {20, 390},  {30, 396},  {40, 400}, {50, 428},  {60, 440},
+      {70, 463},  {80, 482},  {90, 509}, {100, 531}, {110, 549},
+      {120, 560}, {130, 573}, {140, 586}};
   const uint8_t minTemp = 20;
   const uint8_t maxTemp = 140;
   const uint16_t minAngle = 390;
   const uint16_t maxAngle = 590;
-  uint16_t steps = 0;
   float currentTemperature = minTemp;
   float lastTemperature = currentTemperature;
   Potentiometer angleSensor = Potentiometer(8);

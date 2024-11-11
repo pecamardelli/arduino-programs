@@ -26,7 +26,7 @@ Commander::Commander(/* args */) {}
 Commander::~Commander() {}
 
 String Commander::getInput() {
-  if (Serial.available() <= 0) return;
+  if (Serial.available() <= 0) return "";
 
   char c;
   String input;

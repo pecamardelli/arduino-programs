@@ -42,8 +42,7 @@ typedef struct _sys_data {
   char hostname[MAX_HOSTNAME_CHARS];
   char description[MAX_SYSTEM_DESCRIPTION_CHARS];
   // Flowmeter related
-  uint8_t pin;
-  uint16_t pulsesPerLiter;
+  uint16_t flowMeterPulsesPerLiter;
 } sys_data;
 
 /**************************************************************************/

@@ -42,19 +42,15 @@ void TempGauge::loop() {
     Serial.print(" ");
     Serial.print(lastTemperature);
     Serial.print(" ");
-    Serial.print(steps);
-    Serial.print(" ");
     Serial.println(currentMillisBetweenSteps);
   }
 
   if (currentTemperature != lastTemperature) {
     if (currentAngle < nextAngle) {
       stepper.step(1);
-      steps++;
       lastStepMillis = millis();
     } else if (currentAngle > nextAngle) {
       stepper.step(-1);
-      steps--;
       lastStepMillis = millis();
     } else {
       stepper.stop();
