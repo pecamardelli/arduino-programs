@@ -1,12 +1,16 @@
-DIR_Config		= ./display/lib/Config
-DIR_EPD			= ./display/lib/LCD
-DIR_FONTS		= ./display/lib/Fonts
-DIR_GUI			= ./display/lib/GUI
-DIR_Examples	= ./display/examples
-DIR_BIN			= ./bin
-DIR_Main		= ./
+DIR_LIB			= ./lib
+DIR_DISPLAY		= ${DIR_LIB}/display
 
-OBJ_C = $(wildcard ${DIR_Main}/*.c ${DIR_EPD}/*.c ${DIR_Config}/*.c ${DIR_GUI}/*.c ${DIR_Examples}/*.c ${DIR_FONTS}/*.c)
+DIR_DISPLAY_CONFIG		= ${DIR_DISPLAY}/lib/Config
+DIR_DISPLAY_EPD			= ${DIR_DISPLAY}/lib/LCD
+DIR_DISPLAY_FONTS		= ${DIR_DISPLAY}/lib/Fonts
+DIR_DISPLAY_GUI			= ${DIR_DISPLAY}/lib/GUI
+DIR_DISPLAY_EXAMPLES	= ${DIR_DISPLAY}/examples
+
+DIR_BIN		= ./bin
+DIR_MAIN	= ./
+
+OBJ_C = $(wildcard ${DIR_MAIN}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_CONFIG}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_EXAMPLES}/*.c ${DIR_DISPLAY_FONTS}/*.c)
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${OBJ_C}))
 
 TARGET = torino-ecu
@@ -31,22 +35,22 @@ CFLAGS += $(MSG) $(DEBUG)
 ${TARGET}:${OBJ_O}
 	$(CC) $(CFLAGS) $(OBJ_O) -o $@ $(LIB)
     
-${DIR_BIN}/%.o:$(DIR_Main)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_Config) -I $(DIR_GUI) -I $(DIR_EPD) -I $(DIR_Examples)
+${DIR_BIN}/%.o:$(DIR_MAIN)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD) -I $(DIR_DISPLAY_EXAMPLES)
     
-${DIR_BIN}/%.o:$(DIR_Examples)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_Config) -I $(DIR_GUI) -I $(DIR_EPD)
+${DIR_BIN}/%.o:$(DIR_DISPLAY_EXAMPLES)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG) -I $(DIR_DISPLAY_GUI) -I $(DIR_DISPLAY_EPD)
 
-${DIR_BIN}/%.o:$(DIR_EPD)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_Config)
+${DIR_BIN}/%.o:$(DIR_DISPLAY_EPD)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG)
     
-${DIR_BIN}/%.o:$(DIR_FONTS)/%.c
+${DIR_BIN}/%.o:$(DIR_DISPLAY_FONTS)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@
     
-${DIR_BIN}/%.o:$(DIR_GUI)/%.c
-	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_Config)  -I $(DIR_EPD) -I $(DIR_Examples)
+${DIR_BIN}/%.o:$(DIR_DISPLAY_GUI)/%.c
+	$(CC) $(CFLAGS) -c  $< -o $@ -I $(DIR_DISPLAY_CONFIG)  -I $(DIR_DISPLAY_EPD) -I $(DIR_DISPLAY_EXAMPLES)
 
-${DIR_BIN}/%.o:$(DIR_Config)/%.c
+${DIR_BIN}/%.o:$(DIR_DISPLAY_CONFIG)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB)
 	
 clean :
