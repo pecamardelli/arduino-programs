@@ -1,4 +1,4 @@
-#include "test.h"
+#include "display.h"
 #include <math.h>
 #include <stdlib.h>     //exit()
 #include <stdio.h>

@@ -2,7 +2,7 @@
 #include "LCD_1in28.h"
 #include "GUI_Paint.h"
 #include "GUI_BMP.h"
-#include "test.h"
+#include "display.h"
 #include "image.h"
 #include <stdio.h>		//printf()
 #include <stdlib.h>		//exit()

@@ -2,7 +2,7 @@
 #include "LCD_0in96.h"
 #include "GUI_Paint.h"
 #include "GUI_BMP.h"
-#include "test.h"
+#include "display.h"
 #include <stdio.h>		//printf()
 #include <stdlib.h>		//exit()
 #include <signal.h>     //signal()
@@ -57,7 +57,7 @@ void LCD_0IN96_test(void)
 	
 	Paint_DrawFloatNum (23, 37 ,987.654321,3, &Font12,  0x000f,  0xfff0);
 	Paint_DrawString_EN(1, 37, "ABC", &Font12, 0x000f, 0xfff0);
-	Paint_DrawString_CN(1,43, "Î¢Ñ©µç×Ó",  &Font24CN, WHITE, BLUE);
+	Paint_DrawString_CN(1,43, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½",  &Font24CN, WHITE, BLUE);
 	   
     /*3.Refresh the picture in RAM to LCD*/
     LCD_0IN96_Display(BlackImage);

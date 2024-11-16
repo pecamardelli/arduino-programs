@@ -2,7 +2,7 @@
 #include "LCD_1in14.h"
 #include "GUI_Paint.h"
 #include "GUI_BMP.h"
-#include "test.h"
+#include "display.h"
 #include <stdio.h>		//printf()
 #include <stdlib.h>		//exit()
 #include <signal.h>     //signal()
@@ -58,7 +58,7 @@ void LCD_1IN14_test(void)
 
 	Paint_DrawFloatNum (50, 40 ,9.87654321,3, &Font20,  WHITE,  BLACK);
 	Paint_DrawString_EN(1, 40, "ABC", &Font20, 0x000f, 0xfff0);
-	Paint_DrawString_CN(1,60, "Î¢Ñ©µç×Ó",  &Font24CN, WHITE, BLUE);
+	Paint_DrawString_CN(1,60, "Î¢Ñ©ï¿½ï¿½ï¿½ï¿½",  &Font24CN, WHITE, BLUE);
 	Paint_DrawString_EN(1, 100, "WaveShare", &Font16, RED, WHITE); 
 
     // /*3.Refresh the picture in RAM to LCD*/
