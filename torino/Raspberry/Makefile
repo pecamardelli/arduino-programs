@@ -28,7 +28,7 @@ else ifeq ($(USELIB), USE_DEV_LIB)
 endif
 
 
-CC = gcc
+CC = g++
 MSG = -g -O0 -Wall
 CFLAGS += $(MSG) $(DEBUG)
 
