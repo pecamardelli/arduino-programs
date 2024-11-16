@@ -10,7 +10,7 @@ DIR_DISPLAY_EXAMPLES	= ${DIR_DISPLAY}/examples
 DIR_BIN		= ./bin
 DIR_MAIN	= ./
 
-OBJ_C = $(wildcard ${DIR_MAIN}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_CONFIG}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_EXAMPLES}/*.c ${DIR_DISPLAY_FONTS}/*.c)
+OBJ_C = $(wildcard ${DIR_LIB}/*.c ${DIR_MAIN}/*.c ${DIR_DISPLAY_EPD}/*.c ${DIR_DISPLAY_CONFIG}/*.c ${DIR_DISPLAY_GUI}/*.c ${DIR_DISPLAY_EXAMPLES}/*.c ${DIR_DISPLAY_FONTS}/*.c)
 OBJ_O = $(patsubst %.c,${DIR_BIN}/%.o,$(notdir ${OBJ_C}))
 
 TARGET = torino-ecu
@@ -52,6 +52,9 @@ ${DIR_BIN}/%.o:$(DIR_DISPLAY_GUI)/%.c
 
 ${DIR_BIN}/%.o:$(DIR_DISPLAY_CONFIG)/%.c
 	$(CC) $(CFLAGS) -c  $< -o $@ $(LIB)
+
+${DIR_BIN}/%.o:$(DIR_LIB)/%.cpp
+	$(CC) $(CFLAGS) -c  $< -o $@
 	
 clean :
 	rm $(DIR_BIN)/*.* 

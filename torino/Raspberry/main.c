@@ -1,7 +1,4 @@
-#include "display.h"
-#include <math.h>
-#include <stdlib.h>     //exit()
-#include <stdio.h>
+#include "main.h"
 
 int main(int argc, char *argv[])
 {
