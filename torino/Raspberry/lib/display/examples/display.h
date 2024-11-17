@@ -14,6 +14,16 @@
 #ifndef _TRST_H_
 #define _TRST_H_
 
+#include "DEV_Config.h"
+#include "LCD_1in28.h"
+#include "GUI_Paint.h"
+#include "GUI_BMP.h"
+#include "display.h"
+#include "image.h"
+#include <stdio.h>  //printf()
+#include <stdlib.h> //exit()
+#include <signal.h> //signal()
+
 void LCD_0IN96_test(void);
 void LCD_1IN14_test(void);
 void LCD_1IN28_test(void);
