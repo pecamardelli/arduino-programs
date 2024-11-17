@@ -8,7 +8,7 @@
 #include <stdlib.h> //exit()
 #include <signal.h> //signal()
 
-void LCD_init_logo(void)
+void LCD_init_logo(char *pathToImageFile)
 {
     // Exception handling:ctrl + c
     signal(SIGINT, Handler_1IN28_LCD);
@@ -40,7 +40,7 @@ void LCD_init_logo(void)
 
     // /* show bmp */
     printf("show bmp\r\n");
-    GUI_ReadBmp("./lib/display/pic/LCD_1inch28_1.bmp");
+    GUI_ReadBmp(pathToImageFile);
 
     LCD_1IN28_Display(BlackImage);
     DEV_Delay_ms(2000);

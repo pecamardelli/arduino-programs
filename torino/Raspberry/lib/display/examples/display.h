@@ -32,6 +32,6 @@ void LCD_1IN54_test(void);
 void LCD_1IN8_test(void);
 void LCD_2IN_test(void);
 void LCD_2IN4_test(void);
-void LCD_init_logo(void);
+void LCD_init_logo(char *);
 
 #endif

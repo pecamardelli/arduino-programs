@@ -2,6 +2,6 @@
 
 int main(int argc, char *argv[])
 {
-	CircularDisplay dis;
-	dis.setup();
+	CircularDisplay display;
+	display.setup();
 }

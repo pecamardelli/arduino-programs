@@ -6,8 +6,7 @@ CircularDisplay::~CircularDisplay() {}
 
 void CircularDisplay::setup()
 {
-    printf("Hola mundo");
-    LCD_init_logo();
+    LCD_init_logo("./assets/torino_tsx_logo.bmp");
 }
 
 void CircularDisplay::loop()
