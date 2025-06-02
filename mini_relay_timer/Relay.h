@@ -58,8 +58,8 @@ private:
     // Max variation in minutes of the start and end time when type is RANGE
     uint8_t rangeMaxTimeVariation = 30;
     // Season time range
-    uint16_t seasonMinStartMinute = 19 * 60;      // 19:00 hs
-    uint16_t seasonMaxStartMinute = 21 * 60 + 15; // 20:45 hs
+    uint16_t seasonMinStartMinute = 18 * 60 + 40; // 18:40 hs
+    uint16_t seasonMaxStartMinute = 21 * 60 + 15; // 21:15 hs
     uint16_t seasonStartTimespan = seasonMaxStartMinute - seasonMinStartMinute;
     uint16_t seasonMinEndMinute = 6 * 60;      // 06:00 hs
     uint16_t seasonMaxEndMinute = 8 * 60 + 20; // 08:20 hs

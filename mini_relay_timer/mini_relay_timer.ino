@@ -24,4 +24,5 @@ void loop()
 
   relays.relay_check();
   relays.relay_watch();
+  delay(1000); // Check every second
 }

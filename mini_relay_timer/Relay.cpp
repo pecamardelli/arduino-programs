@@ -29,7 +29,7 @@ void Relay::begin()
     relayArray[2].type = RELAY_TYPE_RANGE;
     relayArray[2].duration = 240;
     relayArray[2].pin = pinInternalLights;
-    relayArray[2].enabled = true;
+    relayArray[2].enabled = false;
 
     pinMode(pinExternalLights, OUTPUT);
     digitalWrite(pinExternalLights, HIGH);
@@ -49,29 +49,53 @@ void Relay::begin()
 void Relay::relay_check()
 {
     for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
+    {
+        // Skip if relay is disabled
+        if (!relayArray[i].enabled)
+        {
+            continue;
+        }
+
         switch (relayArray[i].type)
         {
         case RELAY_TYPE_FIXED:
+            // Fixed type doesn't need updates
             continue;
+
         case RELAY_TYPE_SEASON:
+            // Simple seasonal adjustment
             relayArray[i].startMinute = getSeasonStartMins();
             relayArray[i].endMinute = getSeasonEndMins();
             break;
+
         case RELAY_TYPE_RANGE:
             uint16_t currentMinute = clock.RTC.now().hour() * 60 + clock.RTC.now().minute();
             uint16_t seasonStartMinute = getSeasonStartMins();
-            if (seasonStartMinute - rangeMaxTimeVariation <= currentMinute)
+
+            // Calculate new random start time
+            int16_t randomVariation = round(random(rangeMaxTimeVariation));
+            if (seasonStartMinute > randomVariation)
             {
-                continue;
+                relayArray[i].startMinute = seasonStartMinute - randomVariation;
             }
-            relayArray[i].startMinute = seasonStartMinute - round(random(rangeMaxTimeVariation));
-            relayArray[i].endMinute = relayArray[i].startMinute + relayArray[i].duration + round(rangeMaxTimeVariation * random(-1, 1));
-            if (relayArray[i].endMinute >= 1440)
-                relayArray[i].endMinute = 1438;
+            else
+            {
+                relayArray[i].startMinute = 0;
+            }
+
+            // Calculate end time with bounds checking
+            int16_t endTimeVariation = round(rangeMaxTimeVariation * random(-1, 1));
+            uint16_t calculatedEnd = relayArray[i].startMinute + relayArray[i].duration + endTimeVariation;
+            relayArray[i].endMinute = min(1439, calculatedEnd); // 1439 = 23:59
             break;
+
         default:
+            // Log unexpected relay type
+            Serial.print(F("Warning: Unknown relay type for relay "));
+            Serial.println(i);
             break;
         }
+    }
 }
 
 /**************************************************************************/
@@ -85,59 +109,49 @@ void Relay::relay_watch()
 
     for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
     {
+        // Skip disabled relays
         if (!relayArray[i].enabled)
         {
-            digitalWrite(relayArray[i].pin, HIGH);
+            digitalWrite(relayArray[i].pin, HIGH); // Turn OFF
             continue;
         }
 
+        // Skip invalid times
         if (isnan(relayArray[i].startMinute) || isnan(relayArray[i].endMinute))
             continue;
 
-        if (relayArray[i].startMinute <= currentMinute)
+        bool shouldBeOn = false;
+
+        // Normal case (e.g., 18:00 to 23:00)
+        if (relayArray[i].startMinute < relayArray[i].endMinute)
         {
-            if (relayArray[i].endMinute > relayArray[i].startMinute)
-            {
-                if (relayArray[i].endMinute < currentMinute)
-                {
-                    digitalWrite(relayArray[i].pin, HIGH);
-                }
-                else
-                {
-                    digitalWrite(relayArray[i].pin, LOW);
-                }
-            }
-            else
-            {
-                digitalWrite(relayArray[i].pin, LOW);
-            }
+            shouldBeOn = (currentMinute >= relayArray[i].startMinute && currentMinute < relayArray[i].endMinute);
         }
+        // Overnight case (e.g., 23:00 to 06:00)
         else
         {
-            if (relayArray[i].startMinute < relayArray[i].endMinute)
-            {
-                digitalWrite(relayArray[i].pin, HIGH);
-            }
-            else
-            {
-                if (relayArray[i].endMinute > currentMinute)
-                {
-                    digitalWrite(relayArray[i].pin, LOW);
-                }
-                else
-                {
-                    digitalWrite(relayArray[i].pin, HIGH);
-                }
-            }
+            shouldBeOn = (currentMinute >= relayArray[i].startMinute || currentMinute < relayArray[i].endMinute);
         }
+
+        digitalWrite(relayArray[i].pin, shouldBeOn ? LOW : HIGH); // CORRECTED COMMENT: LOW = ON, HIGH = OFF
     }
 }
 
 uint16_t Relay::getSeasonStartMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-    float ratio = sin(PI * dayOfTheYear / seasonLongestDayOfTheYear);
-    return (uint16_t)seasonMaxStartMinute - round(seasonStartTimespan * ratio);
+
+    // Adjust day to make solstice the peak of the sine wave
+    float adjustedDay = (dayOfTheYear - seasonShortestDayOfTheYear) * (2 * PI / 365.0);
+
+    // Calculate ratio (-1 to 1) with correct phase
+    float ratio = sin(adjustedDay);
+
+    // Map the ratio to start time range
+    uint16_t range = seasonMaxStartMinute - seasonMinStartMinute;
+    uint16_t variation = round(range * ratio);
+
+    return seasonMinStartMinute + variation;
 }
 
 uint16_t Relay::getSeasonEndMins()
@@ -268,6 +282,77 @@ EXEC_STATUSES Relay::exec(String args[])
                 Serial.println(seasonLongestDayOfTheYear);
                 printSeparator();
 
+                return COMMAND_SUCCESSFUL;
+            }
+            else if (args[2].equals("status"))
+            {
+                uint16_t currentMinute = clock.RTC.now().hour() * 60 + clock.RTC.now().minute();
+                uint16_t dayOfYear = clock.calculateDayOfYear();
+
+                printSeparator();
+                Serial.print(F("Current time: "));
+                Serial.print(currentMinute / 60);
+                Serial.print(F(":"));
+                if (currentMinute % 60 < 10)
+                    Serial.print("0");
+                Serial.print(currentMinute % 60);
+                Serial.print(F(" ("));
+                Serial.print(currentMinute);
+                Serial.println(F(" minutes)"));
+
+                Serial.print(F("Day of year: "));
+                Serial.println(dayOfYear);
+                printSeparator();
+
+                for (uint8_t i = 0; i < MAX_RELAY_NUMBER; i++)
+                {
+                    Serial.print(F("Relay "));
+                    Serial.print(i);
+                    Serial.print(F(" ("));
+                    switch (relayArray[i].type)
+                    {
+                    case RELAY_TYPE_FIXED:
+                        Serial.print(F("FIXED"));
+                        break;
+                    case RELAY_TYPE_SEASON:
+                        Serial.print(F("SEASON"));
+                        break;
+                    case RELAY_TYPE_RANGE:
+                        Serial.print(F("RANGE"));
+                        break;
+                    default:
+                        Serial.print(F("UNKNOWN"));
+                        break;
+                    }
+                    Serial.println(F(")"));
+
+                    Serial.print(F("  Enabled: "));
+                    Serial.println(relayArray[i].enabled ? F("Yes") : F("No"));
+
+                    Serial.print(F("  Start: "));
+                    Serial.print(relayArray[i].startMinute / 60);
+                    Serial.print(F(":"));
+                    if (relayArray[i].startMinute % 60 < 10)
+                        Serial.print("0");
+                    Serial.print(relayArray[i].startMinute % 60);
+                    Serial.print(F(" ("));
+                    Serial.print(relayArray[i].startMinute);
+                    Serial.println(F(" minutes)"));
+
+                    Serial.print(F("  End: "));
+                    Serial.print(relayArray[i].endMinute / 60);
+                    Serial.print(F(":"));
+                    if (relayArray[i].endMinute % 60 < 10)
+                        Serial.print("0");
+                    Serial.print(relayArray[i].endMinute % 60);
+                    Serial.print(F(" ("));
+                    Serial.print(relayArray[i].endMinute);
+                    Serial.println(F(" minutes)"));
+
+                    Serial.print(F("  State: "));
+                    Serial.println(digitalRead(relayArray[i].pin) == LOW ? F("ON") : F("OFF"));
+                    printSeparator();
+                }
                 return COMMAND_SUCCESSFUL;
             }
         }
