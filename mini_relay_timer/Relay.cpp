@@ -147,8 +147,8 @@ uint16_t Relay::getSeasonStartMins()
 uint16_t Relay::getSeasonEndMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-    float ratio = cos(PI * dayOfTheYear / 365.0);
-    return (uint16_t)seasonMinEndMinute + round(seasonEndTimespan * ratio);
+    float ratio = sin(PI * dayOfTheYear / 365.0);
+    return (uint16_t)seasonMaxEndMinute - round(seasonEndTimespan * ratio);
 }
 
 void Relay::setSeasonMinStartMinute(long minutes)
