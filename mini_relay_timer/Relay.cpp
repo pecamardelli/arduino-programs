@@ -140,25 +140,15 @@ void Relay::relay_watch()
 uint16_t Relay::getSeasonStartMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-
-    // Adjust day to make solstice the peak of the sine wave
-    float adjustedDay = (dayOfTheYear - seasonShortestDayOfTheYear) * (2 * PI / 365.0);
-
-    // Calculate ratio (-1 to 1) with correct phase
-    float ratio = sin(adjustedDay);
-
-    // Map the ratio to start time range
-    uint16_t range = seasonMaxStartMinute - seasonMinStartMinute;
-    uint16_t variation = round(range * ratio);
-
-    return seasonMinStartMinute + variation;
+    float ratio = sin(PI * dayOfTheYear / 365.0);
+    return (uint16_t)seasonMinStartMinute + round(seasonStartTimespan * ratio);
 }
 
 uint16_t Relay::getSeasonEndMins()
 {
     uint16_t dayOfTheYear = clock.calculateDayOfYear();
-    float ratio = sin(PI * dayOfTheYear / seasonLongestDayOfTheYear);
-    return (uint16_t)seasonMinEndMinute + round(seasonStartTimespan * ratio);
+    float ratio = cos(PI * dayOfTheYear / 365.0);
+    return (uint16_t)seasonMinEndMinute + round(seasonEndTimespan * ratio);
 }
 
 void Relay::setSeasonMinStartMinute(long minutes)
